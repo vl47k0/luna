@@ -1,0 +1,51 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router';
+
+import Content from './components/Content';
+import Login from './components/Login';
+import Profile from './components/Profile';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import PublicRoutes from './components/PublicRoutes';
+import PermissionDenied from './components/PermissionDenied';
+import ServiceList from './components/ServiceList';
+import BookmarkList from './components/BookmarkList';
+import BookmarkDetail from './components/BookmarkDetail';
+import IssueList from './components/IssueList';
+import IssueDetail from './components/IssueDetail';
+import ProcessList from './components/ProcessList';
+import ProcessDetail from './components/ProcessDetail';
+import ServiceDetail from './components/ServiceDetail';
+import Authenticate from './components/Authenticate';
+import ResourceAccessListForm from './components/ResourceAccessListForm';
+import UploadSearch from './components/UploadSearch';
+
+const Routing: React.FC = (): JSX.Element => (
+  <Routes>
+    <Route path="/" element={<ProtectedRoutes />}>
+      <Route path="/" element={<Content />}>
+        <Route path="/" element={<Navigate replace to="issues" />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="resource" element={<ResourceAccessListForm />} />
+        <Route path="issues" element={<IssueList />} />
+        <Route path="issues/:issueId" element={<IssueDetail />} />
+        <Route path="processes" element={<ProcessList />} />
+        <Route path="processes/:processId" element={<ProcessDetail />} />
+        <Route path="services" element={<ServiceList />} />
+        <Route path="bookmarks" element={<BookmarkList />} />
+        <Route path="bookmarks/:unitId" element={<BookmarkDetail />} />
+        <Route path="services/:serviceId" element={<ServiceDetail />} />
+        <Route path="upload-search" element={<UploadSearch />} />
+      </Route>
+    </Route>
+
+    <Route path="login" element={<PublicRoutes />}>
+      <Route path="/login" element={<Login />} />
+    </Route>
+
+    <Route path="/token" element={<Authenticate />} />
+
+    <Route path="/denied" element={<PermissionDenied />} />
+  </Routes>
+);
+
+export default Routing;

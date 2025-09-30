@@ -1,0 +1,151 @@
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Link as MuiLink,
+  CardHeader,
+  IconButton,
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Process,
+  Solution,
+  Issue,
+  SolutionService,
+} from '../services/SolutionsService';
+import { authService } from '../utils/oidc';
+import { User } from 'oidc-client-ts';
+import SolutionCard from './SolutionCard';
+
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useTheme } from '@mui/material/styles';
+
+interface IssueCardProps {
+  id: string;
+}
+
+const IssueCard: React.FC<IssueCardProps> = ({ id }) => {
+  const [issue, setIssue] = useState<Issue | null>(null);
+  const [solution, setSolution] = useState<Solution | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const solutionBackendRef = useRef<SolutionService | null>(null);
+
+  const theme = useTheme();
+
+  const fetchIssueSolution = useCallback(
+    async (issueId: string): Promise<void> => {
+      if (!solutionBackendRef.current || !issueId) return;
+      setLoading(true);
+      try {
+        const data: Solution | undefined | null =
+          await solutionBackendRef.current.fetchIssueSolution(issueId);
+        if (data) {
+          console.log('fetchIssueSolution: Data:', data);
+          setSolution(data);
+        }
+      } catch (error) {
+        setError('Failed to load solution. Please try again later.');
+        console.error('Failed to fetch solution:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const fetchData = useCallback(async (issueId: string): Promise<void> => {
+    if (!solutionBackendRef.current) return;
+    setLoading(true);
+    try {
+      const data: Issue | undefined | null =
+        await solutionBackendRef.current.fetchIssue(issueId);
+      if (data) {
+        setIssue(data);
+      }
+    } catch (error) {
+      setError('Failed to load issue. Please try again later.');
+      console.error('Failed to fetch issue:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void authService
+      .getUser()
+      .then((data) => {
+        setUser(data);
+      })
+      .catch((error) => {
+        setError('Failed to authenticate user. Please try again later.');
+        console.error('Failed to get user:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      if (!solutionBackendRef.current) {
+        solutionBackendRef.current = new SolutionService(
+          'https://mars.georgievski.net/',
+          user.access_token
+        );
+      }
+      void fetchData(id);
+    }
+  }, [user, id, fetchData]);
+
+  useEffect(() => {
+    if (issue) {
+      void fetchIssueSolution(issue.id);
+    }
+  }, [issue, fetchIssueSolution]);
+
+  const processMerged = useCallback((p: Process): void => {
+    console.log(p);
+  }, []);
+
+  return (
+    <Card variant="outlined" sx={{ margin: 1 }}>
+      <CardHeader
+        action={
+          <IconButton aria-label="settings">
+            <ContentCopyIcon style={{ color: theme.palette.primary.main }} />
+          </IconButton>
+        }
+        title={
+          <MuiLink
+            color="primary"
+            component={RouterLink}
+            to={`/issues/${issue?.id}`}
+            underline="none"
+          >
+            <Typography variant="h5" component="div">
+              {issue?.title}
+              {loading && 'loading...'}
+              {error !== '' && <h1>{error}</h1>}
+            </Typography>
+          </MuiLink>
+        }
+        subheader={issue?.timestamp?.toLocaleString() ?? ''}
+      />
+
+      <CardContent>
+        <Typography variant="body2" color="textSecondary">
+          ID: {issue?.id}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Timestamp:{' '}
+          {issue?.timestamp ? new Date(issue.timestamp).toLocaleString() : ''}
+        </Typography>
+        {solution && <SolutionCard id={solution.id} onMerger={processMerged} />}
+      </CardContent>
+      <CardActions />
+    </Card>
+  );
+};
+
+export default IssueCard;

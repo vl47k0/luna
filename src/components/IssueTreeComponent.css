@@ -1,0 +1,8 @@
+.tree-container {
+  transform: rotate(180deg) scaleX(-1);
+}
+
+.MuiTreeItem-label {
+  transform: rotate(180deg) scaleX(-1);
+  display: inline-block;
+}
