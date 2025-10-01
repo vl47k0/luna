@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silent Refresh</title>
+  </head>
+  <body>
+    <script>
+      window.onload = function () {
+        // This page is loaded in an iframe by oidc-client for silent token renewal
+        // The library will extract the token from the URL and close this window
+        parent.postMessage(location.href, location.origin);
+      };
+    </script>
+  </body>
+</html>

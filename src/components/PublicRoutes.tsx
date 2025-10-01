@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
+import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface AuthState {
   auth: boolean;
-  role: User['profile'] | null; // Adjust the type if you have a specific type for role
+  role: User["profile"] | null;
   loading: boolean;
 }
 
@@ -19,7 +20,7 @@ const useAuth = (): AuthState => {
         const currentUser = await authService.getUser();
         setUser(currentUser);
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
       } finally {
         setLoading(false);
       }
@@ -31,15 +32,27 @@ const useAuth = (): AuthState => {
   return { auth: !!user, role: user?.profile ?? null, loading };
 };
 
-const PublicRoutes: React.FC = (props): JSX.Element => {
+const PublicRoutes: React.FC = (): JSX.Element => {
   const { auth, loading } = useAuth();
-  console.log(props);
+
+  // Automatically initiate sign-in if not authenticated
+  useEffect(() => {
+    if (!loading && !auth) {
+      void authService.signIn();
+    }
+  }, [loading, auth]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
+    );
   }
 
-  return auth ? <Navigate to="/home" /> : <Outlet />;
+  return auth ? (
+    <Outlet />
+  ) : (
+    <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
+  );
 };
 
 export default PublicRoutes;

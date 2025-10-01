@@ -3,17 +3,17 @@ import {
   UserManager,
   UserManagerSettings,
   WebStorageStateStore,
-} from 'oidc-client-ts';
+} from "oidc-client-ts";
 
 const AUTHORITY =
   process.env.REACT_APP_AUTHORITY ??
-  'https://default-authority.example.com/oauth';
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'fallback-client-id';
+  "https://default-authority.example.com/oauth";
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? "fallback-client-id";
 const REDIRECT_URI =
-  process.env.REACT_APP_REDIRECT_URI ?? 'http://localhost:3000/luna/token';
+  process.env.REACT_APP_REDIRECT_URI ?? "http://localhost:3000/luna/token";
 const SCOPE =
-  process.env.REACT_APP_SCOPE ?? 'openid email profile offline_access';
-const RESPONSE_TYPE = process.env.REACT_APP_RESPONSE_TYPE ?? 'code';
+  process.env.REACT_APP_SCOPE ?? "openid email profile offline_access";
+const RESPONSE_TYPE = process.env.REACT_APP_RESPONSE_TYPE ?? "code";
 
 const config: UserManagerSettings = {
   authority: AUTHORITY,
@@ -23,16 +23,36 @@ const config: UserManagerSettings = {
   response_type: RESPONSE_TYPE,
   userStore: new WebStorageStateStore({ store: window.localStorage }),
   automaticSilentRenew: true,
-  loadUserInfo: false,
+  silentRequestTimeout: 10000,
+  monitorSession: true,
+  loadUserInfo: true,
+  revokeAccessTokenOnSignout: true,
+
+  // Add silent redirect URI for silent token renewal
+  silent_redirect_uri: window.location.origin + "/luna/silent-refresh.html",
 };
 
 class AuthService {
   private userManager: UserManager;
+  private renewingToken: boolean = false;
 
   constructor() {
     this.userManager = new UserManager(config);
+
+    // Set up event handlers for token management
+    this.userManager.events.addAccessTokenExpiring(() => {
+      console.log("Access token expiring, attempting silent renewal");
+      this.renewToken();
+    });
+
+    this.userManager.events.addSilentRenewError((error) => {
+      console.error("Silent renew error:", error);
+      // Redirect to login if silent renewal fails
+      this.signIn().catch(console.error);
+    });
+
     this.userManager.events.addUserLoaded((user: User) => {
-      console.log('User loaded', user);
+      console.log("User loaded", user);
     });
   }
 
@@ -45,16 +65,49 @@ class AuthService {
   }
 
   public async getUser(): Promise<User | null> {
-    return await this.userManager.getUser();
+    const user = await this.userManager.getUser();
+
+    // If we have a user but the token is about to expire, try to renew it
+    if (user && this.isTokenExpiringSoon(user)) {
+      return await this.renewToken();
+    }
+
+    return user;
+  }
+
+  private isTokenExpiringSoon(user: User): boolean {
+    const now = Math.floor(Date.now() / 1000);
+    const expiresIn = user.expires_at ? user.expires_at - now : 0;
+    // Renew if token expires in less than 5 minutes
+    return expiresIn < 300;
+  }
+
+  private async renewToken(): Promise<User | null> {
+    // Prevent multiple simultaneous token renewals
+    if (this.renewingToken) {
+      return this.userManager.getUser();
+    }
+
+    try {
+      this.renewingToken = true;
+      const user = await this.userManager.signinSilent();
+      console.log("Token renewed successfully");
+      return user;
+    } catch (error) {
+      console.error("Failed to renew token silently:", error);
+      return null;
+    } finally {
+      this.renewingToken = false;
+    }
   }
 
   public async handleRedirectCallback(): Promise<User> {
     try {
       const user = await this.userManager.signinRedirectCallback();
-      console.log(user);
+      console.log("Successfully processed redirect callback");
       return user;
     } catch (error) {
-      console.error('Error handling redirect callback', error);
+      console.error("Error handling redirect callback", error);
       throw error;
     }
   }

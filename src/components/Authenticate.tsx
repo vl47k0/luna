@@ -1,46 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { authService } from '../utils/oidc';
-import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { authService } from "../utils/oidc";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const AuthenticateCallback: React.FC = () => {
   const navigate = useNavigate();
-  const [queryParams, setQueryParams] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
 
   useEffect((): void => {
-    const params: Record<string, string> = {};
-    const entries = searchParams.entries();
-    let entry = entries.next();
-    while (!entry.done) {
-      const [key, value] = entry.value;
-      params[key] = value;
-      entry = entries.next();
-    }
-    setQueryParams(params);
-
     const handleAuthCallback = async (): Promise<void> => {
-      const user = await authService.handleRedirectCallback();
-      console.log(user);
-      navigate('/home');
+      try {
+        const user = await authService.handleRedirectCallback();
+        console.log("Authentication successful:", user);
+        navigate("/home", { replace: true });
+      } catch (err) {
+        console.error("Authentication callback error:", err);
+        setError("Authentication failed. Please try again.");
+      }
     };
 
     void handleAuthCallback();
   }, [navigate, searchParams]);
 
+  if (error) {
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Typography variant="h5" color="error">
+          {error}
+        </Typography>
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          <a href="/login">Return to login</a>
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
-    <div>
-      <Typography variant="h5">Query Parameters:</Typography>
-      <ul>
-        {Object.entries(queryParams).map(([key, value]) => (
-          <li key={key}>
-            <Typography>
-              <strong>{key}:</strong> {value}
-            </Typography>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        flexDirection: "column",
+      }}
+    >
+      <CircularProgress />
+      <Typography variant="h6" sx={{ mt: 2 }}>
+        Processing authentication...
+      </Typography>
+    </Box>
   );
 };
 

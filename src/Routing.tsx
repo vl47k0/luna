@@ -1,26 +1,27 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router";
 
-import Content from './components/Content';
-import Login from './components/Login';
-import Profile from './components/Profile';
-import ProtectedRoutes from './components/ProtectedRoutes';
-import PublicRoutes from './components/PublicRoutes';
-import PermissionDenied from './components/PermissionDenied';
-import ServiceList from './components/ServiceList';
-import BookmarkList from './components/BookmarkList';
-import BookmarkDetail from './components/BookmarkDetail';
-import IssueList from './components/IssueList';
-import IssueDetail from './components/IssueDetail';
-import ProcessList from './components/ProcessList';
-import ProcessDetail from './components/ProcessDetail';
-import ServiceDetail from './components/ServiceDetail';
-import Authenticate from './components/Authenticate';
-import ResourceAccessListForm from './components/ResourceAccessListForm';
-import UploadSearch from './components/UploadSearch';
+import Content from "./components/Content";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import PublicRoutes from "./components/PublicRoutes";
+import PermissionDenied from "./components/PermissionDenied";
+import ServiceList from "./components/ServiceList";
+import BookmarkList from "./components/BookmarkList";
+import BookmarkDetail from "./components/BookmarkDetail";
+import IssueList from "./components/IssueList";
+import IssueDetail from "./components/IssueDetail";
+import ProcessList from "./components/ProcessList";
+import ProcessDetail from "./components/ProcessDetail";
+import ServiceDetail from "./components/ServiceDetail";
+import Authenticate from "./components/Authenticate";
+import ResourceAccessListForm from "./components/ResourceAccessListForm";
+import UploadSearch from "./components/UploadSearch";
 
 const Routing: React.FC = (): JSX.Element => (
   <Routes>
+    {/* Protected routes requiring authentication */}
     <Route path="/" element={<ProtectedRoutes />}>
       <Route path="/" element={<Content />}>
         <Route path="/" element={<Navigate replace to="issues" />} />
@@ -38,13 +39,19 @@ const Routing: React.FC = (): JSX.Element => (
       </Route>
     </Route>
 
+    {/* Public routes */}
     <Route path="login" element={<PublicRoutes />}>
       <Route path="/login" element={<Login />} />
     </Route>
 
+    {/* Authentication callback route */}
     <Route path="/token" element={<Authenticate />} />
 
+    {/* Permission denied route */}
     <Route path="/denied" element={<PermissionDenied />} />
+
+    {/* Catch all route */}
+    <Route path="*" element={<Navigate to="/" />} />
   </Routes>
 );
 
