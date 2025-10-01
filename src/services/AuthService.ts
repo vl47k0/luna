@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export interface ILoginResponse {
   access_token: string;
@@ -68,7 +68,7 @@ export interface IJWK {
   alg: string;
   kid: string;
   x5c: string[];
-  'x5t#S256': string;
+  "x5t#S256": string;
   e: string;
   n: string;
 }
@@ -96,15 +96,15 @@ class AuthService {
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Basic ${process.env.REACT_APP_SOD_SEC}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     };
 
     const data = new URLSearchParams({
-      grant_type: 'password',
+      grant_type: "password",
       username: username,
       password: password,
-      scope: 'openid profile',
+      scope: "openid profile",
     });
 
     return axios
@@ -128,7 +128,7 @@ class AuthService {
           IdToken: jwtDecode<IIdToken>(id_token),
         };
 
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(userData));
         return userData;
       });
   }
@@ -138,24 +138,24 @@ class AuthService {
       const decoded = jwtDecode<{ exp: number }>(token);
       return decoded;
     } catch (error) {
-      console.error('Failed to decode JWT:', error);
+      console.error("Failed to decode JWT:", error);
       return null;
     }
   }
 
-  async revokeToken(token: string): Promise<AxiosResponse<any>> {
+  async revokeToken(token: string): Promise<AxiosResponse<unknown>> {
     const data = new URLSearchParams();
-    data.append('token', token);
+    data.append("token", token);
 
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Basic ${process.env.REACT_APP_SOD_SEC}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     };
 
     return axios.post(
-      axiosBackend.defaults.baseURL + '/oauth/revoke',
+      axiosBackend.defaults.baseURL + "/oauth/revoke",
       data,
       config
     );
@@ -164,8 +164,8 @@ class AuthService {
   async refToken(): Promise<IUserData> {
     const user = this.getCurrentUser();
     if (!user?.refresh_token) {
-      console.error('No refresh token available');
-      return Promise.reject('No refresh token available');
+      console.error("No refresh token available");
+      return Promise.reject("No refresh token available");
     }
 
     const config: AxiosRequestConfig = {
@@ -181,11 +181,11 @@ class AuthService {
       );
 
       if (response.data) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
       }
       return response.data;
     } catch (error) {
-      console.error('Error refreshing token:', error);
+      console.error("Error refreshing token:", error);
       return Promise.reject(error);
     }
   }
@@ -193,19 +193,19 @@ class AuthService {
   refreshToken(): Promise<IUserData> {
     const user = this.getCurrentUser();
     if (!user?.refresh_token) {
-      console.log('No refresh token available');
-      return Promise.reject('No refresh token available');
+      console.log("No refresh token available");
+      return Promise.reject("No refresh token available");
     }
 
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Basic ${process.env.REACT_APP_SOD_SEC}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     };
 
     const data = new URLSearchParams({
-      grant_type: 'refresh_token',
+      grant_type: "refresh_token",
       refresh_token: user.refresh_token,
     });
 
@@ -217,7 +217,7 @@ class AuthService {
       )
       .then((response) => {
         if (response.data) {
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         }
         return response.data;
       });
@@ -226,13 +226,13 @@ class AuthService {
   isAccessTokenExpiring(): boolean {
     const user = this.getCurrentUser();
     if (!user?.access_token) {
-      console.log('No access token available');
+      console.log("No access token available");
       return true;
     }
 
     const decoded = this.decodeJwt(user.access_token);
     if (!decoded?.exp) {
-      console.log('Failed to decode access token or no exp claim.');
+      console.log("Failed to decode access token or no exp claim.");
       return true;
     }
 
@@ -245,10 +245,10 @@ class AuthService {
 
   async refreshTokenIfNeeded(): Promise<IUserData | null> {
     if (this.isAccessTokenExpiring()) {
-      console.log('Access token is about to expire, refreshing...');
+      console.log("Access token is about to expire, refreshing...");
       return this.refreshToken();
     } else {
-      console.log('Access token is valid.');
+      console.log("Access token is valid.");
       return Promise.resolve(null);
     }
   }
@@ -256,13 +256,19 @@ class AuthService {
   logout(): void {
     const user = this.getCurrentUser();
     if (!user?.id_token) {
-      console.error('No ID token available for logout.');
+      console.error("No ID token available for logout.");
       return;
     }
 
-    const logoutUrl = `${axiosBackend.defaults.baseURL}am/a2b-develop/logout?id_token_hint=${user.id_token}&post_logout_redirect_uri=${encodeURIComponent('YOUR_POST_LOGOUT_REDIRECT_URI')}`;
+    const logoutUrl = `${
+      axiosBackend.defaults.baseURL
+    }am/a2b-develop/logout?id_token_hint=${
+      user.id_token
+    }&post_logout_redirect_uri=${encodeURIComponent(
+      "YOUR_POST_LOGOUT_REDIRECT_URI"
+    )}`;
     console.log(logoutUrl);
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
   }
 
   async getJWKs(): Promise<IJWKSet | null> {
@@ -274,13 +280,13 @@ class AuthService {
       console.log(jwks);
       return jwks;
     } catch (error) {
-      console.error('Failed to fetch JWKs:', error);
+      console.error("Failed to fetch JWKs:", error);
       return null;
     }
   }
 
   getCurrentUser(): IUserData | null {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem("user");
     if (userStr) return JSON.parse(userStr) as IUserData;
 
     return null;
