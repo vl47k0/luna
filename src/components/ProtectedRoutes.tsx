@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { authService } from "../utils/oidc";
 import type { User } from "oidc-client-ts";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -14,7 +14,6 @@ interface AuthState {
 const useAuth = (): AuthState => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect((): void | (() => void) => {
     let isMounted = true;
@@ -42,15 +41,13 @@ const useAuth = (): AuthState => {
 
 const ProtectedRoutes: React.FC = () => {
   const { auth, loading } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading && !auth) {
       // Instead of using Navigate component, use navigate function
       void authService.signIn();
     }
-  }, [loading, auth, navigate]);
+  }, [loading, auth]);
 
   if (loading)
     return (

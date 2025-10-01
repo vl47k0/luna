@@ -23,10 +23,11 @@ const config: UserManagerSettings = {
   response_type: RESPONSE_TYPE,
   userStore: new WebStorageStateStore({ store: window.localStorage }),
   automaticSilentRenew: true,
-  silentRequestTimeout: 10000,
+  // Corrected property names and disabled loadUserInfo
+  silentRequestTimeoutInSeconds: 10,
   monitorSession: true,
-  loadUserInfo: true,
-  revokeAccessTokenOnSignout: true,
+  loadUserInfo: false, // Set to false to prevent userinfo endpoint error
+  revokeTokensOnSignout: true, // Corrected from revokeAccessTokenOnSignout
 
   // Add silent redirect URI for silent token renewal
   silent_redirect_uri: window.location.origin + "/luna/silent-refresh.html",
@@ -42,13 +43,13 @@ class AuthService {
     // Set up event handlers for token management
     this.userManager.events.addAccessTokenExpiring(() => {
       console.log("Access token expiring, attempting silent renewal");
-      this.renewToken();
+      void this.renewToken();
     });
 
     this.userManager.events.addSilentRenewError((error) => {
       console.error("Silent renew error:", error);
       // Redirect to login if silent renewal fails
-      this.signIn().catch(console.error);
+      void this.signIn().catch(console.error);
     });
 
     this.userManager.events.addUserLoaded((user: User) => {

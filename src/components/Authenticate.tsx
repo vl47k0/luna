@@ -15,7 +15,8 @@ const AuthenticateCallback: React.FC = () => {
       try {
         const user = await authService.handleRedirectCallback();
         console.log("Authentication successful:", user);
-        navigate("/home", { replace: true });
+        // Redirect to the root, letting App.tsx handle the next navigation step.
+        navigate("/", { replace: true });
       } catch (err) {
         console.error("Authentication callback error:", err);
         setError("Authentication failed. Please try again.");
@@ -32,7 +33,8 @@ const AuthenticateCallback: React.FC = () => {
           {error}
         </Typography>
         <Typography variant="body1" sx={{ mt: 2 }}>
-          <a href="/login">Return to login</a>
+          {/* Corrected: The link now correctly points to the login page within the app's basename */}
+          <a href="/luna/login">Return to login</a>
         </Typography>
       </Box>
     );

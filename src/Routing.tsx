@@ -24,7 +24,8 @@ const Routing: React.FC = (): JSX.Element => (
     {/* Protected routes requiring authentication */}
     <Route path="/" element={<ProtectedRoutes />}>
       <Route path="/" element={<Content />}>
-        <Route path="/" element={<Navigate replace to="issues" />} />
+        {/* REMOVED: Immediate redirect to /issues. App.tsx will handle this. */}
+        <Route path="/" element={<IssueList />} />
         <Route path="profile" element={<Profile />} />
         <Route path="resource" element={<ResourceAccessListForm />} />
         <Route path="issues" element={<IssueList />} />
