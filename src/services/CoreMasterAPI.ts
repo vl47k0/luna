@@ -1,1919 +1,920 @@
-// === Auto-generated from OpenAPI (typed Axios client) ===
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-// ---- Schemas & Operation Types ----
-export interface FindByUnitSetCodeQuery {
-  "code": string;
-}
-export type never = never;
-export type FindByUnitSetCodeResponse = any;
-export type never = never;
-export type CreateUnitSetResponse = any;
-export type never = never;
-export type FindByUnitIdResponse = any;
-export type never = never;
-export type EditUnitSetResponse = any;
-export type never = never;
-export type DeleteUnitSetResponse = any;
-export interface GetUnitSetUnitsQuery {
-  "unitCode"?: string;
-}
-export type never = never;
-export type GetUnitSetUnitsResponse = any;
-export type never = never;
-export type CreateUnitResponse = any;
-export interface GetUnitQuery {
-  "lowerIds"?: true | false;
-  "detailed"?: true | false;
-}
-export type never = never;
-export type GetUnitResponse = any;
-export type never = never;
-export type UpdateUnitResponse = any;
-export interface GetUnitLinksQuery {
-  "target"?: string;
-}
-export type never = never;
-export type GetUnitLinksResponse = any;
-export type CreateUnitLinkBody = {
-  "unitLinkId"?: string;
-  "upperUnitId"?: string;
-  "unitId"?: string;
-  "startDate"?: string;
-  "endDate"?: string;
-  "unitSetId"?: string;
-  "version"?: number;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: any;
-};
-export type CreateUnitLinkResponse = any;
-export interface UpdateLinkPath {
-  "linkId": string;
-}
-export type UpdateLinkBody = {
-  "unitLinkId"?: string;
-  "upperUnitId"?: string;
-  "unitId"?: string;
-  "startDate"?: string;
-  "endDate"?: string;
-  "unitSetId"?: string;
-  "version"?: number;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: any;
-};
-export type UpdateLinkResponse = any;
-export interface DeleteLinkPath {
-  "linkId": string;
-}
-export type never = never;
-export type DeleteLinkResponse = any;
-export interface GetUpperUnitLinksListPath {
-  "unitId": string;
-}
-export type never = never;
-export type GetUpperUnitLinksListResponse = any;
-export interface PutRelinkPath {
-  "unitId": string;
-}
-export type PutRelinkBody = {
-  "unitLinkId"?: string;
-  "upperUnitId"?: string;
-  "unitId"?: string;
-  "startDate"?: string;
-  "endDate"?: string;
-  "unitSetId"?: string;
-  "version"?: number;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: any;
-} & {
-  "unitId"?: any;
-  "version"?: any;
-};
-export type PutRelinkResponse = any;
-export interface PutUnlinkPath {
-  "unitId": string;
-  "linkId": string;
-}
-export interface PutUnlinkQuery {
-  "version": number;
-}
-export type PutUnlinkBody = {
-  "endDate": string;
-};
-export type PutUnlinkResponse = any;
-export interface GetUnitUsersPath {
-  "unitId": string;
-}
-export interface GetUnitUsersQuery {
-  "jobDutyId"?: string;
-  "roleCode"?: string;
-}
-export type never = never;
-export type GetUnitUsersResponse = any;
-export interface GetUnitsFindQuery {
-  "unitCode": string;
-  "unitSetCode"?: string;
-}
-export interface GetUnitsFindHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetUnitsFindResponse = any;
-export interface PutUnitAssignedUsersPath {
-  "unitAssignedUserId": string;
-}
-export interface PutUnitAssignedUsersHeader {
-  "X-A2b-Token": string;
-}
-export type PutUnitAssignedUsersBody = any & {
-  "unitSetId"?: any;
-  "version"?: any;
-};
-export type PutUnitAssignedUsersResponse = any;
-export interface GetUnitAssignedUsersPath {
-  "unitId": string;
-}
-export interface GetUnitAssignedUsersQuery {
-  "userId"?: string;
-}
-export interface GetUnitAssignedUsersHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetUnitAssignedUsersResponse = any;
-export interface PostUnitAssignedUsersPath {
-  "unitId": string;
-}
-export interface PostUnitAssignedUsersHeader {
-  "X-A2b-Token": string;
-}
-export type PostUnitAssignedUsersBody = any & {
-  "unitId"?: any;
-};
-export type PostUnitAssignedUsersResponse = any;
-export type never = never;
-export type FindAssginedRolesResponse = any;
-export type never = never;
-export type CreateUnitAssginedRolesResponse = any;
-export interface GetAssginedRolePath {
-  "id": string;
-}
-export type never = never;
-export type GetAssginedRoleResponse = any;
-export interface UpdateAssginedRolePath {
-  "id": string;
-}
-export type never = never;
-export type UpdateAssginedRoleResponse = any;
-export interface DeleteAssginedRolePath {
-  "id": string;
-}
-export type never = never;
-export type DeleteAssginedRoleResponse = any;
-export interface FindAssginableJobDutyQuery {
-  "jobDutyId"?: string;
-}
-export type never = never;
-export type FindAssginableJobDutyResponse = any;
-export type never = never;
-export type CreateAssignableJobDutyResponse = any;
-export interface GetAssignableJobDutyPath {
-  "id": string;
-}
-export type never = never;
-export type GetAssignableJobDutyResponse = any;
-export interface UpdateAssignableJobDutyPath {
-  "id": string;
-}
-export type never = never;
-export type UpdateAssignableJobDutyResponse = any;
-export interface DeleteUnitsUnitidJobDutiesIdPath {
-  "id": string;
-}
-export type never = never;
-export type DeleteUnitsUnitidJobDutiesIdResponse = any;
-export interface PostUsersHeader {
-  "X-A2b-Token": string;
-}
-export type PostUsersBody = {
-  "user": any;
-  "unitAssignedUser"?: any & {
-  "userId"?: any;
-};
-};
-export type PostUsersResponse = any;
-export interface GetUsersQuery {
-  "userId"?: string;
-  "userCode"?: string;
-  "unitSetId"?: string;
-}
-export interface GetUsersHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetUsersResponse = any;
-export interface PutUsersPath {
-  "userId": string;
-}
-export interface PutUsersHeader {
-  "X-A2b-Token": string;
-}
-export type PutUsersBody = any & {
-  "version"?: any;
-};
-export type PutUsersResponse = any;
-export interface GetUsersJobDutyListPath {
-  "userId": string;
-}
-export interface GetUsersJobDutyListQuery {
-  "unitId": string;
-  "targetDate"?: string;
-}
-export interface GetUsersJobDutyListHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetUsersJobDutyListResponse = any;
-export interface PostRolesHeader {
-  "X-A2b-Token": string;
-}
-export type PostRolesBody = {
-  "jobDuty"?: {
-  "roleCode"?: string;
-  "roleType"?: "Function" | "Virtual" | "FunctionGroup";
-  "attributes"?: {
-  "name"?: any;
-  "abbrevName"?: any;
-  "description"?: any;
-};
-  "targetUnitId"?: string;
-};
-};
-export type PostRolesResponse = any;
-export interface GetRolesListQuery {
-  "targetUnitId": string;
-  "roleType"?: string;
-  "roleCode"?: string;
-  "offset"?: number;
-  "limit"?: number;
-  "targetDate"?: string;
-  "lowerDepth"?: number;
-  "attrCond"?: string;
-  "$filter"?: string;
-}
-export interface GetRolesListHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetRolesListResponse = any;
-export interface GetRolesPath {
-  "roleCode": string;
-}
-export interface GetRolesHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetRolesResponse = any;
-export interface PutRolesPath {
-  "roleCode": string;
-}
-export interface PutRolesHeader {
-  "X-A2b-Token": string;
-}
-export type PutRolesBody = {
-  "roleType"?: "Function" | "Virtual" | "FunctionGroup";
-  "attributes"?: {
-  "_ver"?: any;
-  "name"?: any;
-  "abbrevName"?: any;
-  "description"?: any;
-};
-  "targetUnitId"?: string;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "ownerScopeType"?: string;
-  "scopeType"?: string;
-  "scopeId"?: string;
-  "aclId"?: string;
-};
-export type PutRolesResponse = any;
-export interface DeleteRolesPath {
-  "roleCode": string;
-}
-export interface DeleteRolesQuery {
-  "version": number;
-}
-export interface DeleteRolesHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type DeleteRolesResponse = any;
-export interface PostRoleLinksPath {
-  "roleCode": string;
-  "lowerRoleCode": string;
-}
-export interface PostRoleLinksHeader {
-  "X-A2b-Token": string;
-}
-export type PostRoleLinksBody = {
-  "startDate"?: string;
-  "endDate"?: string;
-};
-export type PostRoleLinksResponse = any;
-export interface DeleteRoleLinksPath {
-  "roleCode": string;
-  "lowerRoleCode": string;
-}
-export interface DeleteRoleLinksQuery {
-  "targetDate"?: string;
-}
-export interface DeleteRoleLinksHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type DeleteRoleLinksResponse = any;
-export interface PostRoleSetsHeader {
-  "X-A2b-Token": string;
-}
-export type PostRoleSetsBody = {
-  "attributes"?: {
-  "name"?: any;
-  "abbrevName"?: any;
-  "description"?: any;
-};
-  "roleCodeList": string[];
-  "targetUnitId"?: string;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "ownerScopeType"?: string;
-  "scopeType"?: string;
-  "scopeId"?: string;
-  "aclId"?: string;
-};
-export type PostRoleSetsResponse = any;
-export interface GetFindRoleSetsQuery {
-  "targetUnitId": string;
-  "offset"?: number;
-  "limit"?: number;
-  "lowerDepth"?: number;
-  "attrCond"?: string;
-}
-export interface GetFindRoleSetsHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetFindRoleSetsResponse = any;
-export interface GetRoleSetsPath {
-  "roleSetId": string;
-}
-export interface GetRoleSetsHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type GetRoleSetsResponse = any;
-export interface PutRoleSetsPath {
-  "roleSetId": string;
-}
-export interface PutRoleSetsHeader {
-  "X-A2b-Token": string;
-}
-export type PutRoleSetsBody = {
-  "attributes"?: {
-  "name"?: any;
-  "abbrevName"?: any;
-  "description"?: any;
-};
-  "roleCodeList"?: string[];
-  "targetUnitId"?: string;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "ownerScopeType"?: string;
-  "scopeType"?: string;
-  "scopeId"?: string;
-  "aclId"?: string;
-};
-export type PutRoleSetsResponse = any;
-export interface DeleteRoleLinksPath {
-  "roleSetId": string;
-}
-export interface DeleteRoleLinksHeader {
-  "X-A2b-Token": string;
-}
-export type never = never;
-export type DeleteRoleLinksResponse = any;
-export type PostAgreementsBody = {
-  "agreementId"?: string;
-  "agreementTypeId"?: string;
-  "firstPartyUnitSetId"?: string;
-  "firstPartyUnitId"?: string;
-  "secondPartyUnitSetId"?: string;
-  "secondPartyUnitId"?: string;
-  "attributes"?: {
-  "_ver"?: string;
-  "name"?: string;
-  "description"?: string;
-  "priorAgreementId"?: string;
-  "agreementRevision"?: string;
-  "firstPartySigner"?: string;
-  "firstPartyRelevantUnitList"?: string[];
-  "secondPartySigner"?: string;
-  "secondPartyRelevantUnitList"?: string[];
-  "agreedDate"?: string;
-  "referenceAgreementIdList"?: string[];
-};
-  "effectiveStartDate"?: string;
-  "effectiveEndDate"?: string;
-  "cancellationDate"?: string;
-  "version"?: number;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "scopeType"?: "unitSet" | "unit" | "unitTree" | "user" | "everyone" | "anonymous" | "none" | "unitRole" | "unitTreeRole";
-  "scopeId"?: string;
-  "aclId"?: string;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: string;
-};
-export type PostAgreementsResponse = any;
-export interface GetAgreementsListQuery {
-  "typeCode"?: string;
-  "dutyCode"?: string;
-  "roleCode"?: string;
-  "unitSetId"?: string;
-  "targetDate"?: string;
-  "offset"?: number;
-  "limit"?: number;
-  "order"?: string[];
-}
-export type never = never;
-export type GetAgreementsListResponse = any;
-export interface GetAgreementsAgreementidPath {
-  "agreementId": string;
-}
-export type never = never;
-export type GetAgreementsAgreementidResponse = any;
-export interface PutAgreementsAgreementidPath {
-  "agreementId": string;
-}
-export type PutAgreementsAgreementidBody = {
-  "agreementId"?: string;
-  "agreementTypeId"?: string;
-  "firstPartyUnitSetId"?: string;
-  "firstPartyUnitId"?: string;
-  "secondPartyUnitSetId"?: string;
-  "secondPartyUnitId"?: string;
-  "attributes"?: {
-  "_ver"?: string;
-  "name"?: string;
-  "description"?: string;
-  "priorAgreementId"?: string;
-  "agreementRevision"?: string;
-  "firstPartySigner"?: string;
-  "firstPartyRelevantUnitList"?: string[];
-  "secondPartySigner"?: string;
-  "secondPartyRelevantUnitList"?: string[];
-  "agreedDate"?: string;
-  "referenceAgreementIdList"?: string[];
-};
-  "effectiveStartDate"?: string;
-  "effectiveEndDate"?: string;
-  "cancellationDate"?: string;
-  "version"?: number;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "scopeType"?: "unitSet" | "unit" | "unitTree" | "user" | "everyone" | "anonymous" | "none" | "unitRole" | "unitTreeRole";
-  "scopeId"?: string;
-  "aclId"?: string;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: string;
-} & {
-  "firstPartyUnitId"?: any;
-  "secondPartyUnitId"?: any;
-  "attributes"?: {
-  "referenceAgreementIdList"?: any;
-};
-  "version"?: any;
-};
-export type PutAgreementsAgreementidResponse = any;
-export interface DeleteAgreementsAgreementidPath {
-  "agreementId": string;
-}
-export interface DeleteAgreementsAgreementidQuery {
-  "version": number;
-}
-export type never = never;
-export type DeleteAgreementsAgreementidResponse = any;
-export interface PutAgreementsAgreementidCancelPath {
-  "agreementId": string;
-}
-export type PutAgreementsAgreementidCancelBody = {
-  "cancellationDate"?: string;
-  "version": number;
-};
-export type PutAgreementsAgreementidCancelResponse = any;
-export interface PostAgreementsAgreementidRenewPath {
-  "agreementId": string;
-}
-export type PostAgreementsAgreementidRenewBody = {
-  "agreementId"?: string;
-  "agreementTypeId"?: string;
-  "firstPartyUnitSetId"?: string;
-  "firstPartyUnitId"?: string;
-  "secondPartyUnitSetId"?: string;
-  "secondPartyUnitId"?: string;
-  "attributes"?: {
-  "_ver"?: string;
-  "name"?: string;
-  "description"?: string;
-  "priorAgreementId"?: string;
-  "agreementRevision"?: string;
-  "firstPartySigner"?: string;
-  "firstPartyRelevantUnitList"?: string[];
-  "secondPartySigner"?: string;
-  "secondPartyRelevantUnitList"?: string[];
-  "agreedDate"?: string;
-  "referenceAgreementIdList"?: string[];
-};
-  "effectiveStartDate"?: string;
-  "effectiveEndDate"?: string;
-  "cancellationDate"?: string;
-  "version"?: number;
-  "ownerUnitId"?: string;
-  "ownerUserId"?: string;
-  "scopeType"?: "unitSet" | "unit" | "unitTree" | "user" | "everyone" | "anonymous" | "none" | "unitRole" | "unitTreeRole";
-  "scopeId"?: string;
-  "aclId"?: string;
-  "creationDate"?: string;
-  "creationUserId"?: string;
-  "creationUnitId"?: string;
-  "updateDate"?: string;
-  "updateUserId"?: string;
-  "updateUnitId"?: string;
-  "deletionDate"?: string;
-} & {
-  "version"?: any;
-};
-export type PostAgreementsAgreementidRenewResponse = any;
-export type PostAgreementsTypesBody = any & {
-  "agreementTypeCode"?: any;
-  "version"?: any;
-};
-export type PostAgreementsTypesResponse = any;
-export interface GetAgreementsTypesFindQuery {
-  "code": string;
-}
-export type never = never;
-export type GetAgreementsTypesFindResponse = any;
-export interface GetAgreementsTypesAgreementtypeidPath {
-  "agreementTypeId": string;
-}
-export type never = never;
-export type GetAgreementsTypesAgreementtypeidResponse = any;
-export interface PutAgreementsTypesAgreementtypeidPath {
-  "agreementTypeId": string;
-}
-export type PutAgreementsTypesAgreementtypeidBody = any;
-export type PutAgreementsTypesAgreementtypeidResponse = any;
-export interface DeleteAgreementsTypesAgreementtypeidPath {
-  "agreementTypeId": string;
-}
-export type never = never;
-export type DeleteAgreementsTypesAgreementtypeidResponse = any;
-export type PostListbusinesspartyusersBody = {
-  "scopeType": "UnitSet" | "UnitTree" | "AgreementType";
-  "scopeId": string;
-  "roleCode"?: string;
-  "jobDutyCode"?: string;
-  "filters"?: {
-  "filterType": string;
-  "filterValue": string[];
-}[];
-}[];
-export type PostListbusinesspartyusersResponse = any;
-export type PostListBusinessPartnersBody = {
-  "searchConditions"?: {
-  "scopeType": "UnitSet" | "UnitTree" | "AgreementType";
-  "scopeId": string;
-  "filters"?: {
-  "filterType": string;
-  "filterValue": string[];
-}[];
-}[];
-  "groupUnitLimit"?: number;
-  "groupUserLimit"?: number;
-  "limit"?: number;
-};
-export type PostListBusinessPartnersResponse = any;
-export interface GetObjectsByIdHeader {
-  "X-A2b-Token": string;
-}
-export type GetObjectsByIdBody = {
-  "userIds"?: any[];
-  "unitIds"?: any[];
-  "activeOnly"?: boolean;
-};
-export type GetObjectsByIdResponse = any;
-export interface GetObjectsByCodeHeader {
-  "X-A2b-Token": string;
-}
-export type GetObjectsByCodeBody = {
-  "userCodes"?: {
-  "userCode": any;
-  "unitSetCode"?: any;
-}[];
-  "unitCodes"?: {
-  "unitCode": any;
-  "unitSetCode"?: any;
-}[];
-  "activeOnly"?: boolean;
-};
-export type GetObjectsByCodeResponse = any;
-export type never = never;
-export type GetSecurityGroupResponse = any;
-export type PutSecurityGroupBody = any & {
-  "members"?: any & any[];
-} & any;
-export type PutSecurityGroupResponse = any;
-export interface DeleteSecurityGroupQuery {
-  "version": number;
-}
-export type never = never;
-export type DeleteSecurityGroupResponse = any;
-export interface PostSimpleAclHeader {
-  "X-A2b-Token": string;
-}
-export type PostSimpleAclBody = {
-  "candidateScopeType": "unitSet" | "unitTree" | "unit" | "user";
-  "candidateScopeId": string;
-  "userIdAs"?: string;
-  "unitIdAs"?: string;
-  "unitSetIdAs"?: string;
-  "checkScopeList"?: "unitSet" | "unitTree" | "unit" | "agreement"[];
-};
-export type PostSimpleAclResponse = any;
+//################################################################################
+//## TYPE DEFINITIONS (Generated from OpenAPI Schemas)
+//################################################################################
 
-export interface FindByUnitSetCodeRequest {
-  path: Record<string, never>;
-  query?: FindByUnitSetCodeQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface CreateUnitSetRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface FindByUnitIdRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface EditUnitSetRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface DeleteUnitSetRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetUnitSetUnitsRequest {
-  path: Record<string, never>;
-  query?: GetUnitSetUnitsQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface CreateUnitRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetUnitRequest {
-  path: Record<string, never>;
-  query?: GetUnitQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface UpdateUnitRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetUnitLinksRequest {
-  path: Record<string, never>;
-  query?: GetUnitLinksQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface CreateUnitLinkRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: CreateUnitLinkBody;
-}
-export interface UpdateLinkRequest {
-  path: UpdateLinkPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: UpdateLinkBody;
-}
-export interface DeleteLinkRequest {
-  path: DeleteLinkPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetUpperUnitLinksListRequest {
-  path: GetUpperUnitLinksListPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutRelinkRequest {
-  path: PutRelinkPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutRelinkBody;
-}
-export interface PutUnlinkRequest {
-  path: PutUnlinkPath;
-  query?: PutUnlinkQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutUnlinkBody;
-}
-export interface GetUnitUsersRequest {
-  path: GetUnitUsersPath;
-  query?: GetUnitUsersQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetUnitsFindRequest {
-  path: Record<string, never>;
-  query?: GetUnitsFindQuery;
-  header?: GetUnitsFindHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutUnitAssignedUsersRequest {
-  path: PutUnitAssignedUsersPath;
-  query?: Record<string, never>;
-  header?: PutUnitAssignedUsersHeader;
-  cookie?: Record<string, never>;
-  body?: PutUnitAssignedUsersBody;
-}
-export interface GetUnitAssignedUsersRequest {
-  path: GetUnitAssignedUsersPath;
-  query?: GetUnitAssignedUsersQuery;
-  header?: GetUnitAssignedUsersHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostUnitAssignedUsersRequest {
-  path: PostUnitAssignedUsersPath;
-  query?: Record<string, never>;
-  header?: PostUnitAssignedUsersHeader;
-  cookie?: Record<string, never>;
-  body?: PostUnitAssignedUsersBody;
-}
-export interface FindAssginedRolesRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface CreateUnitAssginedRolesRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetAssginedRoleRequest {
-  path: GetAssginedRolePath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface UpdateAssginedRoleRequest {
-  path: UpdateAssginedRolePath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface DeleteAssginedRoleRequest {
-  path: DeleteAssginedRolePath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface FindAssginableJobDutyRequest {
-  path: Record<string, never>;
-  query?: FindAssginableJobDutyQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface CreateAssignableJobDutyRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetAssignableJobDutyRequest {
-  path: GetAssignableJobDutyPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface UpdateAssignableJobDutyRequest {
-  path: UpdateAssignableJobDutyPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface DeleteUnitsUnitidJobDutiesIdRequest {
-  path: DeleteUnitsUnitidJobDutiesIdPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostUsersRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: PostUsersHeader;
-  cookie?: Record<string, never>;
-  body?: PostUsersBody;
-}
-export interface GetUsersRequest {
-  path: Record<string, never>;
-  query?: GetUsersQuery;
-  header?: GetUsersHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutUsersRequest {
-  path: PutUsersPath;
-  query?: Record<string, never>;
-  header?: PutUsersHeader;
-  cookie?: Record<string, never>;
-  body?: PutUsersBody;
-}
-export interface GetUsersJobDutyListRequest {
-  path: GetUsersJobDutyListPath;
-  query?: GetUsersJobDutyListQuery;
-  header?: GetUsersJobDutyListHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostRolesRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: PostRolesHeader;
-  cookie?: Record<string, never>;
-  body?: PostRolesBody;
-}
-export interface GetRolesListRequest {
-  path: Record<string, never>;
-  query?: GetRolesListQuery;
-  header?: GetRolesListHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetRolesRequest {
-  path: GetRolesPath;
-  query?: Record<string, never>;
-  header?: GetRolesHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutRolesRequest {
-  path: PutRolesPath;
-  query?: Record<string, never>;
-  header?: PutRolesHeader;
-  cookie?: Record<string, never>;
-  body?: PutRolesBody;
-}
-export interface DeleteRolesRequest {
-  path: DeleteRolesPath;
-  query?: DeleteRolesQuery;
-  header?: DeleteRolesHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostRoleLinksRequest {
-  path: PostRoleLinksPath;
-  query?: Record<string, never>;
-  header?: PostRoleLinksHeader;
-  cookie?: Record<string, never>;
-  body?: PostRoleLinksBody;
-}
-export interface DeleteRoleLinksRequest {
-  path: DeleteRoleLinksPath;
-  query?: DeleteRoleLinksQuery;
-  header?: DeleteRoleLinksHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostRoleSetsRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: PostRoleSetsHeader;
-  cookie?: Record<string, never>;
-  body?: PostRoleSetsBody;
-}
-export interface GetFindRoleSetsRequest {
-  path: Record<string, never>;
-  query?: GetFindRoleSetsQuery;
-  header?: GetFindRoleSetsHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetRoleSetsRequest {
-  path: GetRoleSetsPath;
-  query?: Record<string, never>;
-  header?: GetRoleSetsHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutRoleSetsRequest {
-  path: PutRoleSetsPath;
-  query?: Record<string, never>;
-  header?: PutRoleSetsHeader;
-  cookie?: Record<string, never>;
-  body?: PutRoleSetsBody;
-}
-export interface DeleteRoleLinksRequest {
-  path: DeleteRoleLinksPath;
-  query?: Record<string, never>;
-  header?: DeleteRoleLinksHeader;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostAgreementsRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PostAgreementsBody;
-}
-export interface GetAgreementsListRequest {
-  path: Record<string, never>;
-  query?: GetAgreementsListQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetAgreementsAgreementidRequest {
-  path: GetAgreementsAgreementidPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutAgreementsAgreementidRequest {
-  path: PutAgreementsAgreementidPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutAgreementsAgreementidBody;
-}
-export interface DeleteAgreementsAgreementidRequest {
-  path: DeleteAgreementsAgreementidPath;
-  query?: DeleteAgreementsAgreementidQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutAgreementsAgreementidCancelRequest {
-  path: PutAgreementsAgreementidCancelPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutAgreementsAgreementidCancelBody;
-}
-export interface PostAgreementsAgreementidRenewRequest {
-  path: PostAgreementsAgreementidRenewPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PostAgreementsAgreementidRenewBody;
-}
-export interface PostAgreementsTypesRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PostAgreementsTypesBody;
-}
-export interface GetAgreementsTypesFindRequest {
-  path: Record<string, never>;
-  query?: GetAgreementsTypesFindQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface GetAgreementsTypesAgreementtypeidRequest {
-  path: GetAgreementsTypesAgreementtypeidPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutAgreementsTypesAgreementtypeidRequest {
-  path: PutAgreementsTypesAgreementtypeidPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutAgreementsTypesAgreementtypeidBody;
-}
-export interface DeleteAgreementsTypesAgreementtypeidRequest {
-  path: DeleteAgreementsTypesAgreementtypeidPath;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostListbusinesspartyusersRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PostListbusinesspartyusersBody;
-}
-export interface PostListBusinessPartnersRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PostListBusinessPartnersBody;
-}
-export interface GetObjectsByIdRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: GetObjectsByIdHeader;
-  cookie?: Record<string, never>;
-  body?: GetObjectsByIdBody;
-}
-export interface GetObjectsByCodeRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: GetObjectsByCodeHeader;
-  cookie?: Record<string, never>;
-  body?: GetObjectsByCodeBody;
-}
-export interface GetSecurityGroupRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PutSecurityGroupRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: PutSecurityGroupBody;
-}
-export interface DeleteSecurityGroupRequest {
-  path: Record<string, never>;
-  query?: DeleteSecurityGroupQuery;
-  header?: Record<string, never>;
-  cookie?: Record<string, never>;
-  body?: never;
-}
-export interface PostSimpleAclRequest {
-  path: Record<string, never>;
-  query?: Record<string, never>;
-  header?: PostSimpleAclHeader;
-  cookie?: Record<string, never>;
-  body?: PostSimpleAclBody;
+/**
+ * Common error response format based on RFC 8707.
+ */
+export interface ErrorProblemDetails {
+  /**
+   * A URI reference [RFC3986] that identifies the problem type.
+   * @example "https://example.com/probs/out-of-credit"
+   */
+  type?: string;
+  /**
+   * A short, human-readable summary of the problem type.
+   * @example "You do not have enough credit."
+   */
+  title: string;
+  /**
+   * The HTTP status code ([RFC7231], Section 6) generated by the origin server for this occurrence of the problem.
+   * @example 400
+   */
+  status: number;
+  /**
+   * A human-readable explanation specific to this occurrence of the problem.
+   * @example "Your current balance is 30, but that costs 50."
+   */
+  detail?: string;
+  /**
+   * A code that identifies the problem type.
+   * @example "invalid_request"
+   */
+  error_code: string;
+  /**
+   * An array of individual error details if the problem has multiple causes.
+   */
+  errors?:
+    | {
+        /**
+         * A code that identifies the problem type.
+         */
+        error_code: string;
+        /**
+         * A human-readable explanation specific to this occurrence of the problem.
+         */
+        detail?: string;
+      }[]
+    | null;
 }
 
-// ---- Client ----
-export interface ApiClientOptions { baseURL?: string; }
-export class OpenApiClient {
-  private axios: AxiosInstance;
-  constructor(opts: ApiClientOptions = {}) {
-    this.axios = axios.create({ baseURL: "http://localhost:3000/v1" });
-    if (opts.baseURL) this.axios.defaults.baseURL = opts.baseURL;
-  }
-  async findByUnitSetCode(params: FindByUnitSetCodeRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<FindByUnitSetCodeResponse>> {
-    const url = `/unit-sets`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<FindByUnitSetCodeResponse>(reqConfig);
-  }
-  async createUnitSet(params: CreateUnitSetRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<CreateUnitSetResponse>> {
-    const url = `/unit-sets`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<CreateUnitSetResponse>(reqConfig);
-  }
-  async findByUnitId(params: FindByUnitIdRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<FindByUnitIdResponse>> {
-    const url = `/unit-sets/{unitSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<FindByUnitIdResponse>(reqConfig);
-  }
-  async editUnitSet(params: EditUnitSetRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<EditUnitSetResponse>> {
-    const url = `/unit-sets/{unitSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<EditUnitSetResponse>(reqConfig);
-  }
-  async deleteUnitSet(params: DeleteUnitSetRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteUnitSetResponse>> {
-    const url = `/unit-sets/{unitSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteUnitSetResponse>(reqConfig);
-  }
-  async getUnitSetUnits(params: GetUnitSetUnitsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitSetUnitsResponse>> {
-    const url = `/unit-sets/{unitSetId}/units`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitSetUnitsResponse>(reqConfig);
-  }
-  async createUnit(params: CreateUnitRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<CreateUnitResponse>> {
-    const url = `/units`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<CreateUnitResponse>(reqConfig);
-  }
-  async getUnit(params: GetUnitRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitResponse>> {
-    const url = `/units/{unitId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitResponse>(reqConfig);
-  }
-  async updateUnit(params: UpdateUnitRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<UpdateUnitResponse>> {
-    const url = `/units/{unitId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<UpdateUnitResponse>(reqConfig);
-  }
-  async getUnitLinks(params: GetUnitLinksRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitLinksResponse>> {
-    const url = `/units/{unitId}/links`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitLinksResponse>(reqConfig);
-  }
-  async createUnitLink(params: CreateUnitLinkRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<CreateUnitLinkResponse>> {
-    const url = `/units/{unitId}/links`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<CreateUnitLinkResponse>(reqConfig);
-  }
-  async updateLink(params: UpdateLinkRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<UpdateLinkResponse>> {
-    const url = `/units/{unitId}/links/{linkId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<UpdateLinkResponse>(reqConfig);
-  }
-  async deleteLink(params: DeleteLinkRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteLinkResponse>> {
-    const url = `/units/{unitId}/links/{linkId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteLinkResponse>(reqConfig);
-  }
-  async getUpperUnitLinksList(params: GetUpperUnitLinksListRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUpperUnitLinksListResponse>> {
-    const url = `/units/{unitId}/upper-unit-links-list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUpperUnitLinksListResponse>(reqConfig);
-  }
-  async putRelink(params: PutRelinkRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutRelinkResponse>> {
-    const url = `/units/{unitId}/relink`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutRelinkResponse>(reqConfig);
-  }
-  async putUnlink(params: PutUnlinkRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutUnlinkResponse>> {
-    const url = `/units/{unitId}/links/{linkId}/unlink`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutUnlinkResponse>(reqConfig);
-  }
-  async getUnitUsers(params: GetUnitUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitUsersResponse>> {
-    const url = `/units/{unitId}/users/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitUsersResponse>(reqConfig);
-  }
-  async getUnitsFind(params: GetUnitsFindRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitsFindResponse>> {
-    const url = `/units/find`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitsFindResponse>(reqConfig);
-  }
-  async putUnitAssignedUsers(params: PutUnitAssignedUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutUnitAssignedUsersResponse>> {
-    const url = `/unit-assigned-users/{unitAssignedUserId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutUnitAssignedUsersResponse>(reqConfig);
-  }
-  async getUnitAssignedUsers(params: GetUnitAssignedUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUnitAssignedUsersResponse>> {
-    const url = `/units/{unitId}/unit-assigned-users/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUnitAssignedUsersResponse>(reqConfig);
-  }
-  async postUnitAssignedUsers(params: PostUnitAssignedUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostUnitAssignedUsersResponse>> {
-    const url = `/units/{unitId}/unit-assigned-users`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostUnitAssignedUsersResponse>(reqConfig);
-  }
-  async findAssginedRoles(params: FindAssginedRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<FindAssginedRolesResponse>> {
-    const url = `/units/{unitId}/roles/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<FindAssginedRolesResponse>(reqConfig);
-  }
-  async createUnitAssginedRoles(params: CreateUnitAssginedRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<CreateUnitAssginedRolesResponse>> {
-    const url = `/units/{unitId}/roles`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<CreateUnitAssginedRolesResponse>(reqConfig);
-  }
-  async getAssginedRole(params: GetAssginedRoleRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAssginedRoleResponse>> {
-    const url = `/units/{unitId}/roles/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAssginedRoleResponse>(reqConfig);
-  }
-  async updateAssginedRole(params: UpdateAssginedRoleRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<UpdateAssginedRoleResponse>> {
-    const url = `/units/{unitId}/roles/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<UpdateAssginedRoleResponse>(reqConfig);
-  }
-  async deleteAssginedRole(params: DeleteAssginedRoleRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteAssginedRoleResponse>> {
-    const url = `/units/{unitId}/roles/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteAssginedRoleResponse>(reqConfig);
-  }
-  async findAssginableJobDuty(params: FindAssginableJobDutyRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<FindAssginableJobDutyResponse>> {
-    const url = `/units/{unitId}/job-duties/find`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<FindAssginableJobDutyResponse>(reqConfig);
-  }
-  async createAssignableJobDuty(params: CreateAssignableJobDutyRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<CreateAssignableJobDutyResponse>> {
-    const url = `/units/{unitId}/job-duties`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<CreateAssignableJobDutyResponse>(reqConfig);
-  }
-  async getAssignableJobDuty(params: GetAssignableJobDutyRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAssignableJobDutyResponse>> {
-    const url = `/units/{unitId}/job-duties/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAssignableJobDutyResponse>(reqConfig);
-  }
-  async updateAssignableJobDuty(params: UpdateAssignableJobDutyRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<UpdateAssignableJobDutyResponse>> {
-    const url = `/units/{unitId}/job-duties/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<UpdateAssignableJobDutyResponse>(reqConfig);
-  }
-  async delete__units__unitId__job_duties__id_(params: DeleteUnitsUnitidJobDutiesIdRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteUnitsUnitidJobDutiesIdResponse>> {
-    const url = `/units/{unitId}/job-duties/{id}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteUnitsUnitidJobDutiesIdResponse>(reqConfig);
-  }
-  async postUsers(params: PostUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostUsersResponse>> {
-    const url = `/users`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostUsersResponse>(reqConfig);
-  }
-  async getUsers(params: GetUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUsersResponse>> {
-    const url = `/users/find`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUsersResponse>(reqConfig);
-  }
-  async putUsers(params: PutUsersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutUsersResponse>> {
-    const url = `/users/{userId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutUsersResponse>(reqConfig);
-  }
-  async get_users_job_duty_list(params: GetUsersJobDutyListRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetUsersJobDutyListResponse>> {
-    const url = `/users/{userId}/job-duty-list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetUsersJobDutyListResponse>(reqConfig);
-  }
-  async postRoles(params: PostRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostRolesResponse>> {
-    const url = `/roles`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostRolesResponse>(reqConfig);
-  }
-  async getRolesList(params: GetRolesListRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetRolesListResponse>> {
-    const url = `/roles/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetRolesListResponse>(reqConfig);
-  }
-  async getRoles(params: GetRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetRolesResponse>> {
-    const url = `/roles/{roleCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetRolesResponse>(reqConfig);
-  }
-  async putRoles(params: PutRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutRolesResponse>> {
-    const url = `/roles/{roleCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutRolesResponse>(reqConfig);
-  }
-  async deleteRoles(params: DeleteRolesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteRolesResponse>> {
-    const url = `/roles/{roleCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteRolesResponse>(reqConfig);
-  }
-  async postRoleLinks(params: PostRoleLinksRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostRoleLinksResponse>> {
-    const url = `/{roleCode}/link/{lowerRoleCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostRoleLinksResponse>(reqConfig);
-  }
-  async deleteRoleLinks(params: DeleteRoleLinksRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteRoleLinksResponse>> {
-    const url = `/{roleCode}/unlink/{lowerRoleCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteRoleLinksResponse>(reqConfig);
-  }
-  async postRoleSets(params: PostRoleSetsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostRoleSetsResponse>> {
-    const url = `/role-sets`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostRoleSetsResponse>(reqConfig);
-  }
-  async getFindRoleSets(params: GetFindRoleSetsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetFindRoleSetsResponse>> {
-    const url = `/role-sets/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetFindRoleSetsResponse>(reqConfig);
-  }
-  async getRoleSets(params: GetRoleSetsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetRoleSetsResponse>> {
-    const url = `/role-sets/{roleSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetRoleSetsResponse>(reqConfig);
-  }
-  async putRoleSets(params: PutRoleSetsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutRoleSetsResponse>> {
-    const url = `/role-sets/{roleSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutRoleSetsResponse>(reqConfig);
-  }
-  async deleteRoleLinks(params: DeleteRoleLinksRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteRoleLinksResponse>> {
-    const url = `/role-sets/{roleSetId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteRoleLinksResponse>(reqConfig);
-  }
-  async post__agreements_(params: PostAgreementsRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostAgreementsResponse>> {
-    const url = `/agreements/`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostAgreementsResponse>(reqConfig);
-  }
-  async get__agreements_list(params: GetAgreementsListRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAgreementsListResponse>> {
-    const url = `/agreements/list`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAgreementsListResponse>(reqConfig);
-  }
-  async get__agreements__agreementId_(params: GetAgreementsAgreementidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAgreementsAgreementidResponse>> {
-    const url = `/agreements/{agreementId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAgreementsAgreementidResponse>(reqConfig);
-  }
-  async put__agreements__agreementId_(params: PutAgreementsAgreementidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutAgreementsAgreementidResponse>> {
-    const url = `/agreements/{agreementId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutAgreementsAgreementidResponse>(reqConfig);
-  }
-  async delete__agreements__agreementId_(params: DeleteAgreementsAgreementidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteAgreementsAgreementidResponse>> {
-    const url = `/agreements/{agreementId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteAgreementsAgreementidResponse>(reqConfig);
-  }
-  async put__agreements__agreementId__cancel(params: PutAgreementsAgreementidCancelRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutAgreementsAgreementidCancelResponse>> {
-    const url = `/agreements/{agreementId}/cancel`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutAgreementsAgreementidCancelResponse>(reqConfig);
-  }
-  async post__agreements__agreementId__renew(params: PostAgreementsAgreementidRenewRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostAgreementsAgreementidRenewResponse>> {
-    const url = `/agreements/{agreementId}/renew`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostAgreementsAgreementidRenewResponse>(reqConfig);
-  }
-  async post__agreements_types(params: PostAgreementsTypesRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostAgreementsTypesResponse>> {
-    const url = `/agreements/types`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostAgreementsTypesResponse>(reqConfig);
-  }
-  async get__agreements_types_find(params: GetAgreementsTypesFindRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAgreementsTypesFindResponse>> {
-    const url = `/agreements/types/find`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAgreementsTypesFindResponse>(reqConfig);
-  }
-  async get__agreements__types__agreementTypeId_(params: GetAgreementsTypesAgreementtypeidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetAgreementsTypesAgreementtypeidResponse>> {
-    const url = `/agreements//types/{agreementTypeId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetAgreementsTypesAgreementtypeidResponse>(reqConfig);
-  }
-  async put__agreements__types__agreementTypeId_(params: PutAgreementsTypesAgreementtypeidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutAgreementsTypesAgreementtypeidResponse>> {
-    const url = `/agreements//types/{agreementTypeId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutAgreementsTypesAgreementtypeidResponse>(reqConfig);
-  }
-  async delete__agreements__types__agreementTypeId_(params: DeleteAgreementsTypesAgreementtypeidRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteAgreementsTypesAgreementtypeidResponse>> {
-    const url = `/agreements//types/{agreementTypeId}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteAgreementsTypesAgreementtypeidResponse>(reqConfig);
-  }
-  async post__listBusinessPartyUsers(params: PostListbusinesspartyusersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostListbusinesspartyusersResponse>> {
-    const url = `/listBusinessPartyUsers`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostListbusinesspartyusersResponse>(reqConfig);
-  }
-  async post__list_business_partners(params: PostListBusinessPartnersRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostListBusinessPartnersResponse>> {
-    const url = `/list-business-partners`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostListBusinessPartnersResponse>(reqConfig);
-  }
-  async getObjectsById(params: GetObjectsByIdRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetObjectsByIdResponse>> {
-    const url = `/get-objects-by-id`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<GetObjectsByIdResponse>(reqConfig);
-  }
-  async getObjectsByCode(params: GetObjectsByCodeRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetObjectsByCodeResponse>> {
-    const url = `/get-objects-by-code`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<GetObjectsByCodeResponse>(reqConfig);
-  }
-  async getSecurityGroup(params: GetSecurityGroupRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<GetSecurityGroupResponse>> {
-    const url = `/security-groups/{securityGroupCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'get',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<GetSecurityGroupResponse>(reqConfig);
-  }
-  async putSecurityGroup(params: PutSecurityGroupRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PutSecurityGroupResponse>> {
-    const url = `/security-groups/{securityGroupCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'put',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PutSecurityGroupResponse>(reqConfig);
-  }
-  async deleteSecurityGroup(params: DeleteSecurityGroupRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<DeleteSecurityGroupResponse>> {
-    const url = `/security-groups/{securityGroupCode}`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'delete',
-      url,
-      params: params.query || {},
-      headers,
-    });
-    return this.axios.request<DeleteSecurityGroupResponse>(reqConfig);
-  }
-  async postSimpleAcl(params: PostSimpleAclRequest, config: import('axios').AxiosRequestConfig = {}): Promise<import('axios').AxiosResponse<PostSimpleAclResponse>> {
-    const url = `/validations/simple-acl`;
-    const headers = Object.assign({}, params.header || {}, config.headers || {});
-    const reqConfig: import('axios').AxiosRequestConfig = Object.assign({}, config, {
-      method: 'post',
-      url,
-      params: params.query || {},
-      data: params.body,
-      headers,
-    });
-    return this.axios.request<PostSimpleAclResponse>(reqConfig);
+/**
+ * Represents the type of an agreement.
+ */
+export interface AgreementType {
+  agreementTypeId: string; // uuid, readOnly
+  /**
+   * Unique code representing the transaction relationship. Logical key.
+   */
+  agreementTypeCode: string; // readOnly
+  /**
+   * true: enabled, false: disabled
+   */
+  isActive: boolean;
+  attributes: {
+    /**
+     * System-defined version to manage changes to attribute values.
+     */
+    _ver: string;
+    /**
+     * Name. For an organization, etc., it would be the official name.
+     */
+    name: string;
+    /**
+     * Abbreviated name (optional).
+     */
+    abbrevName?: string;
+    /**
+     * Description text (optional).
+     */
+    description?: string;
+    /**
+     * Generally, related duties on the buyer's side. If not specified, all are targeted. AND condition with roles. Usable at contact time.
+     */
+    firstPartyRelatedDuties?: string[];
+    /**
+     * Generally, related roles on the buyer's side. If not specified, all are targeted. AND condition with duties. Usable at contact time.
+     */
+    firstPartyRelatedRoles?: string[];
+    /**
+     * Generally, for the supplier side. If not specified, all are targeted. AND condition with roles. Usable at contact time.
+     */
+    secondPartyRelatedDuties?: string[];
+    /**
+     * Generally, for the supplier side. If not specified, all are targeted. AND condition with duties. Usable at contact time.
+     */
+    secondPartyRelatedRoles?: string[];
+  };
+  version?: number;
+}
+
+/**
+ * Placeholder for the main Agreement schema, as it was referenced but not fully defined.
+ * Properties are inferred from usage in request bodies and other parts of the spec.
+ */
+export interface Agreement {
+  agreementId?: string; // uuid, readOnly
+  agreementTypeId?: string; // uuid, readOnly
+  firstPartyUnitSetId?: string; // uuid, readOnly
+  firstPartyUnitId?: string; // uuid, readOnly on update
+  secondPartyUnitSetId?: string; // uuid, readOnly
+  secondPartyUnitId?: string; // uuid, readOnly on update
+  attributes?: {
+    _ver?: number;
+    priorAgreementId?: string; // uuid, readOnly
+    agreementRevision?: number; // readOnly
+    name?: string; // readOnly
+    description?: string;
+    firstPartySigner?: string; // readOnly
+    firstPartyRelevantUnitList?: string[]; // uuid[]
+    secondPartySigner?: string; // readOnly
+    secondPartyRelevantUnitList?: string[]; // uuid[]
+    agreedDate?: string; // date-time, readOnly
+    referenceAgreementIdList?: string[]; // uuid[], readOnly on update
+  };
+  effectiveStartDate?: string; // date-time, readOnly
+  effectiveEndDate?: string; // date-time, readOnly
+  cancellationDate?: string; // date-time, readOnly
+  version?: number; // readOnly on update
+}
+
+/**
+ * Schema for a Job Duty.
+ */
+export interface JobDuty {
+  jobDutyId?: string; // uuid, readOnly
+  unitSetId?: string; // uuid
+  jobDutyCode: string;
+  roleSetIdList?: string[]; // uuid[]
+  effectiveStartDate: string; // date-time
+  effectiveEndDate: string; // date-time
+  targetUnitId?: string; // uuid, readOnly on update
+  attributes: {
+    _ver?: string;
+    name: string;
+    abbrevName?: string;
+    description?: string;
+  };
+  ownerUnitId?: string; // uuid
+  ownerUserId?: string; // uuid
+  ownerScopeType?: string;
+  scopeType?: string;
+  scopeId?: string; // uuid
+  aclId?: string; // uuid
+}
+
+/**
+ * Schema for a Role Set.
+ */
+export interface RoleSet {
+  roleSetId?: string; // uuid, readOnly
+  attributes?: {
+    name: string;
+    abbrevName?: string;
+    description?: string;
+  };
+  roleCodeList: string[];
+  targetUnitId?: string; // uuid
+  ownerUnitId?: string; // uuid
+  ownerUserId?: string; // uuid
+  ownerScopeType?: ("unitSet" | "unit" | "user") | null;
+  scopeType?: ("everyone" | "unitSet" | "unit" | "user") | null;
+  scopeId?: string; // uuid
+  aclId?: string; // uuid
+}
+
+/**
+ * Schema for a single Role.
+ */
+export interface Role {
+  roleCode: string;
+  parentRoleCode?: string | null;
+  attributes?: {
+    _ver: string;
+    name?: string;
+    description?: string;
+  };
+}
+
+// Types for `listBusinessPartyUsers` endpoint
+export interface ListBusinessPartyUsersScope {
+  scopeType: "UnitSet" | "UnitTree" | "AgreementType";
+  scopeId: string; // uuid
+  roleCode?: string;
+  jobDutyCode?: string;
+  filters?: {
+    filterType: string;
+    filterValue: string[];
+  }[];
+}
+
+export interface BusinessPartyUserRecord {
+  userId?: string; // uuid
+  userCode?: string;
+  userName?: string;
+  unitJobDutyList?: {
+    assignedName?: string;
+    roleCode?: string;
+    unitId?: string; // uuid
+    unitCode?: string;
+    unitName?: string;
+    unitAbsPathCode?: {
+      id?: string; // uuid
+      code?: string;
+      name?: string;
+    };
+  }[];
+}
+
+export interface ListBusinessPartyUsersResponse {
+  hasNext?: boolean;
+  records?: BusinessPartyUserRecord[];
+}
+
+// Types for `list-business-partners` endpoint
+export interface SearchCondition {
+  scopeType: "UnitSet" | "UnitTree" | "AgreementType";
+  scopeId: string; // uuid
+  filters?: {
+    filterType: string;
+    filterValue: string[];
+  }[];
+}
+
+export interface ListBusinessPartnersBody {
+  searchConditions: SearchCondition[];
+  groupUnitLimit?: number;
+  groupUserLimit?: number;
+  limit?: number;
+}
+
+export interface BusinessPartnerUser {
+  userId?: string; // uuid
+  userCode?: string;
+  roleCode?: string;
+  name?: string;
+  abbrevName?: string;
+  email?: string;
+}
+
+export interface BusinessPartnerUnit {
+  unitId?: string; // uuid
+  unitCode?: string;
+  name?: string;
+  abbrevName?: string;
+  hasNextUser?: boolean;
+  unitAbsPathCode?: {
+    id?: string; // uuid
+    code?: string;
+    name?: string;
+    abbrevName?: string;
+  };
+  userList?: BusinessPartnerUser[];
+}
+
+export interface BusinessPartnerRecord {
+  agreementTypeId?: string; // uuid
+  agreementTypeCode?: string;
+  name?: string;
+  abbrevName?: string;
+  hasNextUnit?: boolean;
+  hasNextUser?: boolean;
+  unitList?: BusinessPartnerUnit[];
+}
+
+export interface ListBusinessPartnersResponse {
+  hasNext?: boolean;
+  hasNextAgreementType?: boolean;
+  hasNextUnit?: boolean;
+  hasNextUser?: boolean;
+  records?: BusinessPartnerRecord[];
+}
+
+// Types for `get-objects-by-id` endpoint
+export interface GetObjectsByIdBody {
+  /**
+   * Array of user IDs to retrieve. Max: 1000 items.
+   */
+  userIds?: string[];
+  /**
+   * Array of unit IDs to retrieve. Max: 1000 items.
+   */
+  unitIds?: string[];
+  /**
+   * Whether to consider the effective period. Default: false.
+   */
+  activeOnly?: boolean;
+}
+
+export interface UserInfo {
+  userId: string;
+  userCode: string;
+  attributes: { [key: string]: any };
+  effectiveStartDate: string;
+  effectiveEndDate: string;
+}
+
+export interface UnitInfo {
+  unitId: string;
+  unitCode: string;
+  attributes: { [key: string]: any };
+  effectiveStartDate: string;
+  effectiveEndDate: string;
+  unitAbsPathCode: {
+    id: string;
+    code: string;
+    name: string;
+    abbrevName: string;
+  }[];
+}
+
+export interface ObjectError {
+  userId?: string;
+  unitId?: string;
+  errorCode: string;
+  message: string;
+}
+
+export interface GetObjectsByIdResponse {
+  users: (UserInfo | ObjectError)[];
+  units: (UnitInfo | ObjectError)[];
+}
+
+//################################################################################
+//## API CLIENT CLASS
+//################################################################################
+
+export class ApiClient {
+  private axiosInstance: AxiosInstance;
+
+  constructor(baseURL: string, axiosInstance?: AxiosInstance) {
+    this.axiosInstance =
+      axiosInstance ||
+      axios.create({
+        baseURL,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  }
+
+  /**
+   * Set the authentication token for all subsequent requests.
+   * @param token The A2B access token.
+   */
+  public setAuthToken(token: string) {
+    this.axiosInstance.defaults.headers.common["X-A2b-Token"] = token;
+  }
+
+  //==============================================================================
+  //== Agreements Service
+  //==============================================================================
+
+  /**
+   * Register an agreement.
+   * Creates an agreement of the specified agreementType. Returns an error if a combination of Type, unitSet, and Unit for 1st/2nd party already exists.
+   * @param requestBody The agreement object to create.
+   * @returns The created agreement data.
+   */
+  public async createAgreement(
+    requestBody: Agreement,
+    config?: AxiosRequestConfig
+  ): Promise<{ status?: number; data?: Agreement }> {
+    const response = await this.axiosInstance.post(
+      "/agreements/",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Get a list of agreements.
+   * Returns a list of agreements that match the specified criteria and implicit conditions.
+   * @param params Query parameters for filtering and pagination.
+   * @param params.typeCode Filter by type code.
+   * @param params.dutyCode Filter by duty code.
+   * @param params.roleCode Filter by role code.
+   * @param params.unitSetId For superusers. Normally, the unitSetId from the token is used.
+   * @param params.targetDate Get information at a specific point in time.
+   * @param params.offset Start position for data retrieval.
+   * @param params.limit Number of items to retrieve in a single request.
+   * @returns A list of agreements.
+   */
+  public async listAgreements(
+    params?: {
+      typeCode?: string;
+      dutyCode?: string;
+      roleCode?: string;
+      unitSetId?: string;
+      targetDate?: string;
+      offset?: number;
+      limit?: number;
+    },
+    config?: AxiosRequestConfig
+  ): Promise<{
+    status?: number;
+    data?: { count?: number; records?: Agreement[] };
+  }> {
+    const response = await this.axiosInstance.get("/agreements/list", {
+      ...config,
+      params,
+    });
+    return response.data;
+  }
+
+  /**
+   * Retrieve an agreement.
+   * Returns detailed information for a specified agreement.
+   * @param agreementId The ID of the agreement to retrieve.
+   * @returns Detailed information of the agreement.
+   */
+  public async getAgreement(
+    agreementId: string,
+    config?: AxiosRequestConfig
+  ): Promise<{ status?: number; data?: Agreement }> {
+    const response = await this.axiosInstance.get(
+      `/agreements/${agreementId}`,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Update an agreement.
+   * Performs a partial update (like PATCH) on the specified attributes group. agreement_id and agreement_type related fields cannot be updated.
+   * @param agreementId The ID of the agreement to update.
+   * @param requestBody The fields of the agreement to update.
+   * @returns The updated agreement data.
+   */
+  public async updateAgreement(
+    agreementId: string,
+    requestBody: Agreement,
+    config?: AxiosRequestConfig
+  ): Promise<{ status?: number; data?: Agreement }> {
+    const response = await this.axiosInstance.put(
+      `/agreements/${agreementId}`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Logically delete an agreement.
+   * A logically deleted record will behave as if it does not exist.
+   * @param agreementId The ID of the agreement to delete.
+   * @param params Query parameters.
+   * @param params.version The version number for optimistic locking.
+   * @returns Status of the deletion.
+   */
+  public async deleteAgreement(
+    agreementId: string,
+    params: { version: number },
+    config?: AxiosRequestConfig
+  ): Promise<{ status?: number }> {
+    const response = await this.axiosInstance.delete(
+      `/agreements/${agreementId}`,
+      { ...config, params }
+    );
+    return response.data;
+  }
+
+  /**
+   * Cancel or terminate an agreement.
+   * This action stamps the cancellationDate on the specified agreement.
+   * @param agreementId The ID of the agreement to cancel.
+   * @param requestBody Request body containing cancellation date and version.
+   * @returns The updated agreement details.
+   */
+  public async cancelAgreement(
+    agreementId: string,
+    requestBody: { cancellationDate?: string; version: number },
+    config?: AxiosRequestConfig
+  ): Promise<Agreement> {
+    const response = await this.axiosInstance.put(
+      `/agreements/${agreementId}/cancel`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Renew an agreement.
+   * Cancels the specified agreement and creates a new one.
+   * @param agreementId The ID of the agreement to renew.
+   * @param requestBody The new agreement data.
+   * @returns The newly created agreement after renewal.
+   */
+  public async renewAgreement(
+    agreementId: string,
+    requestBody: Agreement,
+    config?: AxiosRequestConfig
+  ): Promise<Agreement> {
+    const response = await this.axiosInstance.post(
+      `/agreements/${agreementId}/renew`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  //==============================================================================
+  //== Agreement Types Service
+  //==============================================================================
+
+  /**
+   * Register an agreement type.
+   * @param requestBody The agreement type to register.
+   */
+  public async createAgreementType(
+    requestBody: Partial<AgreementType>,
+    config?: AxiosRequestConfig
+  ): Promise<AgreementType> {
+    const response = await this.axiosInstance.post(
+      "/agreements/types",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Find agreement types by criteria.
+   * @param params Query parameters.
+   * @param params.code The typeCode to search for (exact match).
+   */
+  public async findAgreementTypes(
+    params: { code: string },
+    config?: AxiosRequestConfig
+  ): Promise<{ records?: AgreementType[] }> {
+    const response = await this.axiosInstance.get("/agreements/types/find", {
+      ...config,
+      params,
+    });
+    return response.data;
+  }
+
+  /**
+   * Get a specific agreement type by its ID.
+   * @param agreementTypeId The UUID of the agreement type.
+   */
+  public async getAgreementType(
+    agreementTypeId: string,
+    config?: AxiosRequestConfig
+  ): Promise<AgreementType> {
+    const response = await this.axiosInstance.get(
+      `/agreements/types/${agreementTypeId}`,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Update an agreement type.
+   * @param agreementTypeId The UUID of the agreement type to update.
+   * @param requestBody The data to update.
+   */
+  public async updateAgreementType(
+    agreementTypeId: string,
+    requestBody: Partial<AgreementType>,
+    config?: AxiosRequestConfig
+  ): Promise<AgreementType> {
+    const response = await this.axiosInstance.put(
+      `/agreements/types/${agreementTypeId}`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Logically delete an agreement type.
+   * @param agreementTypeId The UUID of the agreement type to delete.
+   */
+  public async deleteAgreementType(
+    agreementTypeId: string,
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.axiosInstance.delete(
+      `/agreements/types/${agreementTypeId}`,
+      config
+    );
+  }
+
+  //==============================================================================
+  //== Invited Users Service
+  //==============================================================================
+
+  /**
+   * Get a list of invited users.
+   * @param params Query parameters.
+   * @param params.deleted Include deleted users if set to 1.
+   */
+  public async getAllInvitedUsers(
+    params?: { deleted?: 0 | 1 },
+    config?: AxiosRequestConfig
+  ): Promise<any> {
+    const response = await this.axiosInstance.get("/invited/", {
+      ...config,
+      params,
+    });
+    return response.data;
+  }
+
+  /**
+   * Register an invitation.
+   * An invitation email is sent to the invitee. The invitation is valid for one week.
+   * @param requestBody Invitation details.
+   */
+  public async registerInvitation(
+    requestBody: {
+      unitSetId: string;
+      userId: string;
+      message?: string;
+      assigned: {
+        unitId: string;
+        jobDutyId: string;
+        roleCode: string;
+        startDate?: string;
+        endDate?: string;
+      };
+    },
+    config?: AxiosRequestConfig
+  ): Promise<any> {
+    const response = await this.axiosInstance.post(
+      "/invited/",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Accept an invitation.
+   * @param id The invitation management number (UUID).
+   * @param params Query parameters.
+   * @param params.nonce Number used once.
+   */
+  public async acceptInvitation(
+    id: string,
+    params: { nonce: string },
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.axiosInstance.get(`/invited/accept/${id}`, {
+      ...config,
+      params,
+    });
+  }
+
+  /**
+   * Refuse an invitation.
+   * @param id The invitation management number (UUID).
+   * @param params Query parameters.
+   * @param params.nonce Number used once.
+   */
+  public async refuseInvitation(
+    id: string,
+    params: { nonce: string },
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.axiosInstance.get(`/invited/refuse/${id}`, {
+      ...config,
+      params,
+    });
+  }
+
+  /**
+   * Delete an expired or completed invitation.
+   * @param id The invitation ID to delete.
+   */
+  public async deleteInvitation(
+    id: string,
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.axiosInstance.delete(`/invited/${id}`, config);
+  }
+
+  //==============================================================================
+  //== Job Duty Service
+  //==============================================================================
+
+  /**
+   * Create a new Job Duty.
+   * `jobDutyCode` must be unique within the unitSet. The effective period must not overlap.
+   * @param requestBody The Job Duty to create.
+   */
+  public async createJobDuty(
+    requestBody: JobDuty,
+    config?: AxiosRequestConfig
+  ): Promise<JobDuty> {
+    const response = await this.axiosInstance.post(
+      "/job-duties/",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Update a Job Duty.
+   * @param id The ID of the Job Duty to update.
+   * @param requestBody The updated Job Duty data.
+   */
+  public async updateJobDuty(
+    id: string,
+    requestBody: Partial<JobDuty>,
+    config?: AxiosRequestConfig
+  ): Promise<JobDuty> {
+    const response = await this.axiosInstance.put(
+      `/job-duties/${id}`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Find Job Duties by specified conditions.
+   * If no search criteria are provided, it returns a list of all currently effective Job Duties.
+   * @param params Query parameters.
+   * @param params.code Filter by jobDutyCode.
+   * @param params.unitSetId Filter by unitSetId (for system admins). Use '_share' for shared duties.
+   */
+  public async findJobDuty(
+    params?: { code?: string; unitSetId?: string },
+    config?: AxiosRequestConfig
+  ): Promise<{ status?: number; data?: JobDuty[] }> {
+    const response = await this.axiosInstance.get("/job-duties/find", {
+      ...config,
+      params,
+    });
+    return response.data;
+  }
+
+  //==============================================================================
+  //== Role Service
+  //==============================================================================
+
+  /**
+   * Get a role by its code.
+   * @param roleCode The code of the role to retrieve.
+   */
+  public async getRole(
+    roleCode: string,
+    config?: AxiosRequestConfig
+  ): Promise<{ data: { role: Role; roleCodeList: string[] } }> {
+    const response = await this.axiosInstance.get(`/roles/${roleCode}`, config);
+    return response.data;
+  }
+
+  /**
+   * Create or update a role.
+   * If the roleCode exists, it updates the role. If it's logically deleted, it restores and updates it.
+   * @param roleCode The code of the role to create/update.
+   * @param requestBody The role data.
+   */
+  public async putRole(
+    roleCode: string,
+    requestBody: Partial<Role>,
+    config?: AxiosRequestConfig
+  ): Promise<any> {
+    const response = await this.axiosInstance.put(
+      `/roles/${roleCode}`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  //==============================================================================
+  //== Role Set Service
+  //==============================================================================
+
+  /**
+   * Create a new Role Set.
+   * @param requestBody The Role Set data to create.
+   */
+  public async createRoleSet(
+    requestBody: Partial<RoleSet>,
+    config?: AxiosRequestConfig
+  ): Promise<{ data: { roleSet: RoleSet } }> {
+    const response = await this.axiosInstance.post(
+      "/role-sets/",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Get a Role Set by its ID.
+   * @param roleSetId The ID of the Role Set to retrieve.
+   */
+  public async getRoleSet(
+    roleSetId: string,
+    config?: AxiosRequestConfig
+  ): Promise<{ data: RoleSet }> {
+    const response = await this.axiosInstance.get(
+      `/role-sets/${roleSetId}`,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Update a Role Set.
+   * @param roleSetId The ID of the Role Set to update.
+   * @param requestBody The Role Set data to update.
+   */
+  public async updateRoleSet(
+    roleSetId: string,
+    requestBody: Partial<RoleSet>,
+    config?: AxiosRequestConfig
+  ): Promise<{ data: { roleSet: RoleSet } }> {
+    const response = await this.axiosInstance.put(
+      `/role-sets/${roleSetId}`,
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Logically delete a Role Set.
+   * @param roleSetId The ID of the Role Set to delete.
+   */
+  public async deleteRoleSet(
+    roleSetId: string,
+    config?: AxiosRequestConfig
+  ): Promise<any> {
+    const response = await this.axiosInstance.delete(
+      `/role-sets/${roleSetId}`,
+      config
+    );
+    return response.data;
+  }
+
+  //==============================================================================
+  //== Other Business Services
+  //==============================================================================
+
+  /**
+   * Retrieves a list of users belonging to the specified scope.
+   * This is a business-purpose API to recursively fetch users.
+   * @param requestBody An array of scope conditions to search for users.
+   */
+  public async listBusinessPartyUsers(
+    requestBody: ListBusinessPartyUsersScope[],
+    config?: AxiosRequestConfig
+  ): Promise<{ data?: ListBusinessPartyUsersResponse }> {
+    const response = await this.axiosInstance.post(
+      "/listBusinessPartyUsers",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Retrieves a list of users belonging to the specified scope, returned as a tree structure.
+   * (agreementType -> unit -> user)
+   * @param requestBody Search conditions and limits.
+   */
+  public async listBusinessPartners(
+    requestBody: ListBusinessPartnersBody,
+    config?: AxiosRequestConfig
+  ): Promise<{ data?: ListBusinessPartnersResponse }> {
+    const response = await this.axiosInstance.post(
+      "/list-business-partners",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Batch fetch users and units by their IDs.
+   * @param requestBody An object containing arrays of userIds and/or unitIds.
+   */
+  public async getObjectsById(
+    requestBody: GetObjectsByIdBody,
+    config?: AxiosRequestConfig
+  ): Promise<{ data?: GetObjectsByIdResponse }> {
+    const response = await this.axiosInstance.post(
+      "/get-objects-by-id",
+      requestBody,
+      config
+    );
+    return response.data;
+  }
+
+  /**
+   * Batch fetch users and units by their codes, paired with a unitSetCode.
+   * @param requestBody An object containing arrays of userCodes and/or unitCodes.
+   */
+  public async getObjectsByCode(
+    requestBody: any,
+    config?: AxiosRequestConfig
+  ): Promise<any> {
+    const response = await this.axiosInstance.post(
+      "/get-objects-by-code",
+      requestBody,
+      config
+    );
+    return response.data;
   }
 }
