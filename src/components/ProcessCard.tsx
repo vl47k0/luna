@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Avatar,
   Card,
@@ -20,12 +20,12 @@ import {
   Box,
   Link as MuiLink,
   Snackbar,
-} from '@mui/material';
+} from "@mui/material";
 
-import MuiAlert from '@mui/material/Alert';
+import MuiAlert from "@mui/material/Alert";
 
-import { red } from '@mui/material/colors';
-import { useTheme } from '@mui/material/styles';
+import { red } from "@mui/material/colors";
+import { useTheme } from "@mui/material/styles";
 
 import {
   Issue,
@@ -35,22 +35,22 @@ import {
   Signature,
   Verification,
   SolutionService,
-} from '../services/SolutionsService';
+} from "../services/SolutionsService";
 
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import { BookmarkService } from '../services/BookmarkService';
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import { BookmarkService } from "../services/BookmarkService";
 
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
 
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import EmailCard from './EmailCard';
-import CheckIcon from '@mui/icons-material/Check';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import ApprovalIcon from '@mui/icons-material/Approval';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import EmailCard from "./EmailCard";
+import CheckIcon from "@mui/icons-material/Check";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import ApprovalIcon from "@mui/icons-material/Approval";
 
-import FormattedTextDisplay from './FormattedTextDisplay';
-import ForkDownRight from './ForkDownRight';
+import FormattedTextDisplay from "./FormattedTextDisplay";
+import ForkDownRight from "./ForkDownRight";
 
 interface ProcessCardProps {
   id: string;
@@ -61,9 +61,9 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
-    'success'
+  const [snackbarMsg, setSnackbarMsg] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
   );
 
   const solutionBackendRef = useRef<SolutionService | null>(null);
@@ -72,7 +72,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
 
   const navigate = useNavigate();
   const [cloneDialogOpen, setCloneDialogOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState<string>('');
+  const [selectedIssue, setSelectedIssue] = useState<string>("");
   const [availableIssues, setAvailableIssues] = useState<Issue[]>([]);
 
   const handleAddBookmark = async (): Promise<void> => {
@@ -80,22 +80,22 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
 
     try {
       const added = await bookmarkServiceRef.current.addLink({
-        title: process?.data ?? 'Untitled',
+        title: process?.data ?? "Untitled",
         href: `/processes/${process?.id}`,
       });
 
       if (added) {
-        console.log('Bookmark added:', added);
-        setSnackbarMsg('Bookmark saved!');
-        setSnackbarSeverity('success');
+        console.log("Bookmark added:", added);
+        setSnackbarMsg("Bookmark saved!");
+        setSnackbarSeverity("success");
       } else {
-        setSnackbarMsg('Failed to save bookmark.');
-        setSnackbarSeverity('error');
+        setSnackbarMsg("Failed to save bookmark.");
+        setSnackbarSeverity("error");
       }
     } catch (error) {
-      console.error('Failed to add bookmark:', error);
-      setSnackbarMsg('Error adding bookmark.');
-      setSnackbarSeverity('error');
+      console.error("Failed to add bookmark:", error);
+      setSnackbarMsg("Error adding bookmark.");
+      setSnackbarSeverity("error");
     } finally {
       setSnackbarOpen(true);
     }
@@ -110,7 +110,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
         setProcess(data);
       }
     } catch (error) {
-      console.error('Failed to fetch process:', error);
+      console.error("Failed to fetch process:", error);
     }
   }, []);
 
@@ -118,20 +118,20 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
     authService
       .getUser()
       .then((data) => setUser(data))
-      .catch((e) => console.error('Failed to get user:', e));
+      .catch((e) => console.error("Failed to get user:", e));
   }, []);
 
   useEffect(() => {
     if (!user) return;
     if (!solutionBackendRef.current && user) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
     if (!bookmarkServiceRef.current) {
       bookmarkServiceRef.current = new BookmarkService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -151,7 +151,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
 
       setAvailableIssues(data.results);
     } catch (error) {
-      console.error('Failed to fetch issues:', error);
+      console.error("Failed to fetch issues:", error);
     }
   }, []);
 
@@ -169,12 +169,12 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
         prevProc ? { ...prevProc, solution: true } : prevProc
       );
       const s: Solution | null = await solutionBackendRef.current.solveIssue(
-        process.issue ?? '',
+        process.issue ?? "",
         process.id
       );
       console.log(s);
     } catch (error) {
-      console.error('Failed to solve issue:', error);
+      console.error("Failed to solve issue:", error);
     }
   };
 
@@ -189,7 +189,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
       );
       console.log(s);
     } catch (error) {
-      console.error('Failed to sign process:', error);
+      console.error("Failed to sign process:", error);
     }
   };
 
@@ -203,7 +203,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
         await solutionBackendRef.current.verifyProcess(process.id);
       console.log(s);
     } catch (error) {
-      console.error('Failed to verify process:', error);
+      console.error("Failed to verify process:", error);
     }
   };
 
@@ -215,10 +215,10 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
           selectedIssue,
           process.id
         );
-      console.log('Cloned Process:', clonedProcess);
+      console.log("Cloned Process:", clonedProcess);
       navigate(`/issues/${selectedIssue}`);
     } catch (error) {
-      console.error('Failed to clone process:', error);
+      console.error("Failed to clone process:", error);
     } finally {
       setCloneDialogOpen(false);
     }
@@ -230,7 +230,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {process?.owner?.charAt(0) ?? ''}
+              {process?.owner?.charAt(0) ?? ""}
             </Avatar>
           }
           action={
@@ -245,12 +245,13 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
               </IconButton>
             </MuiLink>
           }
-          title={<EmailCard id={process?.owner ?? ''} />}
-          subheader={process?.timestamp?.toLocaleString() ?? ''}
+          title={<EmailCard id={process?.owner ?? ""} />}
+          //title={process?.owner ?? ''}
+          subheader={process?.timestamp?.toLocaleString() ?? ""}
         />
 
         <CardContent>
-          <FormattedTextDisplay htmlContent={process?.data ?? ''} />{' '}
+          <FormattedTextDisplay htmlContent={process?.data ?? ""} />{" "}
         </CardContent>
 
         <CardActions>
@@ -259,7 +260,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
               style={{
                 color: process?.solution
                   ? theme.palette.primary.main
-                  : 'defaultColor',
+                  : "defaultColor",
               }}
             />
           </IconButton>
@@ -269,7 +270,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
               style={{
                 color: process?.signed
                   ? theme.palette.primary.main
-                  : 'defaultColor',
+                  : "defaultColor",
               }}
             />
           </IconButton>
@@ -279,7 +280,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
               style={{
                 color: process?.verified
                   ? theme.palette.primary.main
-                  : 'defaultColor',
+                  : "defaultColor",
               }}
             />
           </IconButton>
@@ -345,7 +346,7 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
         open={snackbarOpen}
         autoHideDuration={4000}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <MuiAlert elevation={6} variant="filled" severity={snackbarSeverity}>
           {snackbarMsg}
