@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface ErrorProblemDetails {
   type?: string;
@@ -90,8 +90,8 @@ export interface RoleSet {
   targetUnitId?: string;
   ownerUnitId?: string;
   ownerUserId?: string;
-  ownerScopeType?: ("unitSet" | "unit" | "user") | null;
-  scopeType?: ("everyone" | "unitSet" | "unit" | "user") | null;
+  ownerScopeType?: ('unitSet' | 'unit' | 'user') | null;
+  scopeType?: ('everyone' | 'unitSet' | 'unit' | 'user') | null;
   scopeId?: string;
   aclId?: string;
 }
@@ -107,7 +107,7 @@ export interface Role {
 }
 
 export interface ListBusinessPartyUsersScope {
-  scopeType: "UnitSet" | "UnitTree" | "AgreementType";
+  scopeType: 'UnitSet' | 'UnitTree' | 'AgreementType';
   scopeId: string;
   roleCode?: string;
   jobDutyCode?: string;
@@ -141,7 +141,7 @@ export interface ListBusinessPartyUsersResponse {
 }
 
 export interface SearchCondition {
-  scopeType: "UnitSet" | "UnitTree" | "AgreementType";
+  scopeType: 'UnitSet' | 'UnitTree' | 'AgreementType';
   scopeId: string;
   filters?: {
     filterType: string;
@@ -207,9 +207,13 @@ export interface GetObjectsByIdBody {
 export interface UserInfo {
   userId: string;
   userCode: string;
-  attributes: Record<string, unknown>;
+  attributes: {
+    name?: string;
+    description?: string;
+    [key: string]: unknown;
+  };
   effectiveStartDate: string;
-  effectiveEndDate: string;
+  effectiveEndDate: string | null;
 }
 
 export interface UnitInfo {
@@ -238,6 +242,10 @@ export interface GetObjectsByIdResponse {
   units: (UnitInfo | ObjectError)[];
 }
 
+export interface FindUsersResponse {
+  data: UserInfo | { records?: UserInfo[] };
+}
+
 export class CoreMasterService {
   private axiosInstance: AxiosInstance;
 
@@ -247,13 +255,13 @@ export class CoreMasterService {
       axios.create({
         baseURL,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
   }
 
   public setAuthToken(token: string): void {
-    this.axiosInstance.defaults.headers.common["X-A2b-Token"] = token;
+    this.axiosInstance.defaults.headers.common['X-A2b-Token'] = token;
   }
 
   public async getUser(
@@ -265,6 +273,17 @@ export class CoreMasterService {
       config
     );
     return response.data;
+  }
+
+  public async findUsers(
+    params: { userId?: string; userCode?: string },
+    config?: AxiosRequestConfig
+  ): Promise<FindUsersResponse['data']> {
+    const response = await this.axiosInstance.get<FindUsersResponse>(
+      '/users/find',
+      { ...config, params }
+    );
+    return response.data.data;
   }
 
   public async updateUser(
@@ -311,7 +330,7 @@ export class CoreMasterService {
     const response = await this.axiosInstance.post<{
       status?: number;
       data?: Agreement;
-    }>("/agreements/", requestBody, config);
+    }>('/agreements/', requestBody, config);
     return response.data;
   }
 
@@ -333,7 +352,7 @@ export class CoreMasterService {
     const response = await this.axiosInstance.get<{
       status?: number;
       data?: { count?: number; records?: Agreement[] };
-    }>("/agreements/list", {
+    }>('/agreements/list', {
       ...config,
       params,
     });
@@ -406,7 +425,7 @@ export class CoreMasterService {
     config?: AxiosRequestConfig
   ): Promise<AgreementType> {
     const response = await this.axiosInstance.post<AgreementType>(
-      "/agreements/types",
+      '/agreements/types',
       requestBody,
       config
     );
@@ -419,7 +438,7 @@ export class CoreMasterService {
   ): Promise<{ records?: AgreementType[] }> {
     const response = await this.axiosInstance.get<{
       records?: AgreementType[];
-    }>("/agreements/types/find", {
+    }>('/agreements/types/find', {
       ...config,
       params,
     });
@@ -468,7 +487,7 @@ export class CoreMasterService {
     params?: { deleted?: 0 | 1 },
     config?: AxiosRequestConfig
   ): Promise<unknown> {
-    const response = await this.axiosInstance.get<unknown>("/invited/", {
+    const response = await this.axiosInstance.get<unknown>('/invited/', {
       ...config,
       params,
     });
@@ -491,7 +510,7 @@ export class CoreMasterService {
     config?: AxiosRequestConfig
   ): Promise<unknown> {
     const response = await this.axiosInstance.post<unknown>(
-      "/invited/",
+      '/invited/',
       requestBody,
       config
     );
@@ -536,7 +555,7 @@ export class CoreMasterService {
     config?: AxiosRequestConfig
   ): Promise<JobDuty> {
     const response = await this.axiosInstance.post<JobDuty>(
-      "/job-duties/",
+      '/job-duties/',
       requestBody,
       config
     );
@@ -563,7 +582,7 @@ export class CoreMasterService {
     const response = await this.axiosInstance.get<{
       status?: number;
       data?: JobDuty[];
-    }>("/job-duties/find", {
+    }>('/job-duties/find', {
       ...config,
       params,
     });
@@ -603,7 +622,7 @@ export class CoreMasterService {
   ): Promise<{ data: { roleSet: RoleSet } }> {
     const response = await this.axiosInstance.post<{
       data: { roleSet: RoleSet };
-    }>("/role-sets/", requestBody, config);
+    }>('/role-sets/', requestBody, config);
     return response.data;
   }
 
@@ -650,7 +669,7 @@ export class CoreMasterService {
   ): Promise<{ data?: ListBusinessPartyUsersResponse }> {
     const response = await this.axiosInstance.post<{
       data?: ListBusinessPartyUsersResponse;
-    }>("/listBusinessPartyUsers", requestBody, config);
+    }>('/listBusinessPartyUsers', requestBody, config);
     return response.data;
   }
 
@@ -660,7 +679,7 @@ export class CoreMasterService {
   ): Promise<{ data?: ListBusinessPartnersResponse }> {
     const response = await this.axiosInstance.post<{
       data?: ListBusinessPartnersResponse;
-    }>("/list-business-partners", requestBody, config);
+    }>('/list-business-partners', requestBody, config);
     return response.data;
   }
 
@@ -670,7 +689,7 @@ export class CoreMasterService {
   ): Promise<{ data?: GetObjectsByIdResponse }> {
     const response = await this.axiosInstance.post<{
       data?: GetObjectsByIdResponse;
-    }>("/get-objects-by-id", requestBody, config);
+    }>('/get-objects-by-id', requestBody, config);
     return response.data;
   }
 
@@ -679,7 +698,7 @@ export class CoreMasterService {
     config?: AxiosRequestConfig
   ): Promise<unknown> {
     const response = await this.axiosInstance.post<unknown>(
-      "/get-objects-by-code",
+      '/get-objects-by-code',
       requestBody,
       config
     );

@@ -1,24 +1,25 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router';
 
-import Content from "./components/Content";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
-import ProtectedRoutes from "./components/ProtectedRoutes";
-import PublicRoutes from "./components/PublicRoutes";
-import PermissionDenied from "./components/PermissionDenied";
-import ServiceList from "./components/ServiceList";
-import BookmarkList from "./components/BookmarkList";
-import BookmarkDetail from "./components/BookmarkDetail";
-import IssueList from "./components/IssueList";
-import IssueDetail from "./components/IssueDetail";
-import ProcessList from "./components/ProcessList";
-import ProcessDetail from "./components/ProcessDetail";
-import ServiceDetail from "./components/ServiceDetail";
-import Authenticate from "./components/Authenticate";
-import ResourceAccessListForm from "./components/ResourceAccessListForm";
-import UploadSearch from "./components/UploadSearch";
-
+import Content from './components/Content';
+import Login from './components/Login';
+import Profile from './components/Profile';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import PublicRoutes from './components/PublicRoutes';
+import PermissionDenied from './components/PermissionDenied';
+import ServiceList from './components/ServiceList';
+import BookmarkList from './components/BookmarkList';
+import BookmarkDetail from './components/BookmarkDetail';
+import IssueList from './components/IssueList';
+import IssueDetail from './components/IssueDetail';
+import ProcessList from './components/ProcessList';
+import ProcessDetail from './components/ProcessDetail';
+import ServiceDetail from './components/ServiceDetail';
+import Authenticate from './components/Authenticate';
+import ResourceAccessListForm from './components/ResourceAccessListForm';
+import UploadSearch from './components/UploadSearch';
+import CoreMasterUserUnitList from './components/CoreMasterUserUnitList';
+import UserSearch from './components/UserSearch';
 const Routing: React.FC = (): JSX.Element => (
   <Routes>
     {/* Protected routes requiring authentication */}
@@ -37,6 +38,8 @@ const Routing: React.FC = (): JSX.Element => (
         <Route path="bookmarks/:unitId" element={<BookmarkDetail />} />
         <Route path="services/:serviceId" element={<ServiceDetail />} />
         <Route path="upload-search" element={<UploadSearch />} />
+        <Route path="coremaster-list" element={<CoreMasterUserUnitList />} />
+        <Route path="user-search" element={<UserSearch />} />
       </Route>
     </Route>
 

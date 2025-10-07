@@ -35,7 +35,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { IssueInputForm, IssueForm } from './IssueInputForm';
 import { ProcessEditForm, ProcessUpdateForm } from './ProcessEditForm';
-import EmailCard from './EmailCard';
+//import EmailCard from './EmailCard';
 import FormattedTextDisplay from './FormattedTextDisplay';
 
 import { RTMSData, RTMSEvent, RTMSService } from '../services/RTMSService';
@@ -286,7 +286,8 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
               <EditIcon onClick={handleProcessEditDialogOpen}></EditIcon>
             </IconButton>
           }
-          title={<EmailCard id={process?.owner ?? ''}></EmailCard>}
+          //title={<EmailCard id={process?.owner ?? ''}></EmailCard>}
+          title={process?.owner ?? ''}
           subheader={process?.timestamp?.toLocaleString() ?? ''}
         />
         <CardContent

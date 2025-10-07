@@ -22,7 +22,7 @@ import MuiAlert from '@mui/material/Alert';
 import { Link as RouterLink } from 'react-router-dom';
 import { Process, Issue, SolutionService } from '../services/SolutionsService';
 import { BookmarkService } from '../services/BookmarkService';
-//import { BookmarkService, GroupedUnitLinks } from '../services/BookmarkService';
+import { UserInfo } from '../services/CoreMasterService';
 
 import { authService } from '../utils/oidc';
 import { User } from 'oidc-client-ts';
@@ -42,6 +42,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { ProcessInputForm, ProcessForm } from './ProcessInputForm';
 import FormattedTextDisplay from './FormattedTextDisplay';
 import IssueTreeComponent from './IssueTreeComponent';
+import UserSelectionDialog from './UserSelectionDialog';
+import AdminSelectionDialog from './AdminSelectionDialog';
 
 import { RTMSData, RTMSEvent, RTMSService } from '../services/RTMSService';
 
@@ -78,6 +80,10 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openIssueTreeDialog, setOpenIssueTreeDialog] =
     useState<boolean>(false);
+  const [openUserSelectionDialog, setOpenUserSelectionDialog] =
+    useState<boolean>(false);
+  const [openAdminSelectionDialog, setOpenAdminSelectionDialog] =
+    useState<boolean>(false);
 
   const broadcast = (e: RTMSEvent): void => {
     if (!rtmsServiceRef.current) return;
@@ -101,6 +107,74 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
 
   const handleDialogClose = (): void => {
     setOpenDialog(false);
+  };
+
+  const handleUserSelectionOpen = (): void => {
+    setOpenUserSelectionDialog(true);
+  };
+
+  const handleUserSelectionClose = (): void => {
+    setOpenUserSelectionDialog(false);
+  };
+
+  const handleAdminSelectionOpen = (): void => {
+    setOpenAdminSelectionDialog(true);
+  };
+
+  const handleAdminSelectionClose = (): void => {
+    setOpenAdminSelectionDialog(false);
+  };
+
+  const handleUsersSelected = (users: UserInfo[]): void => {
+    console.log('IssueCardDetail => Selected Members:', users);
+    users.forEach((user) => {
+      console.log('IssueCardDetail => Member User ID:', user.userId);
+      console.log('IssueCardDetail => Member User Code:', user.userCode);
+      console.log(
+        'IssueCardDetail => Member User Attributes:',
+        user.attributes
+      );
+      console.log(
+        'IssueCardDetail => Full Member User Object:',
+        JSON.stringify(user, null, 2)
+      );
+    });
+
+    console.log('IssueCardDetail => Calling onClose with issue ID:', id);
+    onClose(id);
+
+    setSnackbarMsg(`${users.length} member(s) selected successfully!`);
+    setSnackbarSeverity('success');
+    setSnackbarOpen(true);
+  };
+
+  const handleAdminsSelected = (admins: UserInfo[]): void => {
+    console.log('IssueCardDetail => Selected Administrators:', admins);
+    admins.forEach((admin) => {
+      console.log('IssueCardDetail => Admin User ID:', admin.userId);
+      console.log('IssueCardDetail => Admin User Code:', admin.userCode);
+      console.log(
+        'IssueCardDetail => Admin User Attributes:',
+        admin.attributes
+      );
+      console.log(
+        'IssueCardDetail => Full Admin User Object:',
+        JSON.stringify(admin, null, 2)
+      );
+    });
+
+    console.log('IssueCardDetail => Setting administrators for issue ID:', id);
+
+    setSnackbarMsg(`${admins.length} administrator(s) selected successfully!`);
+    setSnackbarSeverity('success');
+    setSnackbarOpen(true);
+  };
+
+  const handleEditClick = (): void => {
+    console.log('IssueCardDetail => Edit button clicked for issue ID:', id);
+    console.log('IssueCardDetail => Current issue data:', issue);
+    console.log('IssueCardDetail => Calling onEdit with issue ID:', id);
+    onEdit(id);
   };
 
   const handleAddBookmark = async (): Promise<void> => {
@@ -291,6 +365,18 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         </DialogActions>
       </Dialog>
 
+      <UserSelectionDialog
+        open={openUserSelectionDialog}
+        onClose={handleUserSelectionClose}
+        onSubmit={handleUsersSelected}
+      />
+
+      <AdminSelectionDialog
+        open={openAdminSelectionDialog}
+        onClose={handleAdminSelectionClose}
+        onSubmit={handleAdminsSelected}
+      />
+
       <Card
         variant="outlined"
         sx={{
@@ -301,7 +387,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
       >
         <CardHeader
           action={
-            <IconButton aria-label="settings">
+            <IconButton aria-label="settings" onClick={handleEditClick}>
               <EditIcon />
             </IconButton>
           }
@@ -339,7 +425,6 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
                     <ListItemText>
                       <MuiLink
                         href={asset}
-                        //download={extractFileName(asset)}
                         download={asset}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -386,10 +471,16 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
             <BookmarkAddIcon />
           </IconButton>
 
-          <IconButton aria-label="Delete" onClick={() => onClose(id)}>
+          <IconButton
+            aria-label="Select Members"
+            onClick={handleUserSelectionOpen}
+          >
             <GroupIcon />
           </IconButton>
-          <IconButton aria-label="Delete" onClick={() => onEdit(id)}>
+          <IconButton
+            aria-label="Select Administrators"
+            onClick={handleAdminSelectionOpen}
+          >
             <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
           </IconButton>
           <IconButton aria-label="Delete" onClick={() => onDelete(id)}>

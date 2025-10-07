@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   Card,
   CardHeader,
@@ -11,14 +11,14 @@ import {
   DialogActions,
   styled,
   IconButton,
-} from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import ForkLeftIcon from "@mui/icons-material/ForkLeft";
-import { Issue, Process, SolutionService } from "../services/SolutionsService";
-import { authService } from "../utils/oidc";
-import { User } from "oidc-client-ts";
-import FormattedTextDisplay from "./FormattedTextDisplay";
-import ProcessMergeForm, { ProcessUpdateForm } from "./ProcessMergeForm";
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import ForkLeftIcon from '@mui/icons-material/ForkLeft';
+import { Issue, Process, SolutionService } from '../services/SolutionsService';
+import { authService } from '../utils/oidc';
+import { User } from 'oidc-client-ts';
+import FormattedTextDisplay from './FormattedTextDisplay';
+import ProcessMergeForm, { ProcessUpdateForm } from './ProcessMergeForm';
 
 interface ProcessCardContentProps {
   solution?: boolean;
@@ -26,7 +26,7 @@ interface ProcessCardContentProps {
 
 const ProcessCardContent = styled(CardContent)<ProcessCardContentProps>(
   ({ theme, solution }) => ({
-    backgroundColor: solution ? "#e4e7f9" : theme.palette.background.paper,
+    backgroundColor: solution ? '#e4e7f9' : theme.palette.background.paper,
   })
 );
 
@@ -69,13 +69,13 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
       if (!solutionBackendRef.current) return;
       try {
         const update: Partial<Process> = {
-          id: issue?.process ?? "",
+          id: issue?.process ?? '',
           data: form.text,
           assets: form.filenames,
         };
         await solutionBackendRef.current.updateProcess(update, processSent);
       } catch (error) {
-        console.error("Failed to create issue:", error);
+        console.error('Failed to create issue:', error);
       } finally {
         setOpenDialog(false);
       }
@@ -86,8 +86,8 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
   const submitHandler = useCallback(
     (form: ProcessUpdateForm): void => {
       void handleSubmit(form).catch((error) => {
-        setError("Failed to get user. Please try again later.");
-        console.error("Failed to get user:", error);
+        setError('Failed to get user. Please try again later.');
+        console.error('Failed to get user:', error);
       });
     },
     [handleSubmit]
@@ -102,8 +102,8 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
       if (!data) return;
       setIssue(data);
     } catch (error) {
-      setError("Failed to load issues. Please try again later.");
-      console.error("Failed to fetch issues:", error);
+      setError('Failed to load issues. Please try again later.');
+      console.error('Failed to fetch issues:', error);
     } finally {
       setLoading(false);
     }
@@ -118,8 +118,8 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
       if (!data) return;
       setProcess(data);
     } catch (error) {
-      setError("Failed to load issues. Please try again later.");
-      console.error("Failed to fetch issues:", error);
+      setError('Failed to load issues. Please try again later.');
+      console.error('Failed to fetch issues:', error);
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
         setUser(data);
       })
       .catch((error) => {
-        console.error("Failed to get user:", error);
+        console.error('Failed to get user:', error);
       });
   }, []);
 
@@ -140,7 +140,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        "https://mars.georgievski.net/",
+        'https://mars.georgievski.net/',
         user.access_token
       );
     }
@@ -154,7 +154,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
   useEffect((): void => {
     if (user) {
       void fetchData(id).catch((error) => {
-        console.error("Failed to fetch process data:", error);
+        console.error('Failed to fetch process data:', error);
       });
     }
   }, [user, id, fetchData]);
@@ -162,7 +162,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
   useEffect((): void => {
     if (process?.issue) {
       void fetchIssue(process.issue).catch((error) => {
-        console.error("Failed to fetch issue:", error);
+        console.error('Failed to fetch issue:', error);
       });
     }
   }, [process, fetchIssue]);
@@ -174,8 +174,8 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
           <ProcessMergeForm
             onSubmit={submitHandler}
             isOpen={openDialog}
-            source={process?.id ?? ""}
-            destination={issue?.process ?? ""}
+            source={process?.id ?? ''}
+            destination={issue?.process ?? ''}
           />
         </DialogContent>
         <DialogActions>
@@ -183,7 +183,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
         </DialogActions>
       </Dialog>
 
-      <Card variant="outlined" sx={{ margin: 1, width: "100%" }}>
+      <Card variant="outlined" sx={{ margin: 1, width: '100%' }}>
         <CardHeader
           action={
             <IconButton aria-label="settings" onClick={handleDialogOpen}>
@@ -200,11 +200,11 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
               <Typography>{process?.id}</Typography>
             </MuiLink>
           }
-          subheader={process?.timestamp?.toLocaleString() ?? ""}
+          subheader={process?.timestamp?.toLocaleString() ?? ''}
         />
 
         <ProcessCardContent solution={true}>
-          <FormattedTextDisplay htmlContent={process?.data ?? ""} />
+          <FormattedTextDisplay htmlContent={process?.data ?? ''} />
         </ProcessCardContent>
       </Card>
     </>

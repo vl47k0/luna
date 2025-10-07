@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { authService } from "../utils/oidc";
+import React, { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { authService } from '../utils/oidc';
 
 const UserAccountMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -18,7 +18,7 @@ const UserAccountMenu: React.FC = () => {
   };
 
   const handleSettings = (): void => {
-    console.log("Settings Click");
+    console.log('Settings Click');
     setAnchorEl(null);
   };
 
@@ -36,12 +36,12 @@ const UserAccountMenu: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>

@@ -6,6 +6,8 @@ import ProfileIcon from '@mui/icons-material/AccountCircle';
 import StorageIcon from '@mui/icons-material/Storage';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import GroupIcon from '@mui/icons-material/Group';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 export const mainListItems: JSX.Element = (
   <React.Fragment>
@@ -27,6 +29,18 @@ export const mainListItems: JSX.Element = (
         <ManageSearchIcon></ManageSearchIcon>
       </ListItemIcon>
       <ListItemText primary="Upload Search" />
+    </ListItem>
+    <ListItem component={RouterLink} to="/coremaster-list">
+      <ListItemIcon>
+        <GroupIcon />
+      </ListItemIcon>
+      <ListItemText primary="User/Unit List" />
+    </ListItem>
+    <ListItem component={RouterLink} to="/user-search">
+      <ListItemIcon>
+        <PersonSearchIcon />
+      </ListItemIcon>
+      <ListItemText primary="User Search" />
     </ListItem>
   </React.Fragment>
 );

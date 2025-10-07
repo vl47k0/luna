@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { authService } from "../utils/oidc";
-import type { User } from "oidc-client-ts";
-import CircularProgress from "@mui/material/CircularProgress";
+import React, { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { authService } from '../utils/oidc';
+import type { User } from 'oidc-client-ts';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface AuthState {
   auth: boolean;
-  role: User["profile"] | undefined;
+  role: User['profile'] | undefined;
   loading: boolean;
   user: User | null;
 }
@@ -51,7 +51,7 @@ const ProtectedRoutes: React.FC = () => {
 
   if (loading)
     return (
-      <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
+      <CircularProgress sx={{ margin: 'auto', display: 'block', mt: 10 }} />
     );
 
   // Only render the outlet when authenticated

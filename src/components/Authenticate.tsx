@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { authService } from "../utils/oidc";
-import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { authService } from '../utils/oidc';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const AuthenticateCallback: React.FC = () => {
   const navigate = useNavigate();
@@ -14,12 +14,12 @@ const AuthenticateCallback: React.FC = () => {
     const handleAuthCallback = async (): Promise<void> => {
       try {
         const user = await authService.handleRedirectCallback();
-        console.log("Authentication successful:", user);
+        console.log('Authentication successful:', user);
         // Redirect to the root, letting App.tsx handle the next navigation step.
-        navigate("/", { replace: true });
+        navigate('/', { replace: true });
       } catch (err) {
-        console.error("Authentication callback error:", err);
-        setError("Authentication failed. Please try again.");
+        console.error('Authentication callback error:', err);
+        setError('Authentication failed. Please try again.');
       }
     };
 
@@ -28,7 +28,7 @@ const AuthenticateCallback: React.FC = () => {
 
   if (error) {
     return (
-      <Box sx={{ p: 3, textAlign: "center" }}>
+      <Box sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="h5" color="error">
           {error}
         </Typography>
@@ -43,11 +43,11 @@ const AuthenticateCallback: React.FC = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        flexDirection: "column",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        flexDirection: 'column',
       }}
     >
       <CircularProgress />

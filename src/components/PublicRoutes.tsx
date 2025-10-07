@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { authService } from "../utils/oidc";
-import { User } from "oidc-client-ts";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { authService } from '../utils/oidc';
+import { User } from 'oidc-client-ts';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface AuthState {
   auth: boolean;
-  role: User["profile"] | null;
+  role: User['profile'] | null;
   loading: boolean;
 }
 
@@ -20,7 +20,7 @@ const useAuth = (): AuthState => {
         const currentUser = await authService.getUser();
         setUser(currentUser);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error('Error fetching user:', error);
       } finally {
         setLoading(false);
       }
@@ -44,14 +44,14 @@ const PublicRoutes: React.FC = (): JSX.Element => {
 
   if (loading) {
     return (
-      <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
+      <CircularProgress sx={{ margin: 'auto', display: 'block', mt: 10 }} />
     );
   }
 
   return auth ? (
     <Outlet />
   ) : (
-    <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
+    <CircularProgress sx={{ margin: 'auto', display: 'block', mt: 10 }} />
   );
 };
 

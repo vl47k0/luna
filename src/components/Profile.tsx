@@ -1,10 +1,10 @@
-import React from "react";
-import { Card, CardContent, Typography, Skeleton } from "@mui/material";
-import { User } from "oidc-client-ts";
-import { authService } from "../utils/oidc";
-import { CoreMasterService, UserInfo } from "../services/CoreMasterService";
+import React from 'react';
+import { Card, CardContent, Typography, Skeleton } from '@mui/material';
+import { User } from 'oidc-client-ts';
+import { authService } from '../utils/oidc';
+import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
 
-const BACKEND_URL = "https://dev.api-sod.com/core-api/";
+const BACKEND_URL = 'https://dev.api-sod.com/core/v1';
 const UserCard: React.FC = (): JSX.Element => {
   const [fullUser, setFullUser] = React.useState<UserInfo | null>(null);
   const [oidcUser, setOidcUser] = React.useState<User | null>(null);
@@ -27,7 +27,7 @@ const UserCard: React.FC = (): JSX.Element => {
             if (isMounted) setFullUser(fullUserInfo);
           } catch (err) {
             // eslint-disable-next-line no-console
-            console.error("Failed to fetch full user info:", err);
+            console.error('Failed to fetch full user info:', err);
             if (isMounted) setFullUser(null);
           }
         }
@@ -82,8 +82,8 @@ const UserCard: React.FC = (): JSX.Element => {
           <strong>Effective End:</strong> {fullUser.effectiveEndDate}
         </Typography>
         <Typography variant="body1">
-          <strong>Attributes:</strong>{" "}
-          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+          <strong>Attributes:</strong>{' '}
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
             {JSON.stringify(fullUser.attributes, null, 2)}
           </pre>
         </Typography>
