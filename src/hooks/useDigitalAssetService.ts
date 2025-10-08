@@ -7,7 +7,7 @@ export const useDigitalAssetService = (): DigitalAssetService | null => {
   const [service, setService] = useState<DigitalAssetService | null>(null);
 
   useEffect(() => {
-    const initializeService = async () => {
+    const initializeService = async (): Promise<void> => {
       try {
         const user: User | null = await authService.getUser();
         if (user?.access_token) {

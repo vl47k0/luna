@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+  RawAxiosRequestHeaders,
+} from "axios";
 
 export interface ApiConfig {
   protocol?: "http" | "https";
@@ -14,7 +19,7 @@ export class DigitalAssetService {
   constructor(config: ApiConfig) {
     const {
       protocol = "https",
-      domain = "mars.georgievski.net",
+      domain = "dev.api-sod.com",
       port = 443,
       basePath = "assets/v1",
       token,
@@ -29,15 +34,12 @@ export class DigitalAssetService {
 
     this.apiClient = axios.create({
       baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     this.apiClient.interceptors.request.use(
-      (axiosConfig) => {
+      (axiosConfig: InternalAxiosRequestConfig) => {
         if (token && axiosConfig.headers) {
-          axiosConfig.headers["Authorization"] = `Bearer ${token}`;
+          axiosConfig.headers["X-A2b-Token"] = token;
         }
         return axiosConfig;
       },
@@ -61,11 +63,13 @@ export class DigitalAssetService {
       "x-a2b-correlation-id"?: string;
     }
   ): Promise<AxiosResponse<T>> {
-    const requestHeaders = { ...this.apiClient.defaults.headers, ...headers };
-    if (!(data instanceof FormData)) {
-      requestHeaders["Content-Type"] =
-        headers?.["Content-Type"] ?? "application/octet-stream";
-    }
+    const requestHeaders: RawAxiosRequestHeaders = { ...headers };
+
+    // Ensure the content type for the blob is correctly set,
+    // defaulting to application/octet-stream if not provided.
+    requestHeaders["Content-Type"] =
+      headers?.["Content-Type"] ?? "application/octet-stream";
+
     return this.apiClient.put<T>(`/blobs/${container}`, data, {
       params,
       headers: requestHeaders,
