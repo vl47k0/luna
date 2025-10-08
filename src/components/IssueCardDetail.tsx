@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   Button,
   Card,
@@ -22,7 +22,7 @@ import MuiAlert from '@mui/material/Alert';
 import { Link as RouterLink } from 'react-router-dom';
 import { Process, Issue, SolutionService } from '../services/SolutionsService';
 import { BookmarkService } from '../services/BookmarkService';
-import { UserInfo } from '../services/CoreMasterService';
+import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
 
 import { authService } from '../utils/oidc';
 import { User } from 'oidc-client-ts';
@@ -43,9 +43,8 @@ import { ProcessInputForm, ProcessForm } from './ProcessInputForm';
 import FormattedTextDisplay from './FormattedTextDisplay';
 import IssueTreeComponent from './IssueTreeComponent';
 import UserSelectionDialog from './UserSelectionDialog';
-import AdminSelectionDialog from './AdminSelectionDialog';
 
-import { RTMSData, RTMSEvent, RTMSService } from '../services/RTMSService';
+import { RTMSEvent, RTMSService } from '../services/RTMSService';
 
 interface IssueCardProps {
   id: string;
@@ -63,9 +62,8 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   onAddProcess,
 }) => {
   const [issue, setIssue] = useState<Issue | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [memberDetails, setMemberDetails] = useState<UserInfo[]>([]);
+  const [adminDetails, setAdminDetails] = useState<UserInfo[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
@@ -73,8 +71,8 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   );
 
   const solutionBackendRef = useRef<SolutionService | null>(null);
+  const coreMasterServiceRef = useRef<CoreMasterService | null>(null);
   const bookmarkServiceRef = useRef<BookmarkService | null>(null);
-
   const rtmsServiceRef = useRef<RTMSService | null>(null);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -88,12 +86,9 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   const broadcast = (e: RTMSEvent): void => {
     if (!rtmsServiceRef.current) return;
     rtmsServiceRef.current.sendMessage(e);
-    console.log('IssueCardDetail=> Broadcast => Issue:', issue);
-    console.log('IssueCardDetail => Broadcast => Event:', e);
   };
 
   const handleIssueTreeDialogOpen = (): void => {
-    console.log(loading, error);
     setOpenIssueTreeDialog(true);
   };
 
@@ -125,71 +120,69 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     setOpenAdminSelectionDialog(false);
   };
 
-  const handleUsersSelected = (users: UserInfo[]): void => {
-    console.log('IssueCardDetail => Selected Members:', users);
-    users.forEach((user) => {
-      console.log('IssueCardDetail => Member User ID:', user.userId);
-      console.log('IssueCardDetail => Member User Code:', user.userCode);
-      console.log(
-        'IssueCardDetail => Member User Attributes:',
-        user.attributes
-      );
-      console.log(
-        'IssueCardDetail => Full Member User Object:',
-        JSON.stringify(user, null, 2)
-      );
-    });
+  const handleUsersSelected = async (
+    selectedUsers: UserInfo[]
+  ): Promise<void> => {
+    if (!issue || !solutionBackendRef.current) return;
 
-    console.log('IssueCardDetail => Calling onClose with issue ID:', id);
-    onClose(id);
+    const memberIds = selectedUsers.map((u) => u.userId);
+    const updatedIssue = await solutionBackendRef.current.issueUpdateMembers(
+      issue,
+      memberIds
+    );
 
-    setSnackbarMsg(`${users.length} member(s) selected successfully!`);
-    setSnackbarSeverity('success');
+    if (updatedIssue) {
+      setIssue(updatedIssue);
+      setMemberDetails(selectedUsers);
+      setSnackbarMsg('Members updated successfully!');
+      setSnackbarSeverity('success');
+      onClose(issue.id);
+    } else {
+      setSnackbarMsg('Failed to update members.');
+      setSnackbarSeverity('error');
+    }
     setSnackbarOpen(true);
+    handleUserSelectionClose();
   };
 
-  const handleAdminsSelected = (admins: UserInfo[]): void => {
-    console.log('IssueCardDetail => Selected Administrators:', admins);
-    admins.forEach((admin) => {
-      console.log('IssueCardDetail => Admin User ID:', admin.userId);
-      console.log('IssueCardDetail => Admin User Code:', admin.userCode);
-      console.log(
-        'IssueCardDetail => Admin User Attributes:',
-        admin.attributes
-      );
-      console.log(
-        'IssueCardDetail => Full Admin User Object:',
-        JSON.stringify(admin, null, 2)
-      );
-    });
+  const handleAdminsSelected = async (
+    selectedAdmins: UserInfo[]
+  ): Promise<void> => {
+    if (!issue || !solutionBackendRef.current) return;
 
-    console.log('IssueCardDetail => Setting administrators for issue ID:', id);
+    const adminIds = selectedAdmins.map((u) => u.userId);
+    const updatedIssue = await solutionBackendRef.current.issueUpdateAdmins(
+      issue,
+      adminIds
+    );
 
-    setSnackbarMsg(`${admins.length} administrator(s) selected successfully!`);
-    setSnackbarSeverity('success');
+    if (updatedIssue) {
+      setIssue(updatedIssue);
+      setAdminDetails(selectedAdmins);
+      setSnackbarMsg('Administrators updated successfully!');
+      setSnackbarSeverity('success');
+      onClose(issue.id);
+    } else {
+      setSnackbarMsg('Failed to update administrators.');
+      setSnackbarSeverity('error');
+    }
     setSnackbarOpen(true);
+    handleAdminSelectionClose();
   };
 
   const handleEditClick = (): void => {
-    console.log('IssueCardDetail => Edit button clicked for issue ID:', id);
-    console.log('IssueCardDetail => Current issue data:', issue);
-    console.log('IssueCardDetail => Calling onEdit with issue ID:', id);
     onEdit(id);
   };
 
   const handleAddBookmark = async (): Promise<void> => {
     if (!bookmarkServiceRef.current) return;
-
     const currentUrl = window.location.href;
-
     try {
       const added = await bookmarkServiceRef.current.addLink({
         title: issue?.title ?? 'Untitled',
         href: currentUrl,
       });
-
       if (added) {
-        console.log('Bookmark added:', added);
         setSnackbarMsg('Bookmark saved!');
         setSnackbarSeverity('success');
       } else {
@@ -206,7 +199,6 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   };
 
   const processSent = (process: Process): void => {
-    console.log(process);
     onAddProcess(process);
     broadcast({
       data: { id: process.id, command: 'add', context: 'process' },
@@ -214,132 +206,101 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     });
   };
 
-  const submitHandler = (form: ProcessForm, issue: string): void => {
-    handleSubmit(form, issue).catch((error) => {
-      setError('Failed to get UserPlease try again later.');
-      console.error('Failed to get user:', error);
-    });
+  const submitHandler = (form: ProcessForm, issueId: string): void => {
+    void handleSubmit(form, issueId);
   };
 
   const handleSubmit = async (
     form: ProcessForm,
-    issue: string
+    issueId: string
   ): Promise<void> => {
     if (!solutionBackendRef.current) return;
-    try {
-      await solutionBackendRef.current.addProcess(
-        issue,
-        form.text,
-        form.filenames,
-        processSent
-      );
-      setOpenDialog(false);
-    } catch (error) {
-      console.error('Failed to create issue:', error);
-    }
+    await solutionBackendRef.current.addProcess(
+      issueId,
+      form.text,
+      form.filenames,
+      processSent
+    );
+    setOpenDialog(false);
   };
 
-  useEffect(() => {
-    const initializeRTMSService = (): void => {
-      if (!rtmsServiceRef.current && user) {
-        const rtms = new RTMSService(id, user.access_token);
-
-        rtms.onConnected((receivedMessage: RTMSData): void => {
-          console.log(
-            'Services => RTMSService => OnConnected => Message: ',
-            receivedMessage
-          );
-        });
-
-        rtms.onDisconnected((receivedMessage: RTMSData): void => {
-          console.log(
-            'Services => RTMSService => OnDisconnected => Message: ',
-            receivedMessage
-          );
-        });
-
-        rtms.onData((events: RTMSEvent[]): void => {
-          events.forEach((e): void => {
-            console.log('Services => RTMS => OnData => Event: ', e);
-            if (e.type === 'delete') {
-              console.log('Services => RTMS => Delete => Event: ', e);
-            }
-            if (e.type === 'add') {
-              console.log('Services => RTMS => Add => Event: ', e);
-            }
+  const fetchUserDetails = useCallback(
+    async (userIds: string[]): Promise<UserInfo[]> => {
+      if (!coreMasterServiceRef.current || userIds.length === 0) return [];
+      try {
+        const userPromises = userIds.map(async (userId) => {
+          const userData = await coreMasterServiceRef.current!.findUsers({
+            userId,
           });
+          if (userData && 'userId' in userData) {
+            return userData;
+          }
+          return null;
         });
 
-        rtms.connect();
-        rtmsServiceRef.current = rtms;
+        const users = await Promise.all(userPromises);
+        return users.filter((u): u is UserInfo => u !== null);
+      } catch (error) {
+        console.error('Failed to fetch user details with findUsers', error);
+        return [];
       }
-    };
+    },
+    []
+  );
 
-    initializeRTMSService();
-
-    return (): void => {
-      if (rtmsServiceRef.current) {
-        console.log('Services => RTMS => Disconnect: ');
-        rtmsServiceRef.current.disconnect();
-        rtmsServiceRef.current = null;
-      }
-    };
-  }, [user, id]);
-
-  const fetchData = async (issueId: string): Promise<void> => {
+  const fetchData = useCallback(async (issueId: string): Promise<void> => {
     if (!solutionBackendRef.current) return;
-    setLoading(true);
     try {
-      const data: Issue | undefined | null =
-        await solutionBackendRef.current.fetchIssue(issueId);
-      if (!data) return;
-      setIssue(data);
+      const issueData = await solutionBackendRef.current.fetchIssue(issueId);
+      if (issueData) {
+        setIssue(issueData);
+      }
     } catch (error) {
-      setError('Failed to load issues. Please try again later.');
-      console.error('Failed to fetch issues:', error);
-    } finally {
-      setLoading(false);
+      console.error('Failed to load issue details.', error);
     }
-  };
-
-  useEffect((): void => {
-    authService
-      .getUser()
-      .then((data) => {
-        setUser(data);
-      })
-      .catch((error) => {
-        setError('Failed to get UserPlease try again later.');
-        console.error('Failed to get user:', error);
-      });
   }, []);
 
   useEffect(() => {
-    if (!user) return;
+    if (issue) {
+      const fetchAllDetails = async (): Promise<void> => {
+        const adminUserIds = issue.admin ?? [];
+        const memberUserIds = issue.members ?? [];
 
-    if (!solutionBackendRef.current) {
-      solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
-        user.access_token
-      );
+        const [adminData, memberData] = await Promise.all([
+          fetchUserDetails(adminUserIds),
+          fetchUserDetails(memberUserIds),
+        ]);
+
+        setAdminDetails(adminData);
+        setMemberDetails(memberData);
+      };
+      void fetchAllDetails();
     }
+  }, [issue, fetchUserDetails]);
 
-    if (!bookmarkServiceRef.current) {
-      bookmarkServiceRef.current = new BookmarkService(
-        'https://mars.georgievski.net/',
-        user.access_token
-      );
-    }
-
-    return (): void => {
-      solutionBackendRef.current = null;
-      bookmarkServiceRef.current = null;
+  useEffect((): (() => void) => {
+    let isMounted = true;
+    void authService.getUser().then((userData: User | null) => {
+      if (userData && isMounted) {
+        solutionBackendRef.current = new SolutionService(
+          'https://mars.georgievski.net/',
+          userData.access_token
+        );
+        coreMasterServiceRef.current = new CoreMasterService(
+          'https://dev.api-sod.com/core/v1'
+        );
+        coreMasterServiceRef.current.setAuthToken(userData.access_token);
+        bookmarkServiceRef.current = new BookmarkService(
+          'https://mars.georgievski.net/',
+          userData.access_token
+        );
+        void fetchData(id);
+      }
+    });
+    return () => {
+      isMounted = false;
     };
-  }, [user]);
-
-  useEffect((): void => {
-    void fetchData(id);
-  }, [user, id]);
+  }, [id, fetchData]);
 
   const extractFileName = (url: string): string => {
     return url.split('/').pop() ?? url;
@@ -358,7 +319,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
 
       <Dialog open={openIssueTreeDialog} onClose={handleIssueTreeDialogClose}>
         <DialogContent>
-          <IssueTreeComponent issueId={issue?.id ?? ''}></IssueTreeComponent>
+          <IssueTreeComponent issueId={issue?.id ?? ''} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleIssueTreeDialogClose}>Close</Button>
@@ -368,13 +329,17 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
       <UserSelectionDialog
         open={openUserSelectionDialog}
         onClose={handleUserSelectionClose}
-        onSubmit={handleUsersSelected}
+        onSubmit={(users) => void handleUsersSelected(users)}
+        title="Select Members"
+        initialSelection={memberDetails}
       />
 
-      <AdminSelectionDialog
+      <UserSelectionDialog
         open={openAdminSelectionDialog}
         onClose={handleAdminSelectionClose}
-        onSubmit={handleAdminsSelected}
+        onSubmit={(admins) => void handleAdminsSelected(admins)}
+        title="Select Administrators"
+        initialSelection={adminDetails}
       />
 
       <Card
@@ -410,12 +375,10 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
             <AddIcon />
           </Fab>
           <Grid container spacing={1}>
-            <Grid item xs={12} md={12}>
-              <FormattedTextDisplay
-                htmlContent={issue?.description ?? ''}
-              ></FormattedTextDisplay>
+            <Grid item xs={12}>
+              <FormattedTextDisplay htmlContent={issue?.description ?? ''} />
             </Grid>
-            <Grid item xs={12} md={12}>
+            <Grid item xs={12}>
               <List>
                 {issue?.assets?.map((asset, index) => (
                   <ListItem key={index}>
@@ -425,7 +388,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
                     <ListItemText>
                       <MuiLink
                         href={asset}
-                        download={asset}
+                        download={extractFileName(asset)}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -450,13 +413,16 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
             to={issue?.process ? `/processes/${issue.process}` : '/issues/'}
             underline="none"
           >
-            <IconButton aria-label="share">
-              <ArrowUpwardIcon></ArrowUpwardIcon>
+            <IconButton aria-label="go-to-process">
+              <ArrowUpwardIcon />
             </IconButton>
           </MuiLink>
 
-          <IconButton aria-label="share" onClick={handleIssueTreeDialogOpen}>
-            <AccountTreeIcon></AccountTreeIcon>
+          <IconButton
+            aria-label="view-tree"
+            onClick={handleIssueTreeDialogOpen}
+          >
+            <AccountTreeIcon />
           </IconButton>
 
           <IconButton aria-label="share">
@@ -481,7 +447,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
             aria-label="Select Administrators"
             onClick={handleAdminSelectionOpen}
           >
-            <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
+            <AdminPanelSettingsIcon />
           </IconButton>
           <IconButton aria-label="Delete" onClick={() => onDelete(id)}>
             <DeleteIcon />

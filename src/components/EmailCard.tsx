@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Typography, Link as MuiLink } from '@mui/material';
+import { Typography, Link as MuiLink, Skeleton } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
 import { authService } from '../utils/oidc';
@@ -11,7 +11,7 @@ interface EmailCardProps {
 
 const EmailCard: React.FC<EmailCardProps> = ({ id }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const coreMasterServiceRef = useRef<CoreMasterService | null>(null);
@@ -19,14 +19,18 @@ const EmailCard: React.FC<EmailCardProps> = ({ id }) => {
   const fetchData = useCallback(async (userId: string): Promise<void> => {
     if (!coreMasterServiceRef.current) return;
     setLoading(true);
+    setError(null);
     try {
-      const data: UserInfo = await coreMasterServiceRef.current.getUser(userId);
-      if (data) {
+      // Using findUsers as requested
+      const data = await coreMasterServiceRef.current.findUsers({ userId });
+      if (data && 'userId' in data) {
         setUserInfo(data);
+      } else {
+        setError('User not found.');
       }
-    } catch (error) {
-      setError('Failed to load user. Please try again later.');
-      console.error('Failed to fetch user:', error);
+    } catch (err) {
+      setError('Failed to load user.');
+      console.error('Failed to fetch user:', err);
     } finally {
       setLoading(false);
     }
@@ -41,15 +45,11 @@ const EmailCard: React.FC<EmailCardProps> = ({ id }) => {
   useEffect(() => {
     if (user && !coreMasterServiceRef.current) {
       coreMasterServiceRef.current = new CoreMasterService(
-        'https://dev.api-sod.com/core-api/'
+        'https://dev.api-sod.com/core/v1'
       );
       coreMasterServiceRef.current.setAuthToken(user.access_token);
     }
-    return (): void => {
-      if (coreMasterServiceRef.current) {
-        coreMasterServiceRef.current = null;
-      }
-    };
+    // No cleanup needed here as the ref persists across renders
   }, [user]);
 
   useEffect(() => {
@@ -58,34 +58,41 @@ const EmailCard: React.FC<EmailCardProps> = ({ id }) => {
     }
   }, [user, id, fetchData]);
 
-  // Extract first name and last name from attributes
   const getDisplayName = (): string => {
-    if (!userInfo?.attributes) return userInfo?.userCode ?? 'Unknown User';
-
-    const firstName = userInfo.attributes.firstName as string | undefined;
-    const lastName = userInfo.attributes.lastName as string | undefined;
-
-    if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
-    }
-
-    if (firstName) return firstName;
-    if (lastName) return lastName;
-
-    return userInfo.userCode;
+    // The ! postfix asserts that userInfo is not null here.
+    // This is safe because we only call this function when userInfo is truthy.
+    return userInfo!.attributes.name ?? userInfo!.userCode ?? 'Unknown User';
   };
+
+  if (loading) {
+    return <Skeleton variant="text" width={150} />;
+  }
+
+  if (error) {
+    return (
+      <Typography variant="h5" component="div" color="error">
+        {error}
+      </Typography>
+    );
+  }
+
+  if (!userInfo) {
+    return (
+      <Typography variant="h5" component="div">
+        User not found
+      </Typography>
+    );
+  }
 
   return (
     <MuiLink
       color="primary"
       component={RouterLink}
-      to={`/users/${userInfo?.userId}`}
+      to={`/users/${userInfo.userId}`}
       underline="none"
     >
       <Typography variant="h5" component="div">
-        {loading && 'Loading...'}
-        {!loading && userInfo && getDisplayName()}
-        {error && <span style={{ color: 'red' }}>{error}</span>}
+        {getDisplayName()}
       </Typography>
     </MuiLink>
   );

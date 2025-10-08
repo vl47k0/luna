@@ -276,7 +276,12 @@ export class CoreMasterService {
   }
 
   public async findUsers(
-    params: { userId?: string; userCode?: string },
+    params: {
+      userId?: string;
+      userCode?: string;
+      name?: string;
+      email?: string;
+    },
     config?: AxiosRequestConfig
   ): Promise<FindUsersResponse['data']> {
     const response = await this.axiosInstance.get<FindUsersResponse>(

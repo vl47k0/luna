@@ -105,7 +105,7 @@ export interface Issue {
   constraints?: Constraint[] | null;
   process?: string | null;
   owner?: string;
-  admin?: string;
+  admin?: string[];
   members?: string[];
 }
 
@@ -416,6 +416,62 @@ export class SolutionService {
       return response.data;
     } catch (error) {
       console.error('Error fetching issue:', error);
+      return null;
+    }
+  }
+
+  async issueUpdateMembers(
+    issue: Issue,
+    memberIds: string[]
+  ): Promise<Issue | null> {
+    try {
+      const payload: Issue = {
+        ...issue,
+        members: memberIds,
+      };
+      const response = await this.client.put<Issue>(
+        `solution/api/v1/issues/${issue.id}/`,
+        payload
+      );
+      console.log('Issue members updated successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          'Failed to update issue members:',
+          error.response?.data || error.message
+        );
+      } else {
+        console.error('Error updating issue members:', error);
+      }
+      return null;
+    }
+  }
+
+  async issueUpdateAdmins(
+    issue: Issue,
+    adminIds: string[]
+  ): Promise<Issue | null> {
+    try {
+      const payload: Issue = {
+        ...issue,
+        admin: adminIds,
+      };
+      const response = await this.client.put<Issue>(
+        `solution/api/v1/issues/${issue.id}/`,
+        payload
+      );
+      console.log('Issue admins updated successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          'Failed to update issue admins:',
+          error.response?.data || error.message
+        );
+      } else {
+        console.error('Error updating issue admins:', error);
+      }
       return null;
     }
   }
