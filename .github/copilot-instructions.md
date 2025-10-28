@@ -129,9 +129,10 @@ npm run lint  # ESLint 9 with flat config (eslint.config.js)
 
 ### MUI Components
 
-- **Design system**: Material-UI v5 (`@mui/material`, `@mui/icons-material`)
-- **Tree views**: `@mui/x-tree-view` for hierarchical data (`IssueTreeComponent`, `ProcessTreeComponent`)
+- **Design system**: Material-UI v6 (`@mui/material`, `@mui/icons-material`)
+- **Tree views**: `@mui/x-tree-view` with `SimpleTreeView` and `TreeItem` (use `itemId` not `nodeId`, icons via `slots`)
 - **Data grids**: `@mui/x-data-grid` for tabular displays
+- **Breaking changes from v5**: `ListItem` `button` prop removed (use `component="div"` with `sx={{ cursor: 'pointer' }}`)
 
 ### Routing
 
