@@ -1,57 +1,28 @@
-import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
-import CircularProgress from '@mui/material/CircularProgress';
-
-interface AuthState {
-  auth: boolean;
-  role: User['profile'] | null;
-  loading: boolean;
-}
-
-const useAuth = (): AuthState => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect((): void => {
-    const fetchUser = async (): Promise<void> => {
-      try {
-        const currentUser = await authService.getUser();
-        setUser(currentUser);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void fetchUser();
-  }, []);
-
-  return { auth: !!user, role: user?.profile ?? null, loading };
-};
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { authService } from "../utils/oidc";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useAuth } from "../contexts/AuthContext";
 
 const PublicRoutes: React.FC = () => {
-  const { auth, loading } = useAuth();
+  const { user, loading } = useAuth();
 
-  // Automatically initiate sign-in if not authenticated
   useEffect(() => {
-    if (!loading && !auth) {
+    if (!loading && !user) {
       void authService.signIn();
     }
-  }, [loading, auth]);
+  }, [loading, user]);
 
   if (loading) {
     return (
-      <CircularProgress sx={{ margin: 'auto', display: 'block', mt: 10 }} />
+      <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
     );
   }
 
-  return auth ? (
+  return user ? (
     <Outlet />
   ) : (
-    <CircularProgress sx={{ margin: 'auto', display: 'block', mt: 10 }} />
+    <CircularProgress sx={{ margin: "auto", display: "block", mt: 10 }} />
   );
 };
 

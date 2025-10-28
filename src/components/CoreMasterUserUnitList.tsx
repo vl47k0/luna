@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   List,
   ListItem,
@@ -6,42 +6,41 @@ import {
   Typography,
   Box,
   Paper,
-} from '@mui/material';
-import { authService } from '../utils/oidc';
+} from "@mui/material";
+import { useToken } from "../contexts/AuthContext";
 import {
   CoreMasterService,
   UserInfo,
   UnitInfo,
   GetObjectsByIdResponse,
-} from '../services/CoreMasterService';
+} from "../services/CoreMasterService";
 
-const BACKEND_URL = 'https://dev.api-sod.com/core/api/v1';
+const BACKEND_URL = "https://dev.api-sod.com/core/api/v1";
 
 const CoreMasterUserUnitList: React.FC = () => {
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [units, setUnits] = useState<UnitInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
+  const token = useToken();
 
   useEffect(() => {
     let isMounted = true;
     const fetchData = async (): Promise<void> => {
       setLoading(true);
-      setError('');
+      setError("");
       try {
-        const user = await authService.getUser();
-        if (!user) {
-          setError('Not authenticated');
+        if (!token) {
+          setError("Not authenticated");
           setLoading(false);
           return;
         }
-        const token = user.access_token;
         const service = new CoreMasterService(BACKEND_URL);
         service.setAuthToken(token);
 
         // TODO: Replace with actual IDs for testing
-        const userIds = ['user1', 'user2'];
-        const unitIds = ['unit1', 'unit2'];
+        const userIds = ["user1", "user2"];
+        const unitIds = ["unit1", "unit2"];
 
         const resp = await service.getObjectsById({
           userIds,
@@ -53,18 +52,18 @@ const CoreMasterUserUnitList: React.FC = () => {
         if (isMounted && data) {
           setUsers(
             Array.isArray(data.users)
-              ? (data.users.filter((u): u is UserInfo => 'userId' in u) ?? [])
+              ? data.users.filter((u): u is UserInfo => "userId" in u) ?? []
               : []
           );
           setUnits(
             Array.isArray(data.units)
-              ? (data.units.filter((u): u is UnitInfo => 'unitId' in u) ?? [])
+              ? data.units.filter((u): u is UnitInfo => "unitId" in u) ?? []
               : []
           );
         }
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to fetch users/units'
+          err instanceof Error ? err.message : "Failed to fetch users/units"
         );
       } finally {
         if (isMounted) {
@@ -76,7 +75,7 @@ const CoreMasterUserUnitList: React.FC = () => {
     return (): void => {
       isMounted = false;
     };
-  }, []);
+  }, [token]);
 
   return (
     <Paper sx={{ p: 3, m: 2 }}>

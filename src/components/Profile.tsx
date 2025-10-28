@@ -1,33 +1,30 @@
-import React from 'react';
-import { Card, CardContent, Typography, Skeleton } from '@mui/material';
-import { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
-import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
+import React from "react";
+import { Card, CardContent, Typography, Skeleton } from "@mui/material";
+import { useUser, useToken } from "../contexts/AuthContext";
+import { CoreMasterService, UserInfo } from "../services/CoreMasterService";
 
-const BACKEND_URL = 'https://dev.api-sod.com/core/v1';
+const BACKEND_URL = "https://dev.api-sod.com/core/v1";
 const UserCard: React.FC = () => {
   const [fullUser, setFullUser] = React.useState<UserInfo | null>(null);
-  const [oidcUser, setOidcUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const oidcUser = useUser();
+  const token = useToken();
 
   React.useEffect((): (() => void) => {
     let isMounted = true;
     const run = async (): Promise<void> => {
       try {
-        const user = await authService.getUser();
-        if (!user) return;
-        if (isMounted) setOidcUser(user);
+        if (!oidcUser || !token) return;
 
-        const userId = user.profile.sub;
-        if (userId && user.access_token) {
+        const userId = oidcUser.profile.sub;
+        if (userId) {
           const service = new CoreMasterService(BACKEND_URL);
-          service.setAuthToken(user.access_token);
+          service.setAuthToken(token);
           try {
             const fullUserInfo = await service.getUser(String(userId));
             if (isMounted) setFullUser(fullUserInfo);
           } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error('Failed to fetch full user info:', err);
+            console.error("Failed to fetch full user info:", err);
             if (isMounted) setFullUser(null);
           }
         }
@@ -39,7 +36,7 @@ const UserCard: React.FC = () => {
     return (): void => {
       isMounted = false;
     };
-  }, []);
+  }, [oidcUser, token]);
 
   if (loading) {
     return (
@@ -82,8 +79,8 @@ const UserCard: React.FC = () => {
           <strong>Effective End:</strong> {fullUser.effectiveEndDate}
         </Typography>
         <Typography variant="body1">
-          <strong>Attributes:</strong>{' '}
-          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          <strong>Attributes:</strong>{" "}
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
             {JSON.stringify(fullUser.attributes, null, 2)}
           </pre>
         </Typography>
