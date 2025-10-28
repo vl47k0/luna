@@ -10,9 +10,10 @@ Luna is a React + TypeScript issue/process management SPA with OIDC authenticati
 
 All backend communication follows a consistent service class pattern:
 
-- **Instance per auth context**: Services are instantiated with `baseURL` and `token` in component refs (e.g., `useRef<SolutionService | null>(null)`)
-- **Lazy initialization**: Services initialize in `useEffect` after user auth, checking `if (!serviceRef.current && user)`
-- **Token-based**: All services receive `user.access_token` from OIDC `authService.getUser()`
+- **Centralized auth**: Use `useUser()` and `useToken()` hooks from `AuthContext` (no prop drilling)
+- **Token access**: Call `useToken()` to get current access token synchronously
+- **Service initialization**: Initialize services with token from `useToken()` hook
+- **Token-based**: All services receive token from AuthContext
 - **Cleanup on unmount**: Set `serviceRef.current = null` in cleanup functions
 
 **Service examples:**
@@ -26,10 +27,15 @@ All backend communication follows a consistent service class pattern:
 ### Authentication Flow (OIDC)
 
 - **OIDC client**: `oidc-client-ts` configured in `src/utils/oidc.ts`
-- **Auth service**: Singleton `authService` handles sign-in, token renewal, silent refresh
-- **Token renewal**: Automatic silent renewal via iframe (`/luna/silent-refresh.html`), triggers 5 min before expiry
-- **Protected routes**: `ProtectedRoutes.tsx` checks auth, redirects to `authService.signIn()` if unauthenticated
+- **Auth context**: `AuthContext` provides centralized auth state (`src/contexts/AuthContext.tsx`)
+  - Exports: `useAuth()`, `useUser()`, `useToken()` hooks
+  - Handles automatic token refresh with scheduled timers (5 min before expiry)
+  - Token stored in ref for synchronous access
+- **Auth service**: Singleton `authService` handles OIDC operations (sign-in, sign-out, token renewal)
+- **Token management**: Automatic silent renewal scheduled in AuthContext based on token expiry
+- **Protected routes**: `ProtectedRoutes.tsx` uses `useAuth()` hook, redirects to sign-in if unauthenticated
 - **Auth callback**: `/token` route handled by `Authenticate.tsx` component
+- **Usage pattern**: Use `useUser()` for user details, `useToken()` for access token without prop drilling
 
 ### Real-Time Updates (RTMS)
 
@@ -41,23 +47,40 @@ All backend communication follows a consistent service class pattern:
 
 ### Component-Service Integration
 
-**Standard pattern** (see `IssueDetail.tsx`, `ProcessCardDetail.tsx`):
+**New pattern** (using AuthContext):
 
 ```tsx
-const solutionBackendRef = useRef<SolutionService | null>(null);
-const rtmsServiceRef = useRef<RTMSService | null>(null);
+import { useUser, useToken } from "../contexts/AuthContext";
+
+const MyComponent: React.FC = () => {
+  const user = useUser();
+  const token = useToken();
+  const serviceRef = useRef<SolutionService | null>(null);
+
+  useEffect(() => {
+    if (token && !serviceRef.current) {
+      serviceRef.current = new SolutionService(baseURL, token);
+    }
+    return () => {
+      serviceRef.current = null;
+    };
+  }, [token]);
+
+  // Use serviceRef.current for API calls
+};
+```
+
+**Old pattern** (deprecated - for reference only):
+
+```tsx
+import { authService } from "../utils/oidc";
 
 useEffect(() => {
-  if (!solutionBackendRef.current && user) {
-    solutionBackendRef.current = new SolutionService(
-      baseURL,
-      user.access_token
-    );
+  const user = await authService.getUser();
+  if (user && !serviceRef.current) {
+    serviceRef.current = new SolutionService(baseURL, user.access_token);
   }
-  return () => {
-    solutionBackendRef.current = null;
-  };
-}, [user]);
+}, []);
 ```
 
 ### Environment Configuration

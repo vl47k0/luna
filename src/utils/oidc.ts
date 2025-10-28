@@ -22,13 +22,12 @@ const config: UserManagerSettings = {
   scope: SCOPE,
   response_type: RESPONSE_TYPE,
   userStore: new WebStorageStateStore({ store: window.localStorage }),
-  automaticSilentRenew: true,
+  automaticSilentRenew: false,
   silentRequestTimeoutInSeconds: 10,
   monitorSession: true,
   loadUserInfo: false,
   revokeTokensOnSignout: true,
 
-  // Add silent redirect URI for silent token renewal
   silent_redirect_uri: window.location.origin + "/luna/silent-refresh.html",
 };
 
@@ -39,20 +38,12 @@ class AuthService {
   constructor() {
     this.userManager = new UserManager(config);
 
-    // Set up event handlers for token management
-    this.userManager.events.addAccessTokenExpiring(() => {
-      console.log("Access token expiring, attempting silent renewal");
-      void this.renewToken();
+    this.userManager.events.addUserLoaded((user: User) => {
+      console.log("User loaded", user);
     });
 
     this.userManager.events.addSilentRenewError((error) => {
       console.error("Silent renew error:", error);
-      // Redirect to login if silent renewal fails
-      void this.signIn().catch(console.error);
-    });
-
-    this.userManager.events.addUserLoaded((user: User) => {
-      console.log("User loaded", user);
     });
   }
 
@@ -82,7 +73,7 @@ class AuthService {
     return expiresIn < 300;
   }
 
-  private async renewToken(): Promise<User | null> {
+  public async renewToken(): Promise<User | null> {
     // Prevent multiple simultaneous token renewals
     if (this.renewingToken) {
       return this.userManager.getUser();

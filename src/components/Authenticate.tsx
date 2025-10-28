@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { authService } from '../utils/oidc';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../utils/oidc";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const AuthenticateCallback: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
 
   useEffect((): void => {
     const handleAuthCallback = async (): Promise<void> => {
       try {
-        const user = await authService.handleRedirectCallback();
-        console.log('Authentication successful:', user);
-        // Redirect to the root, letting App.tsx handle the next navigation step.
-        navigate('/', { replace: true });
+        await authService.handleRedirectCallback();
+        console.log("✅ Authentication successful, redirecting...");
+        navigate("/issues", { replace: true });
       } catch (err) {
-        console.error('Authentication callback error:', err);
-        setError('Authentication failed. Please try again.');
+        console.error("❌ Authentication callback error:", err);
+        setError("Authentication failed. Please try again.");
       }
     };
 
     void handleAuthCallback();
-  }, [navigate, searchParams]);
+  }, [navigate]);
 
   if (error) {
     return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
+      <Box sx={{ p: 3, textAlign: "center" }}>
         <Typography variant="h5" color="error">
           {error}
         </Typography>
         <Typography variant="body1" sx={{ mt: 2 }}>
-          {/* Corrected: The link now correctly points to the login page within the app's basename */}
           <a href="/luna/login">Return to login</a>
         </Typography>
       </Box>
@@ -43,11 +40,11 @@ const AuthenticateCallback: React.FC = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        flexDirection: 'column',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        flexDirection: "column",
       }}
     >
       <CircularProgress />
