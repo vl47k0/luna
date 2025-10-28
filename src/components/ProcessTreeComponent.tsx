@@ -24,7 +24,7 @@ interface ProcessTreeComponentProps {
 
 const ProcessTreeComponent: React.FC<ProcessTreeComponentProps> = ({
   treeData,
-}): JSX.Element => {
+}): React.ReactElement => {
   const renderTree = (process: ProcessID) => (
     <TreeItem
       key={process.id}

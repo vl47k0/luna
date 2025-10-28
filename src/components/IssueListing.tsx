@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   Container,
   Fab,
@@ -7,7 +7,7 @@ import {
   DialogActions,
   Button,
   Pagination,
-} from '@mui/material';
+} from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -18,20 +18,20 @@ import {
   GridRowModel,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+} from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 import {
   Issue,
   IssuesResponse,
   SolutionService,
-} from '../services/SolutionsService';
-import { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
-import { IssueInputForm, IssueForm } from './IssueInputForm';
+} from "../services/SolutionsService";
+import { User } from "oidc-client-ts";
+import { authService } from "../utils/oidc";
+import { IssueInputForm, IssueForm } from "./IssueInputForm";
 
 const pageSize = 10;
 
@@ -47,19 +47,19 @@ const IssueListing: React.FC = () => {
   const solutionBackendRef = useRef<SolutionService | null>(null);
 
   const fetchData = useCallback(async (page: number): Promise<void> => {
-    console.log('fetchData called with page:', page); // Debug log
+    console.log("fetchData called with page:", page); // Debug log
     if (!solutionBackendRef.current) return;
     setLoading(true);
     try {
       const data: IssuesResponse | undefined | null =
         await solutionBackendRef.current.fetchMasterIssues(page);
-      console.log('Data fetched:', data); // Debug log
+      console.log("Data fetched:", data); // Debug log
       if (!data) return;
 
       setIssues(data.results);
       setPageCount(Math.ceil(data.count / pageSize));
     } catch (error) {
-      console.error('Failed to fetch issues:', error);
+      console.error("Failed to fetch issues:", error);
     } finally {
       setLoading(false);
     }
@@ -69,10 +69,10 @@ const IssueListing: React.FC = () => {
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
-      console.log('SolutionService initialized'); // Debug log
+      console.log("SolutionService initialized"); // Debug log
       setPage(1);
     }
     return (): void => {
@@ -88,7 +88,7 @@ const IssueListing: React.FC = () => {
 
   useEffect((): void => {
     void authService.getUser().then((data) => {
-      console.log('User data:', data); // Debug log
+      console.log("User data:", data); // Debug log
       setUser(data);
     });
   }, []);
@@ -112,13 +112,13 @@ const IssueListing: React.FC = () => {
       void fetchData(page);
       setOpenDialog(false);
     } catch (error) {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     }
   };
 
   const submitHandler = (form: IssueForm): void => {
     handleSubmit(form).catch((error) => {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     });
   };
 
@@ -130,7 +130,7 @@ const IssueListing: React.FC = () => {
     setOpenDialog(false);
   };
 
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event
   ): void => {
@@ -171,27 +171,27 @@ const IssueListing: React.FC = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'title', headerName: 'Title', width: 150, editable: true },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "title", headerName: "Title", width: 150, editable: true },
     {
-      field: 'description',
-      headerName: 'Description',
+      field: "description",
+      headerName: "Description",
       width: 300,
       editable: true,
     },
     {
-      field: 'created_at',
-      headerName: 'Created At',
+      field: "created_at",
+      headerName: "Created At",
       width: 150,
       editable: true,
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id }): JSX.Element[] => {
+      cellClassName: "actions",
+      getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -200,9 +200,6 @@ const IssueListing: React.FC = () => {
               key="save"
               icon={<SaveIcon />}
               label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
@@ -245,7 +242,7 @@ const IssueListing: React.FC = () => {
         onChange={handlePageChange}
         color="primary"
       />
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={issues}
           columns={columns}
@@ -263,7 +260,7 @@ const IssueListing: React.FC = () => {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
         onClick={handleDialogOpen}
       >
         <AddIcon />

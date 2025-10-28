@@ -88,7 +88,7 @@ const IssueTreeComponent: React.FC<IssueTreeComponentProps> = ({ issueId }) => {
       });
   }, [initializeBackendService, issueId]);
 
-  const renderTree = (issue: IssueBranch): JSX.Element => (
+  const renderTree = (issue: IssueBranch): React.ReactElement => (
     <TreeItem
       key={issue.id}
       itemId={issue.id}

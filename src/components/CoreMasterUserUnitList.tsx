@@ -103,7 +103,7 @@ const CoreMasterUserUnitList: React.FC = () => {
             </ListItem>
           )}
           {users.map(
-            (u: UserInfo): JSX.Element => (
+            (u: UserInfo): React.ReactElement => (
               <ListItem key={u.userId}>
                 <ListItemText
                   primary={u.userId}
@@ -129,7 +129,7 @@ const CoreMasterUserUnitList: React.FC = () => {
             </ListItem>
           )}
           {units.map(
-            (u: UnitInfo): JSX.Element => (
+            (u: UnitInfo): React.ReactElement => (
               <ListItem key={u.unitId}>
                 <ListItemText
                   primary={u.unitId}

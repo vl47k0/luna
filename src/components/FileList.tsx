@@ -13,8 +13,8 @@ export interface FileListProps {
   files: File[];
 }
 
-const getIconByExtension = (extension: string): JSX.Element => {
-  const iconMapping: Record<string, JSX.Element> = {
+const getIconByExtension = (extension: string): React.ReactElement => {
+  const iconMapping: Record<string, React.ReactElement> = {
     doc: <DocumentIcon fontSize="large" />,
     docx: <DocumentIcon fontSize="large" />,
     jpg: <ImageIcon fontSize="large" />,

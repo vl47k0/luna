@@ -32,7 +32,7 @@ const useAuth = (): AuthState => {
   return { auth: !!user, role: user?.profile ?? null, loading };
 };
 
-const PublicRoutes: React.FC = (): JSX.Element => {
+const PublicRoutes: React.FC = () => {
   const { auth, loading } = useAuth();
 
   // Automatically initiate sign-in if not authenticated

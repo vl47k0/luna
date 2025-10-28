@@ -9,7 +9,7 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
-export const mainListItems: JSX.Element = (
+export const mainListItems: React.ReactElement = (
   <React.Fragment>
     <ListItem component={RouterLink} to="/">
       <ListItemIcon>
@@ -45,7 +45,7 @@ export const mainListItems: JSX.Element = (
   </React.Fragment>
 );
 
-export const secondaryListItems: JSX.Element = (
+export const secondaryListItems: React.ReactElement = (
   <React.Fragment>
     <ListItem component={RouterLink} to="/bookmarks">
       <ListItemIcon>

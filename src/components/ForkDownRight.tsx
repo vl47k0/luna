@@ -1,7 +1,7 @@
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 import React from 'react';
 
-const FlippedIconExample: React.FC = (): JSX.Element => {
+const FlippedIconExample: React.FC = () => {
   const iconStyle = {
     flipHorizontal: {
       transform: 'scaleX(-1)',

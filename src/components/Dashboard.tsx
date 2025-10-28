@@ -69,7 +69,7 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-const DashboardContent: React.FC = (): JSX.Element => {
+const DashboardContent: React.FC = () => {
   const [open, setOpen] = React.useState<boolean>(true);
 
   const toggleDrawer = (): void => {
@@ -147,7 +147,7 @@ const DashboardContent: React.FC = (): JSX.Element => {
   );
 };
 
-const Dashboard: React.FC = (): JSX.Element => {
+const Dashboard: React.FC = () => {
   return <DashboardContent />;
 };
 

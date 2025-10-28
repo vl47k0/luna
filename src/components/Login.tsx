@@ -20,7 +20,7 @@ import { Navigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import { SignInButton } from "./SignInButton";
 
-function Copyright(): JSX.Element {
+function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}

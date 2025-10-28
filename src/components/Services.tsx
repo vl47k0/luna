@@ -15,7 +15,7 @@ interface ServicesProps {
   icon: string;
 }
 
-const Services = (): JSX.Element => {
+const Services = () => {
   const theme = useTheme();
 
   const [services, setServices] = useState<ServicesProps[]>([]);

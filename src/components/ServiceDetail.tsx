@@ -14,7 +14,7 @@ import { Service, MapperService } from "../services/MapperService";
 import type { User } from "oidc-client-ts";
 import { authService } from "../utils/oidc";
 
-const ServiceDetail: React.FC = (): JSX.Element => {
+const ServiceDetail: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
 
   const [service, setService] = React.useState<Service | null>(null);

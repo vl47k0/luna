@@ -1,4 +1,4 @@
-const PermissionDenied = (): JSX.Element => {
+const PermissionDenied = () => {
   return <h2>Permission denied!</h2>;
 };
 

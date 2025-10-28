@@ -6,7 +6,7 @@ import { authService } from './utils/oidc';
 import { User } from 'oidc-client-ts';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const App: React.FC = (): JSX.Element => {
+const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();

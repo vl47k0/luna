@@ -20,7 +20,7 @@ import ResourceAccessListForm from './components/ResourceAccessListForm';
 import UploadSearch from './components/UploadSearch';
 import CoreMasterUserUnitList from './components/CoreMasterUserUnitList';
 import UserSearch from './components/UserSearch';
-const Routing: React.FC = (): JSX.Element => (
+const Routing: React.FC = () => (
   <Routes>
     {/* Protected routes requiring authentication */}
     <Route path="/" element={<ProtectedRoutes />}>

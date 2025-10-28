@@ -56,7 +56,7 @@ const initialResource: Resource = {
   default_acl: [],
 };
 
-const ResourceAccessListForm: React.FC = (): JSX.Element => {
+const ResourceAccessListForm: React.FC = () => {
   const [resource, setResource] = React.useState<Resource>(initialResource);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (

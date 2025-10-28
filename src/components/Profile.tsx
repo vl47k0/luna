@@ -5,7 +5,7 @@ import { authService } from '../utils/oidc';
 import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
 
 const BACKEND_URL = 'https://dev.api-sod.com/core/v1';
-const UserCard: React.FC = (): JSX.Element => {
+const UserCard: React.FC = () => {
   const [fullUser, setFullUser] = React.useState<UserInfo | null>(null);
   const [oidcUser, setOidcUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
