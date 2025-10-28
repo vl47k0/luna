@@ -1,6 +1,7 @@
-import React from 'react';
-import { TreeView, TreeItem } from '@mui/lab';
-import { ExpandMore, ChevronRight } from '@mui/icons-material';
+import React from "react";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
+import { TreeItem } from "@mui/x-tree-view/TreeItem";
+import { ExpandMore, ChevronRight } from "@mui/icons-material";
 
 interface ProcessID {
   id: string;
@@ -27,7 +28,7 @@ const ProcessTreeComponent: React.FC<ProcessTreeComponentProps> = ({
   const renderTree = (process: ProcessID) => (
     <TreeItem
       key={process.id}
-      nodeId={process.id}
+      itemId={process.id}
       label={`Process ID: ${process.id}`}
     >
       {process.parent_issue && renderTree(process.parent_issue)}
@@ -35,14 +36,16 @@ const ProcessTreeComponent: React.FC<ProcessTreeComponentProps> = ({
   );
 
   return (
-    <TreeView
-      defaultCollapseIcon={<ExpandMore />}
-      defaultExpandIcon={<ChevronRight />}
+    <SimpleTreeView
+      slots={{
+        collapseIcon: ExpandMore,
+        expandIcon: ChevronRight,
+      }}
     >
-      <TreeItem nodeId={treeData.id} label={`Process ID: ${treeData.id}`}>
+      <TreeItem itemId={treeData.id} label={`Process ID: ${treeData.id}`}>
         {treeData.parent_issue && renderTree(treeData.parent_issue)}
       </TreeItem>
-    </TreeView>
+    </SimpleTreeView>
   );
 };
 

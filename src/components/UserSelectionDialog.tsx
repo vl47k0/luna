@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,10 +13,10 @@ import {
   CircularProgress,
   Box,
   Typography,
-} from '@mui/material';
-import { User } from 'oidc-client-ts';
-import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
-import { authService } from '../utils/oidc';
+} from "@mui/material";
+import { User } from "oidc-client-ts";
+import { CoreMasterService, UserInfo } from "../services/CoreMasterService";
+import { authService } from "../utils/oidc";
 
 interface UserSelectionDialogProps {
   open: boolean;
@@ -26,7 +26,7 @@ interface UserSelectionDialogProps {
   initialSelection?: UserInfo[];
 }
 
-const BACKEND_URL = 'https://dev.api-sod.com/core/v1';
+const BACKEND_URL = "https://dev.api-sod.com/core/v1";
 
 const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
   open,
@@ -35,7 +35,7 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
   onSubmit,
   initialSelection = [],
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<UserInfo[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<UserInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,7 +46,7 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      setSearchTerm('');
+      setSearchTerm("");
       setSearchResults([]);
       setSelectedUsers(initialSelection);
       setError(null);
@@ -79,18 +79,18 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
 
       let users: UserInfo[] = [];
       if (responseData) {
-        if ('records' in responseData && Array.isArray(responseData.records)) {
+        if ("records" in responseData && Array.isArray(responseData.records)) {
           users = responseData.records;
-        } else if ('userId' in responseData) {
+        } else if ("userId" in responseData) {
           users = [responseData];
         }
       }
       setSearchResults(users);
       if (users.length === 0) {
-        setError('No users found.');
+        setError("No users found.");
       }
     } catch (err) {
-      setError('Failed to search for users.');
+      setError("Failed to search for users.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -124,14 +124,14 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <Box sx={{ display: 'flex', gap: 1, my: 2 }}>
+        <Box sx={{ display: "flex", gap: 1, my: 2 }}>
           <TextField
             label="Search by User Code"
             variant="outlined"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={(e) => {
-              if (e.key === 'Enter') void handleSearch();
+              if (e.key === "Enter") void handleSearch();
             }}
             fullWidth
           />
@@ -142,11 +142,11 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
             variant="contained"
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Search'}
+            {loading ? <CircularProgress size={24} /> : "Search"}
           </Button>
         </Box>
         {error && <Typography color="error">{error}</Typography>}
-        <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+        <List sx={{ maxHeight: 300, overflow: "auto" }}>
           {displayedUsers.map((userResult) => {
             const isSelected = selectedUsers.some(
               (su) => su.userId === userResult.userId
@@ -154,8 +154,9 @@ const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
             return (
               <ListItem
                 key={userResult.userId}
-                button
+                component="div"
                 onClick={() => handleToggleUser(userResult)}
+                sx={{ cursor: "pointer" }}
               >
                 <Checkbox checked={isSelected} />
                 <ListItemText
