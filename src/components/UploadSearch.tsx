@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
-  Grid,
   Box,
   Container,
   Fab,
@@ -9,17 +8,18 @@ import {
   DialogActions,
   Button,
   Pagination,
-} from '@mui/material';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
 import {
   Issue,
   IssuesResponse,
   SolutionService,
-} from '../services/SolutionsService';
-import { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
-import AddIcon from '@mui/icons-material/Add';
-import { IssueInputForm, IssueForm } from './IssueInputForm';
-import IssueCard from './IssueCard';
+} from "../services/SolutionsService";
+import { User } from "oidc-client-ts";
+import { authService } from "../utils/oidc";
+import AddIcon from "@mui/icons-material/Add";
+import { IssueInputForm, IssueForm } from "./IssueInputForm";
+import IssueCard from "./IssueCard";
 
 const pageSize = 10;
 
@@ -54,7 +54,7 @@ const UploadSearch: React.FC = () => {
     try {
       const data: IssuesResponse | undefined | null =
         await solutionBackendRef.current.fetchIssues(
-          '5e7331ca-27c6-4d82-ab29-403ff49e2e99',
+          "5e7331ca-27c6-4d82-ab29-403ff49e2e99",
           page
         );
       if (!data) return;
@@ -78,8 +78,8 @@ const UploadSearch: React.FC = () => {
       setCount(data.count);
       setPageCount(Math.ceil(data.count / pageSize));
     } catch (error) {
-      setError('Failed to load issues. Please try again later.');
-      console.error('Failed to fetch issues:', error);
+      setError("Failed to load issues. Please try again later.");
+      console.error("Failed to fetch issues:", error);
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ const UploadSearch: React.FC = () => {
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
       setPage(1);
@@ -120,8 +120,8 @@ const UploadSearch: React.FC = () => {
 
   const submitHandler = (form: IssueForm): void => {
     handleSubmit(form).catch((error) => {
-      setError('Failed to get UserPlease try again later.');
-      console.error('Failed to get user:', error);
+      setError("Failed to get UserPlease try again later.");
+      console.error("Failed to get user:", error);
     });
   };
 
@@ -137,7 +137,7 @@ const UploadSearch: React.FC = () => {
       void fetchData(page);
       setOpenDialog(false);
     } catch (error) {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     }
   };
 
@@ -166,20 +166,20 @@ const UploadSearch: React.FC = () => {
             p={1}
             sx={{
               maxHeight: 600,
-              overflowY: 'auto',
-              border: '2px solid darkgrey',
-              borderRadius: '4px',
-              background: '#CFD8DC',
+              overflowY: "auto",
+              border: "2px solid darkgrey",
+              borderRadius: "4px",
+              background: "#CFD8DC",
             }}
           >
             <Box
               m={1}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'relative',
-                overflow: 'hidden',
-                scrollBehavior: 'smooth',
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
+                overflow: "hidden",
+                scrollBehavior: "smooth",
               }}
               ref={scrollContainerRef}
             >
@@ -195,7 +195,7 @@ const UploadSearch: React.FC = () => {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
         onClick={handleDialogOpen}
       >
         <AddIcon />

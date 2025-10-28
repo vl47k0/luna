@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import FileUpload from './FileUpload';
+import React, { useState, useEffect, useRef } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { Box, Button, Typography } from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import FileUpload from "./FileUpload";
 
-import { Process, SolutionService } from '../services/SolutionsService';
+import { Process, SolutionService } from "../services/SolutionsService";
 
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
 
 export interface ProcessUpdateForm {
   text: string;
@@ -24,7 +25,7 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
   proc,
 }) => {
   const [files, setFiles] = useState<string[]>([]);
-  const [data, setData] = useState<string>('');
+  const [data, setData] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
   const [process, setProcess] = useState<Process | null>(null);
@@ -47,7 +48,7 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -73,12 +74,12 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
   useEffect((): void => {
     setProcess(proc);
     if (proc) {
-      setData(proc.data ?? '');
+      setData(proc.data ?? "");
     }
   }, [proc]);
 
   useEffect((): void => {
-    console.log('ProcessEditForm => Data: ', data);
+    console.log("ProcessEditForm => Data: ", data);
   }, [data]);
 
   return (
@@ -86,9 +87,9 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
       <Grid item xs={12} sm={12} md={12}>
         <Box
           sx={{
-            border: '1px dashed #ccc',
-            padding: '10px',
-            textAlign: 'center',
+            border: "1px dashed #ccc",
+            padding: "10px",
+            textAlign: "center",
           }}
         >
           <FileUpload onFileUpload={handleFileUpload} />
@@ -113,14 +114,14 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
           value={data}
           onChange={handleDataChange}
           placeholder="Enter your text here"
-          style={{ height: '200px', marginBottom: '20px' }}
+          style={{ height: "200px", marginBottom: "20px" }}
           modules={{
             toolbar: [
               [{ header: [1, 2, 3, 4, false] }],
-              ['bold', 'italic', 'underline', 'strike'],
-              ['link', 'image'],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              ['clean'],
+              ["bold", "italic", "underline", "strike"],
+              ["link", "image"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["clean"],
             ],
           }}
         />
@@ -129,7 +130,7 @@ export const ProcessEditForm: React.FC<ProcessEditFormProps> = ({
         <Button
           variant="contained"
           onClick={handleSubmit}
-          sx={{ marginTop: '20px' }}
+          sx={{ marginTop: "20px" }}
         >
           Submit
         </Button>

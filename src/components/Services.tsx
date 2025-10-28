@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/GridLegacy";
+import Icon from "@mui/material/Icon";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
 interface ServicesProps {
   title: string;
@@ -22,9 +22,9 @@ const Services = (): JSX.Element => {
 
   const fetchServices = () => {
     axios
-      .get<ServicesProps[]>('http://127.0.0.1:8000/services', {
+      .get<ServicesProps[]>("http://127.0.0.1:8000/services", {
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
         },
       })
       .then((response) => {
@@ -56,7 +56,7 @@ const Services = (): JSX.Element => {
             gutterBottom
             sx={{
               color: theme.palette.text.primary,
-              textTransform: 'uppercase',
+              textTransform: "uppercase",
             }}
           >
             Services
@@ -83,7 +83,7 @@ const Services = (): JSX.Element => {
                       height={50}
                       marginBottom={2}
                       bgcolor={
-                        theme.palette.mode === 'dark'
+                        theme.palette.mode === "dark"
                           ? theme.palette.primary.main
                           : theme.palette.success.dark
                       }

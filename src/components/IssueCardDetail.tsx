@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   Button,
   Card,
@@ -10,41 +10,41 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Grid,
   Fab,
   Dialog,
   DialogContent,
   DialogActions,
   Snackbar,
-} from '@mui/material';
-import MuiAlert from '@mui/material/Alert';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import MuiAlert from "@mui/material/Alert";
 
-import { Link as RouterLink } from 'react-router-dom';
-import { Process, Issue, SolutionService } from '../services/SolutionsService';
-import { BookmarkService } from '../services/BookmarkService';
-import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
+import { Link as RouterLink } from "react-router-dom";
+import { Process, Issue, SolutionService } from "../services/SolutionsService";
+import { BookmarkService } from "../services/BookmarkService";
+import { CoreMasterService, UserInfo } from "../services/CoreMasterService";
 
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
 
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
-import GroupIcon from '@mui/icons-material/Group';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShareIcon from "@mui/icons-material/Share";
+import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from "@mui/icons-material/Group";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
-import AddIcon from '@mui/icons-material/Add';
-import { ProcessInputForm, ProcessForm } from './ProcessInputForm';
-import FormattedTextDisplay from './FormattedTextDisplay';
-import IssueTreeComponent from './IssueTreeComponent';
-import UserSelectionDialog from './UserSelectionDialog';
+import AddIcon from "@mui/icons-material/Add";
+import { ProcessInputForm, ProcessForm } from "./ProcessInputForm";
+import FormattedTextDisplay from "./FormattedTextDisplay";
+import IssueTreeComponent from "./IssueTreeComponent";
+import UserSelectionDialog from "./UserSelectionDialog";
 
-import { RTMSEvent, RTMSService } from '../services/RTMSService';
+import { RTMSEvent, RTMSService } from "../services/RTMSService";
 
 interface IssueCardProps {
   id: string;
@@ -65,9 +65,9 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   const [memberDetails, setMemberDetails] = useState<UserInfo[]>([]);
   const [adminDetails, setAdminDetails] = useState<UserInfo[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
-    'success'
+  const [snackbarMsg, setSnackbarMsg] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
   );
 
   const solutionBackendRef = useRef<SolutionService | null>(null);
@@ -134,12 +134,12 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     if (updatedIssue) {
       setIssue(updatedIssue);
       setMemberDetails(selectedUsers);
-      setSnackbarMsg('Members updated successfully!');
-      setSnackbarSeverity('success');
+      setSnackbarMsg("Members updated successfully!");
+      setSnackbarSeverity("success");
       onClose(issue.id);
     } else {
-      setSnackbarMsg('Failed to update members.');
-      setSnackbarSeverity('error');
+      setSnackbarMsg("Failed to update members.");
+      setSnackbarSeverity("error");
     }
     setSnackbarOpen(true);
     handleUserSelectionClose();
@@ -159,12 +159,12 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     if (updatedIssue) {
       setIssue(updatedIssue);
       setAdminDetails(selectedAdmins);
-      setSnackbarMsg('Administrators updated successfully!');
-      setSnackbarSeverity('success');
+      setSnackbarMsg("Administrators updated successfully!");
+      setSnackbarSeverity("success");
       onClose(issue.id);
     } else {
-      setSnackbarMsg('Failed to update administrators.');
-      setSnackbarSeverity('error');
+      setSnackbarMsg("Failed to update administrators.");
+      setSnackbarSeverity("error");
     }
     setSnackbarOpen(true);
     handleAdminSelectionClose();
@@ -179,20 +179,20 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     const currentUrl = window.location.href;
     try {
       const added = await bookmarkServiceRef.current.addLink({
-        title: issue?.title ?? 'Untitled',
+        title: issue?.title ?? "Untitled",
         href: currentUrl,
       });
       if (added) {
-        setSnackbarMsg('Bookmark saved!');
-        setSnackbarSeverity('success');
+        setSnackbarMsg("Bookmark saved!");
+        setSnackbarSeverity("success");
       } else {
-        setSnackbarMsg('Failed to save bookmark.');
-        setSnackbarSeverity('error');
+        setSnackbarMsg("Failed to save bookmark.");
+        setSnackbarSeverity("error");
       }
     } catch (error) {
-      console.error('Failed to add bookmark:', error);
-      setSnackbarMsg('Error adding bookmark.');
-      setSnackbarSeverity('error');
+      console.error("Failed to add bookmark:", error);
+      setSnackbarMsg("Error adding bookmark.");
+      setSnackbarSeverity("error");
     } finally {
       setSnackbarOpen(true);
     }
@@ -201,8 +201,8 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   const processSent = (process: Process): void => {
     onAddProcess(process);
     broadcast({
-      data: { id: process.id, command: 'add', context: 'process' },
-      type: 'add',
+      data: { id: process.id, command: "add", context: "process" },
+      type: "add",
     });
   };
 
@@ -232,7 +232,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
           const userData = await coreMasterServiceRef.current!.findUsers({
             userId,
           });
-          if (userData && 'userId' in userData) {
+          if (userData && "userId" in userData) {
             return userData;
           }
           return null;
@@ -241,7 +241,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         const users = await Promise.all(userPromises);
         return users.filter((u): u is UserInfo => u !== null);
       } catch (error) {
-        console.error('Failed to fetch user details with findUsers', error);
+        console.error("Failed to fetch user details with findUsers", error);
         return [];
       }
     },
@@ -256,7 +256,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         setIssue(issueData);
       }
     } catch (error) {
-      console.error('Failed to load issue details.', error);
+      console.error("Failed to load issue details.", error);
     }
   }, []);
 
@@ -283,15 +283,15 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     void authService.getUser().then((userData: User | null) => {
       if (userData && isMounted) {
         solutionBackendRef.current = new SolutionService(
-          'https://mars.georgievski.net/',
+          "https://mars.georgievski.net/",
           userData.access_token
         );
         coreMasterServiceRef.current = new CoreMasterService(
-          'https://dev.api-sod.com/core/v1'
+          "https://dev.api-sod.com/core/v1"
         );
         coreMasterServiceRef.current.setAuthToken(userData.access_token);
         bookmarkServiceRef.current = new BookmarkService(
-          'https://mars.georgievski.net/',
+          "https://mars.georgievski.net/",
           userData.access_token
         );
         void fetchData(id);
@@ -303,7 +303,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
   }, [id, fetchData]);
 
   const extractFileName = (url: string): string => {
-    return url.split('/').pop() ?? url;
+    return url.split("/").pop() ?? url;
   };
 
   return (
@@ -319,7 +319,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
 
       <Dialog open={openIssueTreeDialog} onClose={handleIssueTreeDialogClose}>
         <DialogContent>
-          <IssueTreeComponent issueId={issue?.id ?? ''} />
+          <IssueTreeComponent issueId={issue?.id ?? ""} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleIssueTreeDialogClose}>Close</Button>
@@ -345,9 +345,9 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
       <Card
         variant="outlined"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
         }}
       >
         <CardHeader
@@ -357,26 +357,26 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
             </IconButton>
           }
           title={issue?.title}
-          subheader={issue?.timestamp?.toLocaleString() ?? ''}
+          subheader={issue?.timestamp?.toLocaleString() ?? ""}
         />
         <CardContent
           sx={{
             flexGrow: 1,
             height: 400,
-            overflow: 'auto',
+            overflow: "auto",
           }}
         >
           <Fab
             color="primary"
             aria-label="add"
-            sx={{ position: 'fixed', bottom: 16, right: 16 }}
+            sx={{ position: "fixed", bottom: 16, right: 16 }}
             onClick={handleDialogOpen}
           >
             <AddIcon />
           </Fab>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <FormattedTextDisplay htmlContent={issue?.description ?? ''} />
+              <FormattedTextDisplay htmlContent={issue?.description ?? ""} />
             </Grid>
             <Grid item xs={12}>
               <List>
@@ -404,13 +404,13 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         <CardActions
           disableSpacing
           sx={{
-            justifyContent: 'flex-start',
+            justifyContent: "flex-start",
           }}
         >
           <MuiLink
             color="primary"
             component={RouterLink}
-            to={issue?.process ? `/processes/${issue.process}` : '/issues/'}
+            to={issue?.process ? `/processes/${issue.process}` : "/issues/"}
             underline="none"
           >
             <IconButton aria-label="go-to-process">
@@ -458,7 +458,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         open={snackbarOpen}
         autoHideDuration={4000}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <MuiAlert elevation={6} variant="filled" severity={snackbarSeverity}>
           {snackbarMsg}

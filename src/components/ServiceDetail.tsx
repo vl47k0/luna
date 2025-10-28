@@ -1,18 +1,18 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams } from "react-router-dom";
 import {
   Card,
   CardContent,
-  Grid,
   ListItemText,
   Typography,
   CircularProgress,
   Alert,
   Box,
-} from '@mui/material';
-import { Service, MapperService } from '../services/MapperService';
-import type { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import { Service, MapperService } from "../services/MapperService";
+import type { User } from "oidc-client-ts";
+import { authService } from "../utils/oidc";
 
 const ServiceDetail: React.FC = (): JSX.Element => {
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -36,10 +36,10 @@ const ServiceDetail: React.FC = (): JSX.Element => {
       if (data) {
         setService(data);
       } else {
-        setError('Service not found.');
+        setError("Service not found.");
       }
     } catch (err: unknown) {
-      setError('Failed to load service. Please try again later.');
+      setError("Failed to load service. Please try again later.");
       // Optional: console.error('Failed to fetch service:', err);
     } finally {
       setLoading(false);
@@ -70,7 +70,7 @@ const ServiceDetail: React.FC = (): JSX.Element => {
   React.useEffect((): void | (() => void) => {
     if (user && !solutionBackendRef.current) {
       solutionBackendRef.current = new MapperService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -88,7 +88,7 @@ const ServiceDetail: React.FC = (): JSX.Element => {
   // Loading state (centered)
   if (loading && !service) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
         <CircularProgress />
       </Box>
     );
@@ -123,7 +123,7 @@ const ServiceDetail: React.FC = (): JSX.Element => {
       ) : (
         // If not loading and no service: either still waiting for user/serviceId or not found
         <Typography variant="h6" component="div">
-          {loading ? 'Loading…' : 'No service selected.'}
+          {loading ? "Loading…" : "No service selected."}
         </Typography>
       )}
     </>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import FileUpload from './FileUpload';
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { Box, Button, Typography } from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import FileUpload from "./FileUpload";
 
 export interface ProcessForm {
   text: string;
@@ -19,7 +20,7 @@ export const ProcessInputForm: React.FC<ProcessInputFormProps> = ({
   issue,
 }) => {
   const [files, setFiles] = useState<string[]>([]);
-  const [data, setData] = useState('');
+  const [data, setData] = useState("");
 
   const handleDataChange = (value: string): void => {
     setData(value);
@@ -45,9 +46,9 @@ export const ProcessInputForm: React.FC<ProcessInputFormProps> = ({
       <Grid item xs={12} sm={12} md={12}>
         <Box
           sx={{
-            border: '1px dashed #ccc',
-            padding: '10px',
-            textAlign: 'center',
+            border: "1px dashed #ccc",
+            padding: "10px",
+            textAlign: "center",
           }}
         >
           <FileUpload onFileUpload={handleFileUpload} />
@@ -72,14 +73,14 @@ export const ProcessInputForm: React.FC<ProcessInputFormProps> = ({
           value={data}
           onChange={handleDataChange}
           placeholder=""
-          style={{ height: '200px', marginBottom: '10px' }}
+          style={{ height: "200px", marginBottom: "10px" }}
           modules={{
             toolbar: [
               [{ header: [1, 2, 3, 4, false] }],
-              ['bold', 'italic', 'underline', 'strike'],
-              ['link', 'image'],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              ['clean'],
+              ["bold", "italic", "underline", "strike"],
+              ["link", "image"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["clean"],
             ],
           }}
         />
@@ -88,7 +89,7 @@ export const ProcessInputForm: React.FC<ProcessInputFormProps> = ({
         <Button
           variant="contained"
           onClick={handleSubmit}
-          sx={{ marginTop: '40px', marginBottom: '10px' }}
+          sx={{ marginTop: "40px", marginBottom: "10px" }}
         >
           Submit
         </Button>

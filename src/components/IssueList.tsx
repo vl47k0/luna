@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
-  Grid,
   Box,
   Container,
   Fab,
@@ -9,17 +8,18 @@ import {
   DialogActions,
   Button,
   Pagination,
-} from '@mui/material';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
 import {
   Issue,
   IssuesResponse,
   SolutionService,
-} from '../services/SolutionsService';
-import { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
-import AddIcon from '@mui/icons-material/Add';
-import { IssueInputForm, IssueForm } from './IssueInputForm';
-import IssueCard from './IssueCard';
+} from "../services/SolutionsService";
+import { User } from "oidc-client-ts";
+import { authService } from "../utils/oidc";
+import AddIcon from "@mui/icons-material/Add";
+import { IssueInputForm, IssueForm } from "./IssueInputForm";
+import IssueCard from "./IssueCard";
 
 const pageSize = 10;
 
@@ -43,7 +43,7 @@ const IssueList: React.FC = () => {
       setIssues(data.results);
       setPageCount(Math.ceil(data.count / pageSize));
     } catch (error) {
-      console.error('Failed to fetch issues:', error);
+      console.error("Failed to fetch issues:", error);
     }
   }, []);
 
@@ -51,7 +51,7 @@ const IssueList: React.FC = () => {
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -70,7 +70,7 @@ const IssueList: React.FC = () => {
         setUser(data);
       })
       .catch((error) => {
-        console.error('Failed to get user:', error);
+        console.error("Failed to get user:", error);
       });
   }, []);
 
@@ -78,7 +78,7 @@ const IssueList: React.FC = () => {
     _: React.ChangeEvent<unknown>,
     value: number
   ): void => {
-    console.log('Page changed:', value); // Debug log
+    console.log("Page changed:", value); // Debug log
     setPage(value);
   };
 
@@ -94,13 +94,13 @@ const IssueList: React.FC = () => {
       void fetchData(page); // Marked as intentionally ignored.
       setOpenDialog(false);
     } catch (error) {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     }
   };
 
   const submitHandler = (form: IssueForm): void => {
     handleSubmit(form).catch((error) => {
-      console.error('Failed to get user:', error);
+      console.error("Failed to get user:", error);
     });
   };
 
@@ -113,7 +113,7 @@ const IssueList: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('Issues updated:', issues); // Debug log
+    console.log("Issues updated:", issues); // Debug log
   }, [issues]);
 
   return (
@@ -133,20 +133,20 @@ const IssueList: React.FC = () => {
             p={1}
             sx={{
               maxHeight: 600,
-              overflowY: 'auto',
-              border: '2px solid darkgrey',
-              borderRadius: '4px',
-              background: '#CFD8DC',
+              overflowY: "auto",
+              border: "2px solid darkgrey",
+              borderRadius: "4px",
+              background: "#CFD8DC",
             }}
           >
             <Box
               m={1}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'relative',
-                overflow: 'hidden',
-                scrollBehavior: 'smooth',
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
+                overflow: "hidden",
+                scrollBehavior: "smooth",
               }}
               ref={scrollContainerRef}
             >
@@ -162,7 +162,7 @@ const IssueList: React.FC = () => {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
         onClick={handleDialogOpen}
       >
         <AddIcon />

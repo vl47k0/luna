@@ -1,12 +1,13 @@
-import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import React from "react";
+import { Typography } from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
 import {
   InsertDriveFile as FileIcon,
   Description as DocumentIcon,
   Image as ImageIcon,
   MusicNote as AudioIcon,
   Videocam as VideoIcon,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 export interface FileListProps {
   files: File[];
@@ -34,7 +35,7 @@ const FileList: React.FC<FileListProps> = ({ files }) => {
       {files.map((file, index) => (
         <Grid item key={index}>
           {getIconByExtension(
-            file.name.substring(file.name.lastIndexOf('.') + 1)
+            file.name.substring(file.name.lastIndexOf(".") + 1)
           )}
           <Typography variant="body2" align="center">
             {file.name}

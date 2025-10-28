@@ -129,10 +129,15 @@ npm run lint  # ESLint 9 with flat config (eslint.config.js)
 
 ### MUI Components
 
-- **Design system**: Material-UI v6 (`@mui/material`, `@mui/icons-material`)
+- **Design system**: Material-UI v7 (`@mui/material`, `@mui/icons-material`)
+- **Grid System**: Use `Grid` imported from `@mui/material/GridLegacy` for backward compatibility with container/item props
+  - Import pattern: `import Grid from '@mui/material/GridLegacy';`
+  - Maintains MUI v5 Grid API with `container` and `item` props
 - **Tree views**: `@mui/x-tree-view` with `SimpleTreeView` and `TreeItem` (use `itemId` not `nodeId`, icons via `slots`)
 - **Data grids**: `@mui/x-data-grid` for tabular displays
-- **Breaking changes from v5**: `ListItem` `button` prop removed (use `component="div"` with `sx={{ cursor: 'pointer' }}`)
+- **Breaking changes from v5**:
+  - `ListItem` `button` prop removed (use `component="div"` with `sx={{ cursor: 'pointer' }}`)
+  - Grid component completely redesigned - use GridLegacy for backward compatibility
 
 ### Routing
 

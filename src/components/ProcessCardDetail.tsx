@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   Avatar,
@@ -13,32 +13,32 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  Grid,
   Fab,
   Dialog,
   DialogContent,
   DialogActions,
-} from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import { Issue, Process, SolutionService } from '../services/SolutionsService';
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import { Link as RouterLink } from "react-router-dom";
+import { Issue, Process, SolutionService } from "../services/SolutionsService";
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
 
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import { red } from '@mui/material/colors';
-import DeleteIcon from '@mui/icons-material/Delete';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import AddIcon from '@mui/icons-material/Add';
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import { red } from "@mui/material/colors";
+import DeleteIcon from "@mui/icons-material/Delete";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import AddIcon from "@mui/icons-material/Add";
 
-import { IssueInputForm, IssueForm } from './IssueInputForm';
-import { ProcessEditForm, ProcessUpdateForm } from './ProcessEditForm';
+import { IssueInputForm, IssueForm } from "./IssueInputForm";
+import { ProcessEditForm, ProcessUpdateForm } from "./ProcessEditForm";
 //import EmailCard from './EmailCard';
-import FormattedTextDisplay from './FormattedTextDisplay';
+import FormattedTextDisplay from "./FormattedTextDisplay";
 
-import { RTMSData, RTMSEvent, RTMSService } from '../services/RTMSService';
+import { RTMSData, RTMSEvent, RTMSService } from "../services/RTMSService";
 
 interface ProcessCardDetailProps {
   id: string;
@@ -75,17 +75,17 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
   };
 
   const processUpdated = (process: Process): void => {
-    console.log('Process Update Success: ', process);
+    console.log("Process Update Success: ", process);
     broadcast({
-      data: { id: process.id, command: 'update', context: 'process' },
-      type: 'update',
+      data: { id: process.id, command: "update", context: "process" },
+      type: "update",
     });
   };
 
   const updateProcessHandler = (form: ProcessUpdateForm): void => {
     handleUpdateProcess(form).catch((error) => {
-      setError('Failed to get UserPlease try again later.');
-      console.error('Failed to get user:', error);
+      setError("Failed to get UserPlease try again later.");
+      console.error("Failed to get user:", error);
     });
   };
 
@@ -101,7 +101,7 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
         await solutionBackendRef.current.updateProcess(p, processUpdated);
       }
     } catch (error) {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     } finally {
       setOpenProcessEditDialog(false);
     }
@@ -109,8 +109,8 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
 
   const submitHandler = (form: IssueForm): void => {
     handleSubmit(form).catch((error) => {
-      setError('Failed to get UserPlease try again later.');
-      console.error('Failed to get user:', error);
+      setError("Failed to get UserPlease try again later.");
+      console.error("Failed to get user:", error);
     });
   };
 
@@ -127,12 +127,12 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
       setOpenDialog(false);
       if (newIssue) {
         broadcast({
-          data: { id: newIssue.id, command: 'add', context: 'issue' },
-          type: 'add',
+          data: { id: newIssue.id, command: "add", context: "issue" },
+          type: "add",
         });
       }
     } catch (error) {
-      console.error('Failed to create issue:', error);
+      console.error("Failed to create issue:", error);
     }
   };
 
@@ -145,8 +145,8 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
       if (!data) return;
       setProcess(data);
     } catch (error) {
-      setError('Failed to load process. Please try again later.');
-      console.error('Failed to fetch process:', error);
+      setError("Failed to load process. Please try again later.");
+      console.error("Failed to fetch process:", error);
     } finally {
       setLoading(false);
     }
@@ -159,7 +159,7 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
         setUser(data);
       })
       .catch((error) => {
-        console.error('Failed to get user:', error);
+        console.error("Failed to get user:", error);
       });
   }, []);
 
@@ -167,7 +167,7 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -183,14 +183,14 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
   }, [user, id]);
 
   const extractFileName = (url: string): string => {
-    return url.split('/').pop() ?? url;
+    return url.split("/").pop() ?? url;
   };
 
   const broadcast = (e: RTMSEvent): void => {
     if (!rtmsServiceRef.current) return;
     rtmsServiceRef.current.sendMessage(e);
-    console.log('ProcessCardDetail=> Broadcast => Process:', process);
-    console.log('ProcessCardDetail => Broadcast => Event:', e);
+    console.log("ProcessCardDetail=> Broadcast => Process:", process);
+    console.log("ProcessCardDetail => Broadcast => Event:", e);
   };
 
   useEffect(() => {
@@ -200,29 +200,29 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
 
         rtms.onConnected((receivedMessage: RTMSData): void => {
           console.log(
-            'Services => RTMSService => OnConnected => Message: ',
+            "Services => RTMSService => OnConnected => Message: ",
             receivedMessage
           );
         });
 
         rtms.onDisconnected((receivedMessage: RTMSData): void => {
           console.log(
-            'Services => RTMSService => OnDisconnected => Message: ',
+            "Services => RTMSService => OnDisconnected => Message: ",
             receivedMessage
           );
         });
 
         rtms.onData((events: RTMSEvent[]): void => {
           events.forEach((e): void => {
-            console.log('Services => RTMS => OnData => Event: ', e);
-            if (e.type === 'delete') {
-              console.log('ProcessCardDetail => RTMS => Delete => Event: ', e);
+            console.log("Services => RTMS => OnData => Event: ", e);
+            if (e.type === "delete") {
+              console.log("ProcessCardDetail => RTMS => Delete => Event: ", e);
             }
-            if (e.type === 'add') {
-              console.log('ProcessCardDetail => RTMS => Add => Event: ', e);
+            if (e.type === "add") {
+              console.log("ProcessCardDetail => RTMS => Add => Event: ", e);
             }
-            if (e.type === 'update') {
-              console.log('ProcessCardDetail=> RTMS => Update => Event: ', e);
+            if (e.type === "update") {
+              console.log("ProcessCardDetail=> RTMS => Update => Event: ", e);
             }
           });
         });
@@ -236,7 +236,7 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
 
     return (): void => {
       if (rtmsServiceRef.current) {
-        console.log('Services => RTMS => Disconnect: ');
+        console.log("Services => RTMS => Disconnect: ");
         rtmsServiceRef.current.disconnect();
         rtmsServiceRef.current = null;
       }
@@ -272,9 +272,9 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
       <Card
         variant="outlined"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
         }}
       >
         <CardHeader
@@ -287,20 +287,20 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
             </IconButton>
           }
           //title={<EmailCard id={process?.owner ?? ''}></EmailCard>}
-          title={process?.owner ?? ''}
-          subheader={process?.timestamp?.toLocaleString() ?? ''}
+          title={process?.owner ?? ""}
+          subheader={process?.timestamp?.toLocaleString() ?? ""}
         />
         <CardContent
           sx={{
             flexGrow: 1,
             height: 400,
-            overflow: 'auto',
+            overflow: "auto",
           }}
         >
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
               <FormattedTextDisplay
-                htmlContent={process?.data ?? ''}
+                htmlContent={process?.data ?? ""}
               ></FormattedTextDisplay>
             </Grid>
             <Grid item xs={12} md={12}>
@@ -336,18 +336,18 @@ const ProcessCardDetail: React.FC<ProcessCardDetailProps> = ({ id }) => {
           <Fab
             color="primary"
             aria-label="add"
-            sx={{ position: 'fixed', bottom: 16, right: 16 }}
+            sx={{ position: "fixed", bottom: 16, right: 16 }}
             onClick={handleDialogOpen}
           >
             <AddIcon />
           </Fab>
         </CardContent>
-        <CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
+        <CardActions disableSpacing sx={{ justifyContent: "space-between" }}>
           <Box>
             <MuiLink
               color="primary"
               component={RouterLink}
-              to={process?.issue ? `/issues/${process.issue}` : '#'}
+              to={process?.issue ? `/issues/${process.issue}` : "#"}
               underline="none"
             >
               <IconButton aria-label="share">

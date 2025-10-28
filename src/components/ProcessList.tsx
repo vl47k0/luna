@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 import {
-  Grid,
   Box,
   Container,
   CircularProgress,
   Pagination,
   Alert,
-} from '@mui/material';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
 import {
   Process,
   ProcessesResponse,
   SolutionService,
-} from '../services/SolutionsService';
-import { User } from 'oidc-client-ts';
-import { authService } from '../utils/oidc';
-import ProcessCard from './ProcessCard';
+} from "../services/SolutionsService";
+import { User } from "oidc-client-ts";
+import { authService } from "../utils/oidc";
+import ProcessCard from "./ProcessCard";
 
 const pageSize = 10;
 
@@ -55,7 +55,7 @@ const ProcessList: React.FC = () => {
 
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
       setPage(1);
@@ -104,7 +104,7 @@ const ProcessList: React.FC = () => {
 
         setPageCount(Math.ceil(data.count / pageSize));
       } catch (err: unknown) {
-        setError('Failed to load processes. Please try again later.');
+        setError("Failed to load processes. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -131,17 +131,17 @@ const ProcessList: React.FC = () => {
           {loading ? (
             <Box
               sx={{
-                background: 'white',
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
+                background: "white",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
                 py: 2,
               }}
             >
               <CircularProgress />
             </Box>
           ) : (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", py: 1 }}>
               <Pagination
                 count={pageCount}
                 page={Math.max(page, 1)}
@@ -164,20 +164,20 @@ const ProcessList: React.FC = () => {
             m={1}
             sx={{
               maxHeight: 600,
-              overflowY: 'auto',
-              border: '2px solid darkgrey',
-              borderRadius: '4px',
-              overflow: 'hidden',
-              background: '#CFD8DC',
+              overflowY: "auto",
+              border: "2px solid darkgrey",
+              borderRadius: "4px",
+              overflow: "hidden",
+              background: "#CFD8DC",
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                overflowY: 'hidden',
-                flexDirection: 'column',
-                position: 'relative',
-                scrollBehavior: 'smooth',
+                display: "flex",
+                overflowY: "hidden",
+                flexDirection: "column",
+                position: "relative",
+                scrollBehavior: "smooth",
               }}
               ref={scrollContainerRef}
             >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Avatar,
   Checkbox,
@@ -8,27 +8,27 @@ import {
   CssBaseline,
   Box,
   Link,
-  Grid,
   Typography,
   Alert,
   CircularProgress,
   Button,
-} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Navigate } from 'react-router-dom';
-import AuthService from '../services/AuthService';
-import { SignInButton } from './SignInButton';
+} from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Navigate } from "react-router-dom";
+import AuthService from "../services/AuthService";
+import { SignInButton } from "./SignInButton";
 
 function Copyright(): JSX.Element {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://atc-kk.jp/">
         ATC Inc.
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -38,13 +38,13 @@ const theme = createTheme();
 const Login: React.FC = () => {
   const [redirect, setRedirect] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [message, setMessage] = React.useState<string>('');
+  const [message, setMessage] = React.useState<string>("");
 
   React.useEffect(() => {
     // side-effect only; no cleanup function needed
     const currentUser = AuthService.getCurrentUser?.();
     if (currentUser) {
-      setRedirect('/dashboard');
+      setRedirect("/dashboard");
     }
   }, []);
 
@@ -52,40 +52,40 @@ const Login: React.FC = () => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const username = String(data.get('username') ?? '');
-    const password = String(data.get('password') ?? '');
+    const username = String(data.get("username") ?? "");
+    const password = String(data.get("password") ?? "");
 
-    setMessage('');
+    setMessage("");
     setLoading(true);
 
     // If AuthService.login returns a promise, keep as is.
     // If it returns something else, adjust the typing accordingly.
     AuthService.login(username, password)
       .then(() => {
-        setRedirect('/'); // or '/dashboard' to be consistent with useEffect
+        setRedirect("/"); // or '/dashboard' to be consistent with useEffect
       })
       .catch((err: unknown) => {
         let resMessage: string;
 
         // Narrow unknown safely:
-        if (typeof err === 'object' && err !== null) {
+        if (typeof err === "object" && err !== null) {
           // axios-style: err.response?.data?.message
           const maybeAny = err as {
             response?: { data?: { message?: unknown } };
             message?: unknown;
           };
           const apiMsg = maybeAny.response?.data?.message;
-          if (typeof apiMsg === 'string') {
+          if (typeof apiMsg === "string") {
             resMessage = apiMsg;
-          } else if (typeof maybeAny.message === 'string') {
+          } else if (typeof maybeAny.message === "string") {
             resMessage = maybeAny.message;
           } else {
-            resMessage = 'Login failed.';
+            resMessage = "Login failed.";
           }
-        } else if (typeof err === 'string') {
+        } else if (typeof err === "string") {
           resMessage = err;
         } else {
-          resMessage = 'Login failed.';
+          resMessage = "Login failed.";
         }
 
         setLoading(false);
@@ -104,12 +104,12 @@ const Login: React.FC = () => {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
 
@@ -118,7 +118,7 @@ const Login: React.FC = () => {
           </Typography>
 
           {message && (
-            <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+            <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
               {message}
             </Alert>
           )}
@@ -164,7 +164,7 @@ const Login: React.FC = () => {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={22} /> : 'Gravitee Sign In'}
+              {loading ? <CircularProgress size={22} /> : "Gravitee Sign In"}
             </Button>
 
             <Grid container>

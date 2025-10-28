@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material';
-import { Process, SolutionService } from '../services/SolutionsService';
-import { authService } from '../utils/oidc';
-import { User } from 'oidc-client-ts';
-import FileUpload from './FileUpload';
-import { RTMSData, RTMSEvent, RTMSService } from '../services/RTMSService';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import Grid from "@mui/material/GridLegacy";
+import { Process, SolutionService } from "../services/SolutionsService";
+import { authService } from "../utils/oidc";
+import { User } from "oidc-client-ts";
+import FileUpload from "./FileUpload";
+import { RTMSData, RTMSEvent, RTMSService } from "../services/RTMSService";
 
 export interface ProcessUpdateForm {
   text: string;
@@ -27,7 +28,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
   destination,
 }) => {
   const [files, setFiles] = useState<string[]>([]);
-  const [merger, setMerger] = useState('');
+  const [merger, setMerger] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [sourceProcess, setSourceProcess] = useState<Process | null>(null);
   const [destinationProcess, setDestinationProcess] = useState<Process | null>(
@@ -44,7 +45,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
     setUser(authenticatedUser);
     if (authenticatedUser && !solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         authenticatedUser.access_token
       );
     }
@@ -59,10 +60,10 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
           await solutionBackendRef.current.fetchProcess(processId);
         if (!result) return;
         setSourceProcess(result);
-        console.log('ProcessMergeForm => SourceProcess: ', result);
+        console.log("ProcessMergeForm => SourceProcess: ", result);
       } catch (error) {
-        setError('Failed to load source process. Please try again later.');
-        console.error('Failed to fetch source process:', error);
+        setError("Failed to load source process. Please try again later.");
+        console.error("Failed to fetch source process:", error);
       } finally {
         setLoading(false);
       }
@@ -79,16 +80,16 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
           await solutionBackendRef.current.fetchProcess(processId);
         if (!result) {
           console.log(
-            'ProcessMergeForm => DestinationProcess: No Result',
+            "ProcessMergeForm => DestinationProcess: No Result",
             result
           );
           return;
         }
         setDestinationProcess(result);
-        console.log('ProcessMergeForm => DestinationProcess: ', result);
+        console.log("ProcessMergeForm => DestinationProcess: ", result);
       } catch (error) {
-        setError('Failed to load destination process. Please try again later.');
-        console.error('Failed to fetch destination process:', error);
+        setError("Failed to load destination process. Please try again later.");
+        console.error("Failed to fetch destination process:", error);
       } finally {
         setLoading(false);
       }
@@ -103,19 +104,19 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
         setUser(data);
       })
       .catch((error) => {
-        console.error('Failed to get user:', error);
+        console.error("Failed to get user:", error);
       });
   }, []);
 
   useEffect((): void => {
     if (!user) {
-      console.log('ProcessMergeForm => No User: ', user);
+      console.log("ProcessMergeForm => No User: ", user);
       return;
     }
     if (!solutionBackendRef.current) {
-      console.log('ProcessMergeForm => No Backend => Make New: ');
+      console.log("ProcessMergeForm => No Backend => Make New: ");
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        "https://mars.georgievski.net/",
         user.access_token
       );
     }
@@ -146,10 +147,10 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
       broadcast({
         data: {
           id: destinationProcess.id,
-          command: 'update',
-          context: 'process',
+          command: "update",
+          context: "process",
         },
-        type: 'update',
+        type: "update",
       });
     }
   };
@@ -163,8 +164,8 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
           ...(destinationProcess.assets ?? []),
         ])
       );
-      console.log('ProcessMergeForm => MergedData', mergedData);
-      console.log('ProcessMergeForm => MergedFiles', mergedFiles);
+      console.log("ProcessMergeForm => MergedData", mergedData);
+      console.log("ProcessMergeForm => MergedFiles", mergedFiles);
       setMerger(mergedData);
       setFiles(mergedFiles);
     }
@@ -190,9 +191,9 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
 
   useEffect((): void => {
     if (!isOpen) {
-      console.log('ProcessMergeForm => UseEffect => Resetting ');
+      console.log("ProcessMergeForm => UseEffect => Resetting ");
       setFiles([]);
-      setMerger('');
+      setMerger("");
       setSourceProcess(null);
       setDestinationProcess(null);
       setError(null);
@@ -207,29 +208,29 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
 
         rtms.onConnected((receivedMessage: RTMSData): void => {
           console.log(
-            'Services => RTMSService => OnConnected => Message: ',
+            "Services => RTMSService => OnConnected => Message: ",
             receivedMessage
           );
         });
 
         rtms.onDisconnected((receivedMessage: RTMSData): void => {
           console.log(
-            'Services => RTMSService => OnDisconnected => Message: ',
+            "Services => RTMSService => OnDisconnected => Message: ",
             receivedMessage
           );
         });
 
         rtms.onData((events: RTMSEvent[]): void => {
           events.forEach((e): void => {
-            console.log('Services => RTMS => OnData => Event: ', e);
-            if (e.type === 'delete') {
-              console.log('Services => RTMS => Delete => Event: ', e);
+            console.log("Services => RTMS => OnData => Event: ", e);
+            if (e.type === "delete") {
+              console.log("Services => RTMS => Delete => Event: ", e);
             }
-            if (e.type === 'add') {
-              console.log('Services => RTMS => Add => Event: ', e);
+            if (e.type === "add") {
+              console.log("Services => RTMS => Add => Event: ", e);
             }
-            if (e.type === 'update') {
-              console.log('Services => RTMS => Add => Event: ', e);
+            if (e.type === "update") {
+              console.log("Services => RTMS => Add => Event: ", e);
             }
           });
         });
@@ -243,7 +244,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
 
     return (): void => {
       if (rtmsServiceRef.current) {
-        console.log('Services => RTMS => Disconnect: ');
+        console.log("Services => RTMS => Disconnect: ");
         rtmsServiceRef.current.disconnect();
         rtmsServiceRef.current = null;
       }
@@ -269,9 +270,9 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
       <Grid item xs={12} sm={12} md={12}>
         <Box
           sx={{
-            border: '1px dashed #ccc',
-            padding: '10px',
-            textAlign: 'center',
+            border: "1px dashed #ccc",
+            padding: "10px",
+            textAlign: "center",
           }}
         >
           <FileUpload onFileUpload={handleFileUpload} />
@@ -296,14 +297,14 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
           value={merger}
           onChange={handleDataChange}
           placeholder="Enter your text here"
-          style={{ height: '200px', marginBottom: '20px' }}
+          style={{ height: "200px", marginBottom: "20px" }}
           modules={{
             toolbar: [
               [{ header: [1, 2, 3, 4, false] }],
-              ['bold', 'italic', 'underline', 'strike'],
-              ['link', 'image'],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              ['clean'],
+              ["bold", "italic", "underline", "strike"],
+              ["link", "image"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["clean"],
             ],
           }}
         />
@@ -312,7 +313,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
         <Button
           variant="contained"
           onClick={handleSubmit}
-          sx={{ marginTop: '20px' }}
+          sx={{ marginTop: "20px" }}
           disabled={loading}
         >
           Submit
