@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { useDropzone } from "react-dropzone";
 import { TextField, Box, Button } from "@mui/material";
 import Grid from "@mui/material/GridLegacy";

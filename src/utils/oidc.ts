@@ -11,6 +11,9 @@ const AUTHORITY =
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID ?? "fallback-client-id";
 const REDIRECT_URI =
   import.meta.env.VITE_REDIRECT_URI ?? "http://localhost:3000/luna/token";
+const SILENT_REDIRECT_URI =
+  import.meta.env.VITE_SILENT_REDIRECT_URI ??
+  window.location.origin + "/luna/silent-refresh.html";
 const SCOPE =
   import.meta.env.VITE_SCOPE ?? "openid email profile offline_access";
 const RESPONSE_TYPE = import.meta.env.VITE_RESPONSE_TYPE ?? "code";
@@ -28,7 +31,7 @@ const config: UserManagerSettings = {
   loadUserInfo: false,
   revokeTokensOnSignout: true,
 
-  silent_redirect_uri: window.location.origin + "/luna/silent-refresh.html",
+  silent_redirect_uri: SILENT_REDIRECT_URI,
 };
 
 class AuthService {
