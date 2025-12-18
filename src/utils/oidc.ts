@@ -32,6 +32,19 @@ const config: UserManagerSettings = {
   revokeTokensOnSignout: true,
 
   silent_redirect_uri: SILENT_REDIRECT_URI,
+
+  metadata: {
+    issuer: AUTHORITY,
+    authorization_endpoint: `${AUTHORITY}/authorize`,
+    token_endpoint: `${AUTHORITY}/token`,
+    userinfo_endpoint: `${AUTHORITY}/userinfo`,
+    end_session_endpoint: `${AUTHORITY}/logout`,
+    jwks_uri: `${AUTHORITY}/jwks`,
+  },
+
+  extraTokenParams: {
+    op_type: "remote",
+  },
 };
 
 class AuthService {
