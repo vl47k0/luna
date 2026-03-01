@@ -29,7 +29,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
         try {
           const response = await axios.post<FileUploadResponse>(
-            'https://mars.georgievski.net/resource/api/v1/asset',
+            `${import.meta.env.VITE_BACKEND_API_URL}resource/api/v1/asset`,
             formData,
             {
               headers: {

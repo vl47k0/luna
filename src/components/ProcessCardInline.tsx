@@ -140,7 +140,7 @@ const ProcessCardInline: React.FC<ProcessCardInlineProps> = ({
     if (!user) return;
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }

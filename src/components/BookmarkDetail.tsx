@@ -49,7 +49,7 @@ const BookmarkDetail: React.FC = () => {
         if (data?.access_token) {
           setUser(data);
           bookmarkBackendRef.current = new BookmarkService(
-            'https://mars.georgievski.net/',
+            import.meta.env.VITE_BACKEND_API_URL,
             data.access_token
           );
         }

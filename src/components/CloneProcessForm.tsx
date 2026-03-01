@@ -70,7 +70,7 @@ const CloneProcessForm: React.FC<CloneProcessFormProps> = ({
     console.log(user);
     if (!solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }

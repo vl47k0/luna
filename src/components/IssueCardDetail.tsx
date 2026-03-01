@@ -283,7 +283,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
     void authService.getUser().then((userData: User | null) => {
       if (userData && isMounted) {
         solutionBackendRef.current = new SolutionService(
-          "https://mars.georgievski.net/",
+          import.meta.env.VITE_BACKEND_API_URL,
           userData.access_token
         );
         coreMasterServiceRef.current = new CoreMasterService(
@@ -291,7 +291,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
         );
         coreMasterServiceRef.current.setAuthToken(userData.access_token);
         bookmarkServiceRef.current = new BookmarkService(
-          "https://mars.georgievski.net/",
+          import.meta.env.VITE_BACKEND_API_URL,
           userData.access_token
         );
         void fetchData(id);

@@ -70,7 +70,7 @@ const ServiceDetail: React.FC = () => {
   React.useEffect((): void | (() => void) => {
     if (user && !solutionBackendRef.current) {
       solutionBackendRef.current = new MapperService(
-        "https://mars.georgievski.net/",
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }

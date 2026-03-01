@@ -45,7 +45,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
     setUser(authenticatedUser);
     if (authenticatedUser && !solutionBackendRef.current) {
       solutionBackendRef.current = new SolutionService(
-        "https://mars.georgievski.net/",
+        import.meta.env.VITE_BACKEND_API_URL,
         authenticatedUser.access_token
       );
     }
@@ -116,7 +116,7 @@ const ProcessMergeForm: React.FC<ProcessEditFormProps> = ({
     if (!solutionBackendRef.current) {
       console.log("ProcessMergeForm => No Backend => Make New: ");
       solutionBackendRef.current = new SolutionService(
-        "https://mars.georgievski.net/",
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }

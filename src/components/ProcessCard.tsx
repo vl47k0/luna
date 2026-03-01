@@ -125,13 +125,13 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
     if (!user) return;
     if (!solutionBackendRef.current && user) {
       solutionBackendRef.current = new SolutionService(
-        'https://mars.georgievski.net/',
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }
     if (!bookmarkServiceRef.current) {
       bookmarkServiceRef.current = new BookmarkService(
-        'https://mars.georgievski.net/',
+        import.meta.env.VITE_BACKEND_API_URL,
         user.access_token
       );
     }

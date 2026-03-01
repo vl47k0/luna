@@ -77,7 +77,7 @@ const IssueDetail: React.FC = () => {
     const initializeSolutionService = (): void => {
       if (!solutionBackendRef.current && user) {
         const n = new SolutionService(
-          "https://mars.georgievski.net/",
+          import.meta.env.VITE_BACKEND_API_URL,
           user.access_token
         );
         solutionBackendRef.current = n;

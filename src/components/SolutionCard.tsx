@@ -63,7 +63,7 @@ const SolutionCard: React.FC<SolutionCardProps> = ({
       if (!solutionBackendRef.current) {
         console.log('SolutionCard will make New solutionBackend');
         solutionBackendRef.current = new SolutionService(
-          'https://mars.georgievski.net/',
+          import.meta.env.VITE_BACKEND_API_URL,
           user.access_token
         );
       }
