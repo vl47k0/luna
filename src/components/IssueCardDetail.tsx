@@ -297,10 +297,20 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
           import.meta.env.VITE_BACKEND_API_URL,
           userData.access_token
         );
+
+        if (!rtmsServiceRef.current) {
+          rtmsServiceRef.current = new RTMSService(id, userData.access_token);
+          rtmsServiceRef.current.connect();
+        }
+
         void fetchData(id);
       }
     });
     return () => {
+      if (rtmsServiceRef.current) {
+        rtmsServiceRef.current.disconnect();
+        rtmsServiceRef.current = null;
+      }
       isMounted = false;
     };
   }, [id, fetchData]);
