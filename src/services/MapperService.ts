@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { logger } from '../utils/logger';
 
 export interface Service {
   id: string;
@@ -32,7 +33,7 @@ export class MapperService {
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching contact:', error);
+      logger.error('Error fetching contact', error, { contactId });
       return null;
     }
   }
@@ -44,7 +45,7 @@ export class MapperService {
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching contacts:', error);
+      logger.error('Error fetching contacts', error);
       return null;
     }
   }

@@ -4,6 +4,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./contexts/AuthContext";
+import { initializeLogging, logger } from "./utils/logger";
+
+initializeLogging();
 
 const rootElement = document.getElementById("root");
 
@@ -19,6 +22,6 @@ if (rootElement) {
     </StrictMode>
   );
 } else {
-  console.error("Root element not found");
+  logger.error("Root element not found");
 }
 reportWebVitals();

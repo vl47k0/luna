@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { User } from "oidc-client-ts";
 import { authService } from "../utils/oidc";
 import { DigitalAssetService } from "../services/DigitalAssetService";
+import { logger } from "../utils/logger";
 
 export const useDigitalAssetService = (): DigitalAssetService | null => {
   const [service, setService] = useState<DigitalAssetService | null>(null);
@@ -15,11 +16,15 @@ export const useDigitalAssetService = (): DigitalAssetService | null => {
             token: user.access_token,
           });
           setService(digitalAssetService);
+          logger.debug("DigitalAssetService initialized", {
+            hasToken: true,
+          });
         } else {
           setService(null);
+          logger.warn("DigitalAssetService not initialized: no access token");
         }
       } catch (error) {
-        console.error("Error initializing DigitalAssetService:", error);
+        logger.error("Error initializing DigitalAssetService", error);
         setService(null);
       }
     };

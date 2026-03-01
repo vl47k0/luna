@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { User } from "oidc-client-ts";
 import { authService } from "../utils/oidc";
+import { logger } from "../utils/logger";
 
 interface AuthContextValue {
   user: User | null;
@@ -40,21 +41,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const expiresIn = expiresAt - now;
     const refreshIn = Math.max(expiresIn - 300, 60);
 
-    console.log(
-      `🔐 Scheduling token refresh in ${refreshIn} seconds (${Math.floor(
-        refreshIn / 60
-      )} minutes)`
-    );
+    logger.debug("Scheduling token refresh", {
+      refreshInSeconds: refreshIn,
+      refreshInMinutes: Math.floor(refreshIn / 60),
+      expiresAt,
+    });
 
     refreshTimerRef.current = setTimeout(() => {
-      console.log("⏰ Token refresh timer triggered");
+      logger.debug("Token refresh timer triggered");
       void refreshToken();
     }, refreshIn * 1000);
   }, []);
 
   const refreshToken = useCallback(async () => {
     try {
-      console.log("🔄 Refreshing token...");
+      logger.info("Refreshing token");
       const refreshedUser = await authService.renewToken();
       if (refreshedUser) {
         setUser(refreshedUser);
@@ -62,13 +63,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (refreshedUser.expires_at) {
           scheduleTokenRefresh(refreshedUser.expires_at);
         }
-        console.log("✅ Token refreshed successfully");
+        logger.info("Token refreshed successfully", {
+          expiresAt: refreshedUser.expires_at,
+        });
       } else {
-        console.error("❌ Token refresh returned null");
+        logger.error("Token refresh returned null");
         await signOut();
       }
     } catch (error) {
-      console.error("❌ Token refresh failed:", error);
+      logger.error("Token refresh failed", error);
       await signOut();
     }
   }, [scheduleTokenRefresh]);
@@ -83,12 +86,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (currentUser.expires_at) {
           scheduleTokenRefresh(currentUser.expires_at);
         }
-        console.log("✅ User loaded successfully");
+        logger.info("User loaded successfully", {
+          expiresAt: currentUser.expires_at,
+          profileSub: currentUser.profile?.sub,
+        });
       } else {
-        console.log("ℹ️ No user found");
+        logger.warn("No user found during auth bootstrap");
       }
     } catch (error) {
-      console.error("❌ Failed to load user:", error);
+      logger.error("Failed to load user", error);
     } finally {
       setLoading(false);
     }

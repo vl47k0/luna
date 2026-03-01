@@ -4,6 +4,7 @@ import {
   UserManagerSettings,
   WebStorageStateStore,
 } from "oidc-client-ts";
+import { logger } from "./logger";
 
 const AUTHORITY =
   import.meta.env.VITE_AUTHORITY ??
@@ -55,11 +56,14 @@ class AuthService {
     this.userManager = new UserManager(config);
 
     this.userManager.events.addUserLoaded((user: User) => {
-      console.log("User loaded", user);
+      logger.info("OIDC user loaded", {
+        profileSub: user.profile?.sub,
+        expiresAt: user.expires_at,
+      });
     });
 
     this.userManager.events.addSilentRenewError((error) => {
-      console.error("Silent renew error:", error);
+      logger.error("OIDC silent renew error", error);
     });
   }
 
@@ -98,10 +102,12 @@ class AuthService {
     try {
       this.renewingToken = true;
       const user = await this.userManager.signinSilent();
-      console.log("Token renewed successfully");
+      logger.info("OIDC token renewed successfully", {
+        expiresAt: user.expires_at,
+      });
       return user;
     } catch (error) {
-      console.error("Failed to renew token silently:", error);
+      logger.error("Failed to renew token silently", error);
       return null;
     } finally {
       this.renewingToken = false;
@@ -111,10 +117,12 @@ class AuthService {
   public async handleRedirectCallback(): Promise<User> {
     try {
       const user = await this.userManager.signinRedirectCallback();
-      console.log("Successfully processed redirect callback");
+      logger.info("Successfully processed redirect callback", {
+        profileSub: user.profile?.sub,
+      });
       return user;
     } catch (error) {
-      console.error("Error handling redirect callback", error);
+      logger.error("Error handling redirect callback", error);
       throw error;
     }
   }

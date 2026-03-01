@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
+import { logger } from "../utils/logger";
 
 export interface ILoginResponse {
   access_token: string;
@@ -138,7 +139,9 @@ class AuthService {
       const decoded = jwtDecode<{ exp: number }>(token);
       return decoded;
     } catch (error) {
-      console.error("Failed to decode JWT:", error);
+      logger.error("Failed to decode JWT", error, {
+        tokenPreview: token.slice(0, 12),
+      });
       return null;
     }
   }
@@ -164,7 +167,9 @@ class AuthService {
   async refToken(): Promise<IUserData> {
     const user = this.getCurrentUser();
     if (!user?.refresh_token) {
-      console.error("No refresh token available");
+      logger.error("No refresh token available", undefined, {
+        method: "refToken",
+      });
       return Promise.reject("No refresh token available");
     }
 
@@ -185,7 +190,9 @@ class AuthService {
       }
       return response.data;
     } catch (error) {
-      console.error("Error refreshing token:", error);
+      logger.error("Error refreshing token", error, {
+        method: "refToken",
+      });
       return Promise.reject(error);
     }
   }
@@ -193,7 +200,7 @@ class AuthService {
   refreshToken(): Promise<IUserData> {
     const user = this.getCurrentUser();
     if (!user?.refresh_token) {
-      console.log("No refresh token available");
+      logger.warn("No refresh token available", { method: "refreshToken" });
       return Promise.reject("No refresh token available");
     }
 
@@ -226,13 +233,17 @@ class AuthService {
   isAccessTokenExpiring(): boolean {
     const user = this.getCurrentUser();
     if (!user?.access_token) {
-      console.log("No access token available");
+      logger.warn("No access token available", {
+        method: "isAccessTokenExpiring",
+      });
       return true;
     }
 
     const decoded = this.decodeJwt(user.access_token);
     if (!decoded?.exp) {
-      console.log("Failed to decode access token or no exp claim.");
+      logger.warn("Failed to decode access token or no exp claim", {
+        method: "isAccessTokenExpiring",
+      });
       return true;
     }
 
@@ -245,10 +256,10 @@ class AuthService {
 
   async refreshTokenIfNeeded(): Promise<IUserData | null> {
     if (this.isAccessTokenExpiring()) {
-      console.log("Access token is about to expire, refreshing...");
+      logger.info("Access token is about to expire, refreshing");
       return this.refreshToken();
     } else {
-      console.log("Access token is valid.");
+      logger.debug("Access token is valid");
       return Promise.resolve(null);
     }
   }
@@ -256,7 +267,7 @@ class AuthService {
   logout(): void {
     const user = this.getCurrentUser();
     if (!user?.id_token) {
-      console.error("No ID token available for logout.");
+      logger.error("No ID token available for logout");
       return;
     }
 
@@ -267,7 +278,7 @@ class AuthService {
     }&post_logout_redirect_uri=${encodeURIComponent(
       "YOUR_POST_LOGOUT_REDIRECT_URI"
     )}`;
-    console.log(logoutUrl);
+    logger.debug("Generated logout URL", { logoutUrl });
     localStorage.removeItem("user");
   }
 
@@ -277,10 +288,10 @@ class AuthService {
         `${axiosBackend.defaults.baseURL}am/a2b-develop/oidc/.well-known/jwks.json`
       );
       const jwks = response.data;
-      console.log(jwks);
+      logger.debug("Fetched JWKs", { keyCount: jwks.keys.length });
       return jwks;
     } catch (error) {
-      console.error("Failed to fetch JWKs:", error);
+      logger.error("Failed to fetch JWKs", error);
       return null;
     }
   }
