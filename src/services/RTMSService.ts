@@ -27,7 +27,7 @@ export interface RTMSEvent {
   data: RTMSData;
 }
 
-const rtmsEndpoint = 'wss://blue.georgievski.net/rtms/event';
+const rtmsEndpoint = `${import.meta.env.VITE_BACKEND_RTMS}`;
 
 class RTMSService {
   private socket: WebSocket | null = null;
