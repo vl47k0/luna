@@ -26,7 +26,8 @@ interface UserSelectionDialogProps {
   initialSelection?: UserInfo[];
 }
 
-const BACKEND_URL = "https://dev.api-sod.com/core/v1";
+const BACKEND_URL =
+  import.meta.env.VITE_COREMASTER_API_URL ?? "https://dev.api-sod.com/core/v1";
 
 const UserSelectionDialog: React.FC<UserSelectionDialogProps> = ({
   open,

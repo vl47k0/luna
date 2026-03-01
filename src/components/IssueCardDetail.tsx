@@ -46,6 +46,9 @@ import UserSelectionDialog from "./UserSelectionDialog";
 
 import { RTMSEvent, RTMSService } from "../services/RTMSService";
 
+const COREMASTER_BACKEND_URL =
+  import.meta.env.VITE_COREMASTER_API_URL ?? "https://dev.api-sod.com/core/v1";
+
 interface IssueCardProps {
   id: string;
   onDelete: (id: string) => void;
@@ -287,7 +290,7 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
           userData.access_token
         );
         coreMasterServiceRef.current = new CoreMasterService(
-          "https://dev.api-sod.com/core/v1"
+          COREMASTER_BACKEND_URL
         );
         coreMasterServiceRef.current.setAuthToken(userData.access_token);
         bookmarkServiceRef.current = new BookmarkService(

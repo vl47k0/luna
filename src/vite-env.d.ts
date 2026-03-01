@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_BACKEND_API_URL: string;
   readonly VITE_BACKEND_RTMS: string;
   readonly VITE_BACKEND_RESOURCE: string;
+  readonly VITE_COREMASTER_API_URL: string;
+  readonly VITE_COREMASTER_API_OBJECTS_URL: string;
   readonly VITE_SOD_SEC: string;
   readonly VITE_AUTHORITY: string;
   readonly VITE_CLIENT_ID: string;

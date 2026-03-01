@@ -3,7 +3,8 @@ import { Card, CardContent, Typography, Skeleton } from "@mui/material";
 import { useUser, useToken } from "../contexts/AuthContext";
 import { CoreMasterService, UserInfo } from "../services/CoreMasterService";
 
-const BACKEND_URL = "https://dev.api-sod.com/core/v1";
+const BACKEND_URL =
+  import.meta.env.VITE_COREMASTER_API_URL ?? "https://dev.api-sod.com/core/v1";
 const UserCard: React.FC = () => {
   const [fullUser, setFullUser] = React.useState<UserInfo | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);

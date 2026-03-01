@@ -5,6 +5,9 @@ import { CoreMasterService, UserInfo } from '../services/CoreMasterService';
 import { authService } from '../utils/oidc';
 import { User } from 'oidc-client-ts';
 
+const BACKEND_URL =
+  import.meta.env.VITE_COREMASTER_API_URL ?? 'https://dev.api-sod.com/core/v1';
+
 interface EmailCardProps {
   id: string;
 }
@@ -44,9 +47,7 @@ const EmailCard: React.FC<EmailCardProps> = ({ id }) => {
 
   useEffect(() => {
     if (user && !coreMasterServiceRef.current) {
-      coreMasterServiceRef.current = new CoreMasterService(
-        'https://dev.api-sod.com/core/v1'
-      );
+      coreMasterServiceRef.current = new CoreMasterService(BACKEND_URL);
       coreMasterServiceRef.current.setAuthToken(user.access_token);
     }
     // No cleanup needed here as the ref persists across renders

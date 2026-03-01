@@ -15,7 +15,9 @@ import {
   GetObjectsByIdResponse,
 } from "../services/CoreMasterService";
 
-const BACKEND_URL = "https://dev.api-sod.com/core/api/v1";
+const BACKEND_URL =
+  import.meta.env.VITE_COREMASTER_API_OBJECTS_URL ??
+  "https://dev.api-sod.com/core/api/v1";
 
 const CoreMasterUserUnitList: React.FC = () => {
   const [users, setUsers] = useState<UserInfo[]>([]);
