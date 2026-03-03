@@ -56,6 +56,8 @@ interface ProcessCardProps {
   id: string;
 }
 
+const APP_BASE_URL = import.meta.env.BASE_URL ?? '/';
+
 const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
   const [process, setProcess] = useState<Process | null | undefined>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -78,10 +80,15 @@ const ProcessCard: React.FC<ProcessCardProps> = ({ id }) => {
   const handleAddBookmark = async (): Promise<void> => {
     if (!bookmarkServiceRef.current) return;
 
+    const processUrl = new URL(
+      `${APP_BASE_URL.replace(/\/+$/, '/') }processes/${id}`,
+      window.location.origin
+    ).toString();
+
     try {
       const added = await bookmarkServiceRef.current.addLink({
         title: process?.data ?? 'Untitled',
-        href: `/processes/${process?.id}`,
+        href: processUrl,
       });
 
       if (added) {

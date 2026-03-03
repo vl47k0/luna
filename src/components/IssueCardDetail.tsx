@@ -48,6 +48,7 @@ import { RTMSEvent, RTMSService } from "../services/RTMSService";
 
 const COREMASTER_BACKEND_URL =
   import.meta.env.VITE_COREMASTER_API_URL ?? "https://dev.api-sod.com/core/v1";
+const APP_BASE_URL = import.meta.env.BASE_URL ?? "/";
 
 interface IssueCardProps {
   id: string;
@@ -179,11 +180,14 @@ const IssueCardDetail: React.FC<IssueCardProps> = ({
 
   const handleAddBookmark = async (): Promise<void> => {
     if (!bookmarkServiceRef.current) return;
-    const currentUrl = window.location.href;
+    const issueUrl = new URL(
+      `${APP_BASE_URL.replace(/\/+$/, "/")}issues/${id}`,
+      window.location.origin
+    ).toString();
     try {
       const added = await bookmarkServiceRef.current.addLink({
         title: issue?.title ?? "Untitled",
-        href: currentUrl,
+        href: issueUrl,
       });
       if (added) {
         setSnackbarMsg("Bookmark saved!");
