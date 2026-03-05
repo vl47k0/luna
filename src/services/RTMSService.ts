@@ -46,7 +46,7 @@ class RTMSService {
   constructor(channel: string, token: string) {
     this.channel = channel;
     this.token = token;
-    this.url = `${rtmsEndpoint}/${this.channel}/?token=${token}`;
+    this.url = `${rtmsEndpoint}/${this.channel}?token=${token}`;
   }
 
   private uuidv4(): string {
